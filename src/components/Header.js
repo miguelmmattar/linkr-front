@@ -2,18 +2,24 @@ import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import { useContext } from "react";
 import { IoIosArrowDown } from 'react-icons/io';
+import { useLocation } from "react-router-dom";
 
 export default function Header() {
     const { user } = useContext(UserContext);
+    const path = useLocation().pathname;
     
     return (
-        <HeaderBar>
-            <h1>linkr</h1>
-            <span>
-                <IoIosArrowDown />
-                <img src={user.picture} alt="Profile picture" />
-            </span>
-        </HeaderBar>
+        <>
+            {path !== "/signup "&& path !== "/" && (
+                <HeaderBar>
+                    <h1>linkr</h1>
+                    <span>
+                        <IoIosArrowDown />
+                        <img src={user.picture} alt="Profile picture" />
+                    </span>
+                </HeaderBar>
+            )}
+        </>
     );
 } 
 
@@ -28,6 +34,7 @@ const HeaderBar = styled.div`
     position: fixed;
     left: 0;
     top: 0;
+    z-index: 1;
 
     h1 {
         font-family: 'Passion One', cursive;
@@ -40,6 +47,7 @@ const HeaderBar = styled.div`
         width: 53px;
         height: 53px;
         border-radius: 50%;
+        object-fit: cover;
     }
 
     span {
