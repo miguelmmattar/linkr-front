@@ -54,7 +54,8 @@ table {
 .root {
     max-width: 100%;
     min-width: 300px;
-    height: 100vh;
+	min-height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,8 +64,6 @@ table {
 }
 
 * {
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
     box-sizing: border-box;
 }
 `;
