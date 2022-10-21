@@ -11,7 +11,7 @@ function getPosts(token) {
 }
 
 function postUrl(token, body) {
-    return axios.get(`${BASE_URL}/posts`, body, {
+    return axios.post(`${BASE_URL}/posts`, body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
