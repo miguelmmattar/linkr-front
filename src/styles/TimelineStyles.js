@@ -264,6 +264,20 @@ const SnippetBox = styled.div`
     }
 `;
 
+const Trending = styled.div`
+  width: 20%;
+  height: 450px;
+  border-radius: 16px;
+  background-color: #171717;
+  margin-top: 150px;
+  margin-bottom: 40px;
+  margin-left: 25px;
+  @media (max-width: 375px) {
+    width: 0;
+    margin-left: 0;
+  }
+`;
+
 const Load = styled.span`
     width: 100%;
     height: auto;
@@ -285,9 +299,16 @@ const Load = styled.span`
     
 `;
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export {
     Posts,
     Form,
     SnippetBox,
-    Load
+    Load,
+    Trending,
+    Container
 }
