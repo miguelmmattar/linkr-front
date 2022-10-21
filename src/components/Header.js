@@ -62,4 +62,23 @@ const HeaderBar = styled.div`
         margin-right: 17px;
         cursor: pointer;
     }
+
+    @media(max-width: 375px) {
+        padding: 12px 14px;
+
+        h1 {
+            font-size: 49px;
+        }
+        
+        img {
+            width: 44px;
+            height: 44px;
+        }
+
+        svg {
+            width: 25px;
+            height: 25px;
+            margin-right: 12px;
+        }
+    }
 `;

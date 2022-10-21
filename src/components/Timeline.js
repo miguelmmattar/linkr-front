@@ -7,6 +7,7 @@ import { matchRoutes } from "react-router-dom";
 export default function Timeline() {
     //const { user } = useContext(UserContext);
     const [posts, setPosts] = useState([]);
+    const [load, setLoad] = useState(false);
 
     const user = {
         name: "Jake Sully",
@@ -16,9 +17,15 @@ export default function Timeline() {
     
     function loadPosts() {
         const promise = services.getPosts(user.token);
-        console.log(promise)
-        promise.then(answer => setPosts(answer.data));
-        promise.catch(answer => alert(answer.response.data));
+
+        setLoad(true);
+
+        promise.then(answer => {
+            setPosts(answer.data);
+            setLoad(false);
+        });
+
+        promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
     }
 
     useEffect(() => {
@@ -26,9 +33,11 @@ export default function Timeline() {
     }, []);
 
     return (
-        <Posts>
+        <Posts load={load}>
             <h1>timeline</h1>
+
             <NewPost user={user} loadPosts={loadPosts} />
+
             {posts.length === 0 ? (
                 <h6>There are no posts yet . . .</h6>
             ) : (
@@ -40,17 +49,21 @@ export default function Timeline() {
                 />
                 ))
             )}
+
+            <Load load={load}>
+                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+                <h2>Loading</h2>
+            </Load>
         </Posts>
     );
 }
 
 function NewPost({ user,  loadPosts }) {
+    const [sending, setSending] = useState(false);
     const [form, setForm] = useState({
         url: "",
         description: ""
     });
-
-    console.log(user)
 
     function handleForm({ name, value }) {
         setForm({ ...form, [name]: value });
@@ -58,28 +71,41 @@ function NewPost({ user,  loadPosts }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-    
+        
+        setSending(true);
+
         const promise = services.postUrl(user.token, form);
     
         promise.then((answer) => {
-          loadPosts();
+            setForm({
+                url: "",
+                description: ""
+            })
+            
+            setSending(false);
+            
+            loadPosts();
         });
     
         promise.catch((answer) => {
-          alert(answer.response.data);
+            setSending(false);
+            alert(answer.response.data);
         });
       }
 
     return (
         <div>
-            <img src={user.picture} alt="Profile picture" />
+            <img src={user.picture} alt="Profile" />
+
             <h2>What are you going to share today?</h2>
-            <Form onSubmit={handleSubmit}>
+
+            <Form onSubmit={handleSubmit} disabled={sending}>
                 <input
                     type="url"
                     placeholder="Insert a URL..."
                     name="url"
-                    required
+                    required={!sending}
+                    disabled={sending}
                     value={form.url}
                     onChange={(e) =>
                         handleForm({
@@ -94,6 +120,7 @@ function NewPost({ user,  loadPosts }) {
                     placeholder="Write a description..."
                     name="description"
                     value={form.description}
+                    disabled={sending}
                     onChange={(e) =>
                         handleForm({
                           name: e.target.name,
@@ -102,7 +129,11 @@ function NewPost({ user,  loadPosts }) {
                     }
                 />
 
-                <input type="submit" value="Publish" />
+                <input 
+                    type="submit" 
+                    value={!sending ? "Publish" : "Publishing"}
+                    disabled={sending}
+                />
             </Form>
         </div>
     );
@@ -112,7 +143,7 @@ function Post({ user, post }) {
 
     return (
         <div>
-            <img src={user.picture} alt="Profile picture" />
+            <img src={user.picture} alt="Profile" />
             <h3>{user.name}</h3>
             <h4>{post.description}</h4>
             <Snippet url={post.url} />
@@ -123,7 +154,7 @@ function Post({ user, post }) {
 function Snippet({ url }) {
     return (
         <SnippetBox>
-            <img src="https://coodesh.com/blog/wp-content/uploads/2021/09/REACT.JS-scaled.jpg" alt="Featured image" ></img>
+            <img src="https://coodesh.com/blog/wp-content/uploads/2021/09/REACT.JS-scaled.jpg" alt="Featured" ></img>
             <h5>Title</h5>
             <p>Description</p>
             <a hrf="linkvalido" target="_blank">link</a>
@@ -181,6 +212,7 @@ const Posts = styled.div`
     h6 {
         color: #949494;
         font-size: 24px;
+        display: ${props => !props.load ? 'center' : 'none'};
         text-align: center;
         margin-top: 50px;
     }
@@ -267,11 +299,13 @@ const Posts = styled.div`
             min-height: 164px;
             border-radius: 0;
             padding: 10px 18px 15px 69px;
+            display: ${props => !props.load ? 'center' : 'none'};
         }
 
         div:nth-child(2) {
             padding: 15px;
             margin-bottom: 16px;
+            display: flex;
             
             img {
                 display: none;
@@ -377,4 +411,25 @@ const SnippetBox = styled.div`
             left: calc(100% - 95px);
         }
     }
+`;
+
+const Load = styled.span`
+    width: 100%;
+    height: auto;
+    display: ${props => props.load ? 'flex' : 'none'};
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+
+    img {
+        position: static;
+        margin-bottom: 20px;
+        width: 20%;
+        height: auto;
+    }
+
+    h2 {
+        color: #FFFFFF;
+    }
+    
 `;
