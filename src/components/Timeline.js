@@ -73,7 +73,8 @@ export default function Timeline() {
       </Load>
     </Posts>
     <Trending>
-
+            <h3>trending</h3>
+            <div></div>
         {trending.map((value, index)=>(
             <TrendingTopics key = {index} hashtag = {value.hashtag}/>
         ))}
