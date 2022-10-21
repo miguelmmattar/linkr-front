@@ -1,7 +1,6 @@
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
-import { useNavigate, Link } from "react-router-dom";
 import { Posts, Form, Load } from "../styles/TimelineStyles.js";
 import Post from "../components/secondaryCmponents/Post.js";
 
@@ -89,7 +88,7 @@ function NewPost({ user,  loadPosts }) {
       }
 
     return (
-        <div>
+        <div className="new-post">
             <img src={user.picture} alt="Profile" />
 
             <h2>What are you going to share today?</h2>

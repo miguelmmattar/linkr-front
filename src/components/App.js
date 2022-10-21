@@ -6,6 +6,7 @@ import Header from "./Header.js";
 import SignIn from "./SignInPage.js";
 import Timeline from "./Timeline.js";
 import SignUp from "./SignUpPage.js";
+import UserPage from "./UserPage.js";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ function Root() {
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/timeline" element={<Timeline />} />
+          <Route path="/user/:id" element={<UserPage />} />
 
         </Routes>
       </>
