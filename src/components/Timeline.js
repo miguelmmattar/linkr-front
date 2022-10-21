@@ -1,19 +1,12 @@
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
-import services from "../services/linkr.js"
-import { matchRoutes } from "react-router-dom";
+import services from "../services/linkr.js";
 
 export default function Timeline() {
-    //const { user } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
-
-    const user = {
-        name: "Jake Sully",
-        picture: "https://ingresso-a.akamaihd.net/b2b/production/uploads/article/image/520/trailer-avatar-2-capa-2.jpg",
-        token: "sdjhbn9fdeufbefjc238484gu23rdnewd"
-    }
     
     function loadPosts() {
         const promise = services.getPosts(user.token);
@@ -146,18 +139,18 @@ function Post({ user, post }) {
             <img src={user.picture} alt="Profile" />
             <h3>{user.name}</h3>
             <h4>{post.description}</h4>
-            <Snippet url={post.url} />
+            <Snippet link={post.link} />
         </div>
     );
 }
 
-function Snippet({ url }) {
+function Snippet({ link }) {
     return (
         <SnippetBox>
-            <img src="https://coodesh.com/blog/wp-content/uploads/2021/09/REACT.JS-scaled.jpg" alt="Featured" ></img>
-            <h5>Title</h5>
-            <p>Description</p>
-            <a hrf="linkvalido" target="_blank">link</a>
+            <img src={link.image} alt="Featured" ></img>
+            <h5>{link.title}</h5>
+            <p>{link.description}</p>
+            <a hrf={link.url} target="_blank">{link.url}</a>
         </SnippetBox>
     );
 }
@@ -165,7 +158,6 @@ function Snippet({ url }) {
 const Posts = styled.div`
     width: 40%;
     min-width: 600px;
-    height: 100vh;
     margin-top: 150px;
     margin-bottom: 40px;
 
@@ -194,6 +186,7 @@ const Posts = styled.div`
 
     h3, h4, h5, p, a {
         color: #FFFFFF;
+        max-width: calc(100% - 170px);
     }
 
     h3 {
@@ -227,6 +220,8 @@ const Posts = styled.div`
 
     a {
         cursor: pointer;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
     }
 
     div {
@@ -261,6 +256,10 @@ const Posts = styled.div`
         width: 100%;
         min-width: 0;
         margin: 90px 0 20px 0;
+
+        h3, h4, h5, p, a {
+            max-width: calc(100% - 105px);
+        }
 
         h1 {
             font-size: 33px;
@@ -355,6 +354,7 @@ const Form = styled.form`
         bottom: 16px;
         color: #FFFFFF;
         cursor: pointer;
+        opacity: ${props => !props.disabled ? '1' : '0.3'}
     }
 
     input::placeholder,
