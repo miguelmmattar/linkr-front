@@ -1,13 +1,13 @@
-import services from "../services/linkr.js"
 import { useState } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext.js";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import services from "../services/linkr.js"
+
 
 function SignIn() {
-    // eslint-disable-next-line no-unused-vars
     const { setUser } = useContext(UserContext);
     const [isDisable, setIsDisable] = useState(false);
     const load = (isDisable ? <ThreeDots
@@ -19,7 +19,7 @@ function SignIn() {
         wrapperStyle={{}}
         wrapperClassName=""
         visible={true} />
-        : "Entrar");
+        : "Log In");
     const navigate = useNavigate();
 
     function handleForm(e) {
@@ -29,8 +29,7 @@ function SignIn() {
             email: e.target[0].value,
             password: e.target[1].value
         };
-        services.sendLogin(body).then(async (res) => {
-            console.log(res.data.name)
+        services.postLogin(body).then(async (res) => {
             await localStorage.setItem("profile",
                 JSON.stringify({ token: res.data.token, name: res.data.name, picture: res.data.userPicture, id: res.data.userId })
             );
@@ -56,7 +55,7 @@ function SignIn() {
                 <Loginform onSubmit={handleForm}>
                     <input type="email"
                         name="email"
-                        placeholder="email"
+                        placeholder="e-mail"
                         disabled={isDisable}
                         required />
                     <input type="password"

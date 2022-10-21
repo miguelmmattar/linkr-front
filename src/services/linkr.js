@@ -18,17 +18,20 @@ function postUrl(token, body) {
     });
 }
 
-
-function sendLogin(body) {
+function postLogin(body) {
   const promise = axios.post(`${BASE_URL}/sign-in`, body);
   return promise;
 }
 
-
+function postSignup(body) {
+  const promise = axios.post(`${BASE_URL}/sign-up`, body);
+  return promise;
+}
 
 export default {
     getPosts,
     postUrl,
-    sendLogin,
+    postLogin,
+    postSignup
 };
 

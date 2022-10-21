@@ -10,12 +10,12 @@ export default function Header() {
     
     return (
         <>
-            {path !== "/signup "&& path !== "/" && (
+            {path !== "/signup" && path !== "/" && (
                 <HeaderBar>
                     <h1>linkr</h1>
                     <span>
                         <IoIosArrowDown />
-                        <img src={user.picture} alt="Profile picture" />
+                        <img src={user.picture} alt="ProfilePicture" />
                     </span>
                 </HeaderBar>
             )}
