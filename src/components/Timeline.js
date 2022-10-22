@@ -1,7 +1,6 @@
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
-import { useNavigate, Link } from "react-router-dom";
 import {
   Posts,
   Form,
@@ -54,29 +53,29 @@ export default function Timeline() {
 
   return (
     <Container>
-    <Posts load={load}>
-      <h1>timeline</h1>
+      <Posts load={load}>
+        <h1>timeline</h1>
 
-      <NewPost user={user} loadPosts={loadPosts} />
+        <NewPost user={user} loadPosts={loadPosts} />
 
-      {posts.length === 0 ? (
-        <h6>There are no posts yet . . .</h6>
-      ) : (
-        posts.map((post, index) => (
-          <Post key={index} user={post.user} post={post} />
-        ))
-      )}
+        {posts.length === 0 ? (
+          <h6>There are no posts yet . . .</h6>
+        ) : (
+          posts.map((post, index) => (
+            <Post key={index} user={post.user} post={post} />
+          ))
+        )}
 
-      <Load load={load}>
-        <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
-        <h2>Loading</h2>
-      </Load>
-    </Posts>
-    <Trending>
-            <h3>trending</h3>
-            <div></div>
-        {trending.map((value, index)=>(
-            <TrendingTopics key = {index} hashtag = {value.hashtag}/>
+        <Load load={load}>
+          <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          <h2>Loading</h2>
+        </Load>
+      </Posts>
+      <Trending>
+        <h3>trending</h3>
+        <div></div>
+        {trending.map((value, index) => (
+          <TrendingTopics key={index} hashtag={value.hashtag} />
         ))}
       </Trending>
     </Container>
@@ -120,7 +119,7 @@ function NewPost({ user, loadPosts, loadTrending }) {
   }
 
   return (
-    <div>
+    <div className="new-post">
       <img src={user.picture} alt="Profile" />
 
       <h2>What are you going to share today?</h2>

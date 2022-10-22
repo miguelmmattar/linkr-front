@@ -1,10 +1,12 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
+import { Link } from "react-router-dom";
 
 export default function Post({ user, post }) {
+
     return (
         <div>
             <img src={user.picture} alt="Profile" />
-            <h3>{user.name}</h3>
+            <Link to={`/user/${user.id}`}><h3>{user.name}</h3></Link>
             <h4>{post.description}</h4>
             <a href={post.link.url} target="_blank" className="snippet"><Snippet link={post.link} /></a>
         </div>

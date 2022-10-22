@@ -9,6 +9,14 @@ function getPosts(token) {
       },
     });
 }
+ 
+function getUserPosts(token, id) {
+  return axios.get(`${BASE_URL}/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
 
 function getTrending(token) {
   return axios.get(`${BASE_URL}/trending`, {
@@ -32,15 +40,22 @@ function postLogin(body) {
 }
 
 function postSignup(body) {
-  const promise = axios.post(`${BASE_URL}/sign-up`, body);
-  return promise;
+  return  axios.post(`${BASE_URL}/sign-up`, body);
+}
+
+function deleteLogout(token) {
+  return axios.delete(`${BASE_URL}/logout`, {
+    headers: {Authorization: `Bearer ${token}`}
+  });
 }
 
 export default {
     getPosts,
     postUrl,
+    getUserPosts,
     postLogin,
     postSignup,
-    getTrending
+    getTrending,
+    deleteLogout
 };
 
