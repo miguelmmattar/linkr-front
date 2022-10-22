@@ -10,6 +10,7 @@ export default function Header() {
     const path = useLocation().pathname;
     const [menu, setMenu] = useState(true);
     const navigate = useNavigate();
+        
     function logout() {
         services.deleteLogout(user.token).then(async (res) => {
         }).catch((error) => {
@@ -19,6 +20,8 @@ export default function Header() {
         setUser(null)
         return (navigate("/"));
     }
+
+    
     return (
         <>
             {path !== "/signup" && path !== "/" && (
@@ -31,7 +34,7 @@ export default function Header() {
                         <HeaderMenu clicked={menu}>
                             <p onClick={() => { logout() }}>Logout</p>
                         </HeaderMenu>
-                        <img src={user.picture} alt="ProfilePicture" />
+                        <img src={user?.picture} alt="ProfilePicture" />
                     </span>
                 </HeaderBar>
             )}
