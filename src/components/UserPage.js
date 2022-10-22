@@ -11,6 +11,7 @@ export default function UserPage() {
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
+    const [profile, setProfile] = useState({});
 
     console.log(user.picture)
 
@@ -21,6 +22,7 @@ export default function UserPage() {
 
         promise.then(answer => {
             setPosts(answer.data);
+            setProfile(answer.data[0].user);
             setLoad(false);
         });
 
@@ -34,8 +36,8 @@ export default function UserPage() {
     return (
         <Posts load={load}>
             <UserInfo>
-                <img src={user.picture} alt="Profile" />
-                <h1>{`${user.name}’s posts`}</h1>
+                <img src={profile.picture} alt="Profile" />
+                <h1>{`${profile.name}’s posts`}</h1>
             </UserInfo>
 
             {posts.length === 0 ? (
