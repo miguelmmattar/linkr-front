@@ -18,7 +18,7 @@ const Posts = styled.div`
         font-weight: 700;
         width: 100%;
         text-align: left;
-        line-height: 65px;
+        line-height: 40px;
         margin-bottom: 43px;
     }
 
@@ -35,16 +35,18 @@ const Posts = styled.div`
     }
 
     h3 {
-        font-size: 19px;
+        font-size: 19px !important;
     }
 
     h4 {
         margin: 12px 0;
         font-size: 17px;
+        line-height: 20px;
     }
 
     h5 {
         font-size: 16px;
+        line-height: 20px;
     }
 
     h6 {
@@ -57,6 +59,11 @@ const Posts = styled.div`
 
     p {
         margin: 5px 0 10px 0;
+        line-height: 14px;
+    }
+
+    a {
+        text-decoration: none;
     }
 
     div {
@@ -71,7 +78,7 @@ const Posts = styled.div`
         flex-direction: column;
     }
 
-    div:nth-child(2) {
+    .new-post {
         background-color: #FFFFFF !important;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         margin-bottom: 30px;
@@ -92,7 +99,7 @@ const Posts = styled.div`
         text-decoration: none;
     }
 
-    @media(max-width: 375px) {
+    @media(max-width: 614px) {
         width: 100%;
         min-width: 0;
         margin: 90px 0 20px 0;
@@ -141,7 +148,7 @@ const Posts = styled.div`
             display: ${props => !props.load ? 'center' : 'none'};
         }
 
-        div:nth-child(2) {
+        .new-post {
             padding: 15px;
             margin-bottom: 16px;
             display: flex;
@@ -204,7 +211,7 @@ const Form = styled.form`
         font-weight: 300;
     }
 
-    @media(max-width: 375px) {
+    @media(max-width: 614px) {
         margin-bottom: 28px;
 
         textarea {
@@ -250,7 +257,7 @@ const SnippetBox = styled.div`
         border-radius: 0 11px 11px 0 !important;
     }
 
-    @media(max-width: 375px) {
+    @media(max-width: 614px) {
         border-radius: 11px !important;
         min-height: 115px !important;
         padding: 7px 0 8px 11px;
