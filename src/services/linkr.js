@@ -9,6 +9,14 @@ function getPosts(token) {
       },
     });
 }
+ 
+function getUserPosts(token, id) {
+  return axios.get(`${BASE_URL}/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
 
 function postUrl(token, body) {
     return axios.post(`${BASE_URL}/posts`, body, {
@@ -36,6 +44,7 @@ function postLogout(token) {
 export default {
     getPosts,
     postUrl,
+    getUserPosts,
     postLogin,
     postSignup
 };
