@@ -32,8 +32,13 @@ function postLogin(body) {
 }
 
 function postSignup(body) {
-  const promise = axios.post(`${BASE_URL}/sign-up`, body);
-  return promise;
+  return  axios.post(`${BASE_URL}/sign-up`, body);
+}
+
+function deleteLogout(token) {
+  return axios.delete(`${BASE_URL}/logout`, {
+    headers: {Authorization: `Bearer ${token}`}
+  });
 }
 
 export default {
@@ -41,6 +46,7 @@ export default {
     postUrl,
     getUserPosts,
     postLogin,
-    postSignup
+    postSignup,
+    deleteLogout
 };
 
