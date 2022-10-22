@@ -1,14 +1,24 @@
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IoIosArrowDown } from 'react-icons/io';
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import services from "../services/linkr.js"
 
 export default function Header() {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const path = useLocation().pathname;
-    
+    const [menu, setMenu] = useState(true);
+    const navigate = useNavigate();
+    function logout() {
+        services.deleteLogout(user.token).then(async (res) => {
+        }).catch((error) => {
+            console.error(error);
+        });
+        localStorage.clear();
+        setUser(null)
+        return (navigate("/"));
+    }
     return (
         <>
             {path !== "/signup" && path !== "/" && (
@@ -17,14 +27,17 @@ export default function Header() {
                         <h1>linkr</h1>
                     </Link>
                     <span>
-                        <IoIosArrowDown />
+                        <IoIosArrowDown onClick={() => { setMenu(!menu) }} />
+                        <HeaderMenu clicked={menu}>
+                            <p onClick={() => { logout() }}>Logout</p>
+                        </HeaderMenu>
                         <img src={user.picture} alt="ProfilePicture" />
                     </span>
                 </HeaderBar>
             )}
         </>
     );
-} 
+}
 
 const HeaderBar = styled.div`
     width: 100%;
@@ -37,7 +50,7 @@ const HeaderBar = styled.div`
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     a{
         text-decoration: none;
     }
@@ -87,4 +100,28 @@ const HeaderBar = styled.div`
             margin-right: 12px;
         }
     }
+`;
+
+const HeaderMenu = styled.div`
+    width: 150px;
+    height: ${props => props.clicked ? "0" : "50px"};
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    top: 73px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px 0px 20px 20px;
+    background-color: #171717;
+    p{
+        display: ${props => props.clicked ? "none" : "initial"};
+        color: #ffffff;
+        font-family: 'Lato';
+        font-weight: 700;
+        font-size: 17px;
+        line-height: 20px;
+        letter-spacing: 0.05em;
+    }
+    transition: height 0.5s;
 `;
