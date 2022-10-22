@@ -36,7 +36,6 @@ function postSignup(body) {
 }
 
 function deleteLogout(token) {
-  console.log( `Bearer ${token}`)
   return axios.delete(`${BASE_URL}/logout`, {
     headers: {Authorization: `Bearer ${token}`}
   });
