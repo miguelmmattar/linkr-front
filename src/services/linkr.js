@@ -24,8 +24,13 @@ function postLogin(body) {
 }
 
 function postSignup(body) {
-  const promise = axios.post(`${BASE_URL}/sign-up`, body);
-  return promise;
+  return  axios.post(`${BASE_URL}/sign-up`, body);
+}
+
+function postLogout(token) {
+  const config = {Authorization: `Bearer ${token}`};
+  console.log(config);
+  return axios.post(`${BASE_URL}/logout`, config);
 }
 
 export default {

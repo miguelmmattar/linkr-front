@@ -2,7 +2,8 @@ import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import { useContext } from "react";
 import { IoIosArrowDown } from 'react-icons/io';
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import services from "../services/linkr.js"
 
 export default function Header() {
     const { user } = useContext(UserContext);
@@ -12,7 +13,9 @@ export default function Header() {
         <>
             {path !== "/signup" && path !== "/" && (
                 <HeaderBar>
-                    <h1>linkr</h1>
+                    <Link to={"/timeline"}>
+                        <h1>linkr</h1>
+                    </Link>
                     <span>
                         <IoIosArrowDown />
                         <img src={user.picture} alt="ProfilePicture" />
@@ -35,6 +38,9 @@ const HeaderBar = styled.div`
     left: 0;
     top: 0;
     z-index: 1;
+    a{
+        text-decoration: none;
+    }
 
     h1 {
         font-family: 'Passion One', cursive;
