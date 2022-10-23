@@ -303,6 +303,7 @@ const Trending = styled.div`
   @media (max-width: 614px) {
     width: 0;
     margin-left: 0;
+    display: none;
   }
 `;
 
