@@ -79,6 +79,30 @@ const Posts = styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin-bottom: 30px;
   }
+
+  .delete-button-wrapper {
+    position: absolute;
+    right: 22px;
+    cursor: pointer;
+    top: 23px;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${(props) => {
+      let config = "";
+
+      return config;
+    }}
+  }
+
+  .delete-button {
+    width: 100%;
+    height: 100%;
+  }
+
   img {
     border-radius: 50%;
     width: 50px;
@@ -111,7 +135,7 @@ const Posts = styled.div`
     }}
   }
 
-  .likeHeart{
+  .likeHeart {
     width: 100%;
     height: 100%;
   }
@@ -307,7 +331,7 @@ const Trending = styled.div`
     max-width: calc(100% - 15px);
     line-height: 23px;
     letter-spacing: 0.1em;
-    margin-bottom: 5px
+    margin-bottom: 5px;
   }
 
   div {
@@ -334,7 +358,5 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
-
-
 
 export { Posts, Form, SnippetBox, Load, Trending, Container };

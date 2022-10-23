@@ -14,22 +14,29 @@ export default function LikeButton({ postId, isLiked, likes }) {
   const [liked, setLiked] = useState(isLiked);
   const [likesCount, setLikesCount] = useState(likes.length);
   const [isLoading, setIsLoading] = useState(false);
+  const quantityOfLikes = likes.length;
+  const TWO_PEOPLE = 2;
+  const FIRST_LIKE = 0;
+  const SECOND_LIKE = 1;
+  const FIRST_NAME = 0;
+  const ONE_LIKE = 1;
+  const TWO_LIKES = 2;
   let likePlaceholder = null;
-  console.log(isLiked);
-  if (likes.length === 1) {
-    likePlaceholder = `${likes[0].name.split(" ")[0]}`;
+
+  if (quantityOfLikes === ONE_LIKE) {
+    likePlaceholder = `${likes[FIRST_LIKE].name.split(" ")[FIRST_NAME]}`;
   }
 
-  if (likes.length === 2) {
-    likePlaceholder = `${likes[0].name.split(" ")[0]} e ${
-      likes[1].name.split(" ")[0]
+  if (quantityOfLikes === TWO_LIKES) {
+    likePlaceholder = `${likes[FIRST_LIKE].name.split(" ")[FIRST_NAME]} e ${
+      likes[SECOND_LIKE].name.split(" ")[FIRST_NAME]
     }`;
   }
 
-  if (likes.length > 2) {
-    likePlaceholder = `${likes[0].name.split(" ")[0]}, ${
-      likes[1].name.split(" ")[0]
-    } e outras ${likes.length - 1} pessoas`;
+  if (quantityOfLikes > TWO_LIKES) {
+    likePlaceholder = `${likes[FIRST_LIKE].name.split(" ")[FIRST_NAME]}, ${
+      likes[SECOND_LIKE].name.split(" ")[FIRST_NAME]
+    } e outras ${quantityOfLikes - TWO_PEOPLE} pessoas`;
   }
 
   function clickFunction() {

@@ -62,7 +62,7 @@ export default function Timeline() {
           <h6>There are no posts yet . . .</h6>
         ) : (
           posts.map((post, index) => (
-            <Post key={index} user={user} post={post} />
+            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
           ))
         )}
 

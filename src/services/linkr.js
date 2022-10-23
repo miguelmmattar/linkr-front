@@ -57,6 +57,14 @@ function postLike({ postId, token }) {
   });
 }
 
+function deletePost({ postId, token }) {
+  return axios.delete(`${BASE_URL}/posts/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export default {
   getPosts,
   postUrl,
@@ -66,4 +74,5 @@ export default {
   deleteLogout,
   postLike,
   getTrending,
+  deletePost,
 };
