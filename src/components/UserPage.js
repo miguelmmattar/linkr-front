@@ -49,8 +49,9 @@ export default function UserPage() {
                 posts.map((post, index) => (
                 <Post
                     key={index}
-                    user={post.user}
+                    user={user}
                     post={post}
+                    loadPosts={loadPosts}
                 />
                 ))
             )}
