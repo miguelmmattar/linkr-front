@@ -7,6 +7,7 @@ import SignIn from "./SignInPage.js";
 import Timeline from "./Timeline.js";
 import SignUp from "./SignUpPage.js";
 import UserPage from "./UserPage.js";
+import HashtagPage from "../components/HashtagPage.js";
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ function Root() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/user/:id" element={<UserPage />} />
-
+          <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
         </Routes>
       </>
     </UserContext.Provider>

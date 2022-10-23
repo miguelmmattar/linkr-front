@@ -1,47 +1,54 @@
-import { Posts, Load } from "../styles/TimelineStyles.js";
+import { Posts, Load, Trending } from "../styles/TimelineStyles.js";
 import Post from "./secondaryCmponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import TrendingTopics from "./secondaryCmponents/Trending";
 
-export default function UserPage() {
+export default function HashtagPage() {
     const { user } = useContext(UserContext);
-    const { id } = useParams();
+    const { hashtag } = useParams();
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
-    const [profile, setProfile] = useState({});
-    const navigate = useNavigate();
+    const [trending, setTrending] = useState([]);
 
     function loadPosts() {
-        const promise = services.getUserPosts(user.token, id);
+        const promise = services.getHashtagPosts(user.token, hashtag);
 
         setLoad(true);
 
         promise.then(answer => {
             setPosts(answer.data);
-            setProfile(answer.data[0].user);
             setLoad(false);
         });
 
         promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
     }
 
+    function loadTrending() {
+        const promise = services.getTrending(user.token);
+        promise.then((answer) => {
+          setTrending(answer.data);
+        });
+        promise.catch((answer) =>
+          alert(
+            "An error occured while trying to fetch the trending topics, please refresh the page"
+          )
+        );
+      }
+
     useEffect(() => {
-        if(!user) {
-            return navigate("/");
-          }
         loadPosts();
-    }, []);
+        loadTrending();
+    }, [hashtag]);
 
     return (
-        <Posts load={load} trending={false}>
-            <UserInfo load={load}>
-                <img src={profile.picture} alt="Profile" />
-                <h1>{`${profile.name}’s posts`}</h1>
-            </UserInfo>
+        <Posts load={load} hasTrending={true}>
+            <HashtagInfo load={load}>
+                <h1>{`# ${hashtag}`}</h1>
+            </HashtagInfo>
 
             {posts.length === 0 ? (
                 <h6>There are no posts yet . . .</h6>
@@ -59,21 +66,23 @@ export default function UserPage() {
                 <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
                 <h2>Loading</h2>
             </Load>
+
+            <Trending load={load}>
+                <h3>trending</h3>
+                <div></div>
+                {trending.map((value, index) => (
+                    <TrendingTopics key={index} hashtag={value.hashtag} />
+                ))}
+            </Trending>
         </Posts>
     );
 }
 
-const UserInfo = styled.span`
+const HashtagInfo = styled.span`
     display: ${props => props.load ? 'none' : 'flex'};
     align-items: center;
     padding: 0 18px;
-    margin-bottom: 48px;
-
-
-    img {
-        position: initial;
-        margin-right: 18px;
-    }
+    margin-bottom: 42px;
 
     h1{
         margin: 0;

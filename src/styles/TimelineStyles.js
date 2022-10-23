@@ -56,6 +56,8 @@ const Posts = styled.div`
     display: ${(props) => (!props.load ? "center" : "none")};
     text-align: center;
     margin-top: 50px;
+    margin-right: 0;
+    width: 70%;
   }
   p {
     margin: 5px 0 10px 0;
@@ -67,7 +69,7 @@ const Posts = styled.div`
   .post-wrapper {
     width: ${props => props.hasTrending ? '64%' : '100%'};
     min-height: 209px;
-    display: flex;
+    display: ${(props) => (!props.load ? "flex" : "none")};
     padding: 18px 18px 18px 86px;
     background-color: #171717;
     border-radius: 16px;
@@ -119,8 +121,13 @@ const Posts = styled.div`
 
   @media (max-width: 900px) {
       width: 60%;
+      
       .post-wrapper {
           width: 100%;
+      }
+
+      h6 {
+        width: 100%;
       }
   }
 
@@ -336,6 +343,7 @@ const Trending = styled.div`
     line-height: 23px;
     letter-spacing: 0.1em;
     margin: 0 16px 5px 16px;
+    cursor: pointer;
   }
 
   div {
@@ -352,6 +360,7 @@ const Trending = styled.div`
   margin-top: 82px;
   margin-bottom: 40px;
   padding: 20px 0;
+  display: ${(props) => (!props.load ? "initial" : "none")};
   position: absolute;
   top: 0;
   right: 0;

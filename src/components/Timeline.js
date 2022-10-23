@@ -76,7 +76,7 @@ export default function Timeline() {
           <h2>Loading</h2>
         </Load>
 
-        <Trending>
+        <Trending load={load}>
           <h3>trending</h3>
           <div></div>
           {trending.map((value, index) => (
