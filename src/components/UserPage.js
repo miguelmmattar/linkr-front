@@ -34,8 +34,8 @@ export default function UserPage() {
     }, []);
 
     return (
-        <Posts load={load}>
-            <UserInfo>
+        <Posts load={load} hasTrending={false}>
+            <UserInfo load={load}>
                 <img src={profile.picture} alt="Profile" />
                 <h1>{`${profile.name}’s posts`}</h1>
             </UserInfo>
@@ -61,7 +61,7 @@ export default function UserPage() {
 }
 
 const UserInfo = styled.span`
-    display: flex;
+    display: ${props => props.load ? 'none' : 'flex'};
     align-items: center;
     padding: 0 18px;
     margin-bottom: 48px;

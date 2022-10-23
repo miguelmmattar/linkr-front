@@ -5,7 +5,7 @@ import { IconContext } from "react-icons";
 import { IoHeartSharp, IoHeartOutline } from "react-icons/io5";
 import services from "../../services/linkr.js";
 import { useContext, useState } from "react";
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 
 export default function LikeButton({ postId, isLiked, likes }) {
   const { user } = useContext(UserContext);
