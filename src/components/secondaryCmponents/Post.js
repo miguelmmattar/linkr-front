@@ -1,8 +1,9 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
 import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
+import DeletePost from "./DeletePost.js";
 
-export default function Post({ user, post }) {
+export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
@@ -16,6 +17,7 @@ export default function Post({ user, post }) {
       </Link>
       <h4>{post.description}</h4>
       <LikeButton postId={post.id} likes={post.likedBy} isLiked={isLiked} />
+      <DeletePost isUser={isUser} postId={post.id} loadPosts={loadPosts} />
       <a href={post.link.url} target="_blank" className="snippet">
         <Snippet link={post.link} />
       </a>
