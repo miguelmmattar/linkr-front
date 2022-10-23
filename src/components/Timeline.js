@@ -49,7 +49,7 @@ export default function Timeline() {
   }
 
   useEffect(() => {
-    if(!user) {
+    if (!user) {
       return navigate("/");
     }
     loadPosts();
@@ -82,7 +82,7 @@ export default function Timeline() {
           {trending.map((value, index) => (
             <TrendingTopics key={index} hashtag={value.hashtag} />
           ))}
-      </Trending>
+        </Trending>
       </Posts>
     </Container>
   );
