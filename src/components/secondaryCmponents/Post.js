@@ -6,7 +6,7 @@ export default function Post({ user, post }) {
   const postUser = post.user;
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
-  const isMyUser = postUser.id === user.id;
+  const isUser = postUser.id === user.id;
 
   return (
     <div className="post-wrapper">

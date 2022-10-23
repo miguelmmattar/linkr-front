@@ -62,7 +62,7 @@ export default function Timeline() {
           <h6>There are no posts yet . . .</h6>
         ) : (
           posts.map((post, index) => (
-            <Post key={index} user={post.user} post={post} />
+            <Post key={index} user={user} post={post} />
           ))
         )}
 
@@ -119,7 +119,7 @@ function NewPost({ user, loadPosts, loadTrending }) {
   }
 
   return (
-    <div className="new-post">
+    <div className="new-post post-wrapper">
       <img src={user.picture} alt="Profile" />
 
       <h2>What are you going to share today?</h2>

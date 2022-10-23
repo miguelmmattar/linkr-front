@@ -63,7 +63,7 @@ const Posts = styled.div`
   a {
     text-decoration: none;
   }
-  div {
+  .post-wrapper {
     width: 100%;
     min-height: 209px;
     display: flex;
