@@ -277,7 +277,7 @@ const Load = styled.span`
     display: ${props => props.load ? 'flex' : 'none'};
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
+    margin-top: 150px;
 
     img {
         position: static;
