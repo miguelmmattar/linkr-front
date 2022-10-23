@@ -19,7 +19,7 @@ export default function Timeline() {
             setLoad(false);
         });
 
-        promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        promise.catch(answer => alert("An error occurred while trying to fetch the posts, please refresh the page"));
     }
 
     useEffect(() => {
@@ -38,8 +38,9 @@ export default function Timeline() {
                 posts.map((post, index) => (
                 <Post
                     key={index}
-                    user={post.user}
+                    user={user}
                     post={post}
+
                 />
                 ))
             )}
@@ -88,7 +89,7 @@ function NewPost({ user,  loadPosts }) {
       }
 
     return (
-        <div className="new-post">
+        <div className="new-post post-wrapper">
             <img src={user.picture} alt="Profile" />
 
             <h2>What are you going to share today?</h2>
