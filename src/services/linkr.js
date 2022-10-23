@@ -18,6 +18,14 @@ function getUserPosts(token, id) {
   });
 }
 
+function getTrending(token) {
+  return axios.get(`${BASE_URL}/trending`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 function postUrl(token, body) {
     return axios.post(`${BASE_URL}/posts`, body, {
       headers: {
@@ -47,6 +55,7 @@ export default {
     getUserPosts,
     postLogin,
     postSignup,
+    getTrending,
     deleteLogout
 };
 
