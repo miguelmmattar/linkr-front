@@ -10,8 +10,16 @@ function getPosts(token) {
   });
 }
 
-function getUserPosts(token, id) {
-  return axios.get(`${BASE_URL}/user/${id}`, {
+function getUserPosts(token, userId) {
+  return axios.get(`${BASE_URL}/user/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+function getHashtagPosts(token, hashtag) {
+  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -66,4 +74,5 @@ export default {
   deleteLogout,
   postLike,
   getTrending,
+  getHashtagPosts
 };
