@@ -53,7 +53,7 @@ export default function Timeline() {
 
   return (
     <Container>
-      <Posts load={load}>
+      <Posts load={load} hasTrending={true}>
         <h1>timeline</h1>
 
         <NewPost user={user} loadPosts={loadPosts} />
@@ -70,14 +70,15 @@ export default function Timeline() {
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
           <h2>Loading</h2>
         </Load>
-      </Posts>
-      <Trending>
-        <h3>trending</h3>
-        <div></div>
-        {trending.map((value, index) => (
-          <TrendingTopics key={index} hashtag={value.hashtag} />
-        ))}
+
+        <Trending>
+          <h3>trending</h3>
+          <div></div>
+          {trending.map((value, index) => (
+            <TrendingTopics key={index} hashtag={value.hashtag} />
+          ))}
       </Trending>
+      </Posts>
     </Container>
   );
 }

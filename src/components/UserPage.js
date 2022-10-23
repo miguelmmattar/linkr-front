@@ -34,7 +34,7 @@ export default function UserPage() {
     }, []);
 
     return (
-        <Posts load={load}>
+        <Posts load={load} hasTrending={false}>
             <UserInfo load={load}>
                 <img src={profile.picture} alt="Profile" />
                 <h1>{`${profile.name}’s posts`}</h1>

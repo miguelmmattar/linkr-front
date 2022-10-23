@@ -113,7 +113,7 @@ const HeaderMenu = styled.div`
     width: 150px;
     height: ${props => props.clicked ? "0" : "50px"};
     z-index: 5;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 72px;
     display: flex;
@@ -133,7 +133,7 @@ const HeaderMenu = styled.div`
     transition: height 0.5s;
 `;
 const InvisibleDiv = styled.div`
-    width: 100vw;
+    width: 100%;
     height:100vh;
     position: fixed;
     z-index: 3;
