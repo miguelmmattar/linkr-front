@@ -3,13 +3,13 @@ import axios from "axios";
 const BASE_URL = "http://localhost:4000";
 
 function getPosts(token) {
-    return axios.get(`${BASE_URL}/posts`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  return axios.get(`${BASE_URL}/posts`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
- 
+
 function getUserPosts(token, id) {
   return axios.get(`${BASE_URL}/user/${id}`, {
     headers: {
@@ -18,12 +18,20 @@ function getUserPosts(token, id) {
   });
 }
 
+function getTrending(token) {
+  return axios.get(`${BASE_URL}/trending`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 function postUrl(token, body) {
-    return axios.post(`${BASE_URL}/posts`, body, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  return axios.post(`${BASE_URL}/posts`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 function postLogin(body) {
@@ -32,21 +40,30 @@ function postLogin(body) {
 }
 
 function postSignup(body) {
-  return  axios.post(`${BASE_URL}/sign-up`, body);
+  return axios.post(`${BASE_URL}/sign-up`, body);
 }
 
 function deleteLogout(token) {
   return axios.delete(`${BASE_URL}/logout`, {
-    headers: {Authorization: `Bearer ${token}`}
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+function postLike({ postId, token }) {
+  return axios.post(`${BASE_URL}/posts/likes/${postId}`, "", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 }
 
 export default {
-    getPosts,
-    postUrl,
-    getUserPosts,
-    postLogin,
-    postSignup,
-    deleteLogout
+  getPosts,
+  postUrl,
+  getUserPosts,
+  postLogin,
+  postSignup,
+  deleteLogout,
+  postLike,
+  getTrending,
 };
-

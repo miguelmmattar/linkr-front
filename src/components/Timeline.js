@@ -1,134 +1,165 @@
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
-import { Posts, Form, Load } from "../styles/TimelineStyles.js";
+import {
+  Posts,
+  Form,
+  Load,
+  Trending,
+  Container,
+} from "../styles/TimelineStyles.js";
 import Post from "../components/secondaryCmponents/Post.js";
+import TrendingTopics from "./secondaryCmponents/Trending";
 
 export default function Timeline() {
-    const { user } = useContext(UserContext);
-    const [posts, setPosts] = useState([]);
-    const [load, setLoad] = useState(false);
-    
-    function loadPosts() {
-        const promise = services.getPosts(user.token);
+  const { user } = useContext(UserContext);
+  const [posts, setPosts] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [trending, setTrending] = useState([]);
 
-        setLoad(true);
+  function loadPosts() {
+    const promise = services.getPosts(user.token);
 
-        promise.then(answer => {
-            setPosts(answer.data);
-            setLoad(false);
-        });
+    setLoad(true);
 
-        promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
-    }
-
-    useEffect(() => {
-        loadPosts();
-    }, []);
-
-    return (
-        <Posts load={load}>
-            <h1>timeline</h1>
-
-            <NewPost user={user} loadPosts={loadPosts} />
-
-            {posts.length === 0 ? (
-                <h6>There are no posts yet . . .</h6>
-            ) : (
-                posts.map((post, index) => (
-                <Post
-                    key={index}
-                    user={post.user}
-                    post={post}
-                />
-                ))
-            )}
-
-            <Load load={load}>
-                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
-                <h2>Loading</h2>
-            </Load>
-        </Posts>
-    );
-}
-
-function NewPost({ user,  loadPosts }) {
-    const [sending, setSending] = useState(false);
-    const [form, setForm] = useState({
-        url: "",
-        description: ""
+    promise.then((answer) => {
+      setPosts(answer.data);
+      setLoad(false);
     });
 
-    function handleForm({ name, value }) {
-        setForm({ ...form, [name]: value });
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        
-        setSending(true);
-
-        const promise = services.postUrl(user.token, form);
-    
-        promise.then((answer) => {
-            setForm({
-                url: "",
-                description: ""
-            })
-            
-            setSending(false);
-            
-            loadPosts();
-        });
-    
-        promise.catch((answer) => {
-            setSending(false);
-            alert(answer.response.data);
-        });
-      }
-
-    return (
-        <div className="new-post">
-            <img src={user.picture} alt="Profile" />
-
-            <h2>What are you going to share today?</h2>
-
-            <Form onSubmit={handleSubmit} disabled={sending}>
-                <input
-                    type="url"
-                    placeholder="Insert a URL..."
-                    name="url"
-                    required={!sending}
-                    disabled={sending}
-                    value={form.url}
-                    onChange={(e) =>
-                        handleForm({
-                          name: e.target.name,
-                          value: e.target.value,
-                        })
-                    }
-                />
-
-                <textarea
-                    type="text"
-                    placeholder="Write a description..."
-                    name="description"
-                    value={form.description}
-                    disabled={sending}
-                    onChange={(e) =>
-                        handleForm({
-                          name: e.target.name,
-                          value: e.target.value,
-                        })
-                    }
-                />
-
-                <input 
-                    type="submit" 
-                    value={!sending ? "Publish" : "Publishing"}
-                    disabled={sending}
-                />
-            </Form>
-        </div>
+    promise.catch((answer) =>
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      )
     );
+  }
+
+  function loadTrending() {
+    const promise = services.getTrending(user.token);
+    promise.then((answer) => {
+      setTrending(answer.data);
+    });
+    promise.catch((answer) =>
+      alert(
+        "An error occured while trying to fetch the trending topics, please refresh the page"
+      )
+    );
+  }
+
+  useEffect(() => {
+    loadPosts();
+    loadTrending();
+  }, []);
+
+  return (
+    <Container>
+      <Posts load={load}>
+        <h1>timeline</h1>
+
+        <NewPost user={user} loadPosts={loadPosts} />
+
+        {posts.length === 0 ? (
+          <h6>There are no posts yet . . .</h6>
+        ) : (
+          posts.map((post, index) => (
+            <Post key={index} user={user} post={post} />
+          ))
+        )}
+
+        <Load load={load}>
+          <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          <h2>Loading</h2>
+        </Load>
+      </Posts>
+      <Trending>
+        <h3>trending</h3>
+        <div></div>
+        {trending.map((value, index) => (
+          <TrendingTopics key={index} hashtag={value.hashtag} />
+        ))}
+      </Trending>
+    </Container>
+  );
+}
+
+function NewPost({ user, loadPosts, loadTrending }) {
+  const [sending, setSending] = useState(false);
+  const [form, setForm] = useState({
+    url: "",
+    description: "",
+  });
+
+  function handleForm({ name, value }) {
+    setForm({ ...form, [name]: value });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setSending(true);
+
+    const promise = services.postUrl(user.token, form);
+
+    promise.then((answer) => {
+      setForm({
+        url: "",
+        description: "",
+      });
+
+      setSending(false);
+
+      loadPosts();
+      loadTrending();
+    });
+
+    promise.catch((answer) => {
+      setSending(false);
+      alert(answer.response.data);
+    });
+  }
+
+  return (
+    <div className="new-post post-wrapper">
+      <img src={user.picture} alt="Profile" />
+
+      <h2>What are you going to share today?</h2>
+
+      <Form onSubmit={handleSubmit} disabled={sending}>
+        <input
+          type="url"
+          placeholder="Insert a URL..."
+          name="url"
+          required={!sending}
+          disabled={sending}
+          value={form.url}
+          onChange={(e) =>
+            handleForm({
+              name: e.target.name,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <textarea
+          type="text"
+          placeholder="Write a description..."
+          name="description"
+          value={form.description}
+          disabled={sending}
+          onChange={(e) =>
+            handleForm({
+              name: e.target.name,
+              value: e.target.value,
+            })
+          }
+        />
+
+        <input
+          type="submit"
+          value={!sending ? "Publish" : "Publishing"}
+          disabled={sending}
+        />
+      </Form>
+    </div>
+  );
 }
