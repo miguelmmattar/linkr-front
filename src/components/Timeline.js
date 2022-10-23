@@ -10,12 +10,14 @@ import {
 } from "../styles/TimelineStyles.js";
 import Post from "../components/secondaryCmponents/Post.js";
 import TrendingTopics from "./secondaryCmponents/Trending";
+import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [trending, setTrending] = useState([]);
+  const navigate = useNavigate();
 
   function loadPosts() {
     const promise = services.getPosts(user.token);
@@ -47,13 +49,16 @@ export default function Timeline() {
   }
 
   useEffect(() => {
+    if(!user) {
+      return navigate("/");
+    }
     loadPosts();
     loadTrending();
   }, []);
 
   return (
     <Container>
-      <Posts load={load}>
+      <Posts load={load} hasTrending={true}>
         <h1>timeline</h1>
 
         <NewPost user={user} loadPosts={loadPosts} />
@@ -70,14 +75,15 @@ export default function Timeline() {
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
           <h2>Loading</h2>
         </Load>
-      </Posts>
-      <Trending>
-        <h3>trending</h3>
-        <div></div>
-        {trending.map((value, index) => (
-          <TrendingTopics key={index} hashtag={value.hashtag} />
-        ))}
+
+        <Trending load={load}>
+          <h3>trending</h3>
+          <div></div>
+          {trending.map((value, index) => (
+            <TrendingTopics key={index} hashtag={value.hashtag} />
+          ))}
       </Trending>
+      </Posts>
     </Container>
   );
 }
@@ -120,7 +126,7 @@ function NewPost({ user, loadPosts, loadTrending }) {
 
   return (
     <div className="new-post post-wrapper">
-      <img src={user.picture} alt="Profile" />
+      <img src={user?.picture} alt="Profile" />
 
       <h2>What are you going to share today?</h2>
 

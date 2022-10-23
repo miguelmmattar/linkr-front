@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 const Posts = styled.div`
-  width: 40%;
-  min-width: 600px;
+  width: ${props => props.hasTrending ? '70%' : '50%'};
   margin-top: 150px;
   margin-bottom: 40px;
+  position: relative;
+  
   h2,
   h3,
   h4,
@@ -29,11 +30,11 @@ const Posts = styled.div`
     margin-bottom: 16px;
     font-weight: 300;
   }
+
   h3,
   h4,
   h5,
-  p,
-  a {
+  p {
     color: #ffffff;
     max-width: calc(100% - 170px);
   }
@@ -55,6 +56,8 @@ const Posts = styled.div`
     display: ${(props) => (!props.load ? "center" : "none")};
     text-align: center;
     margin-top: 50px;
+    margin-right: 0;
+    width: 70%;
   }
   p {
     margin: 5px 0 10px 0;
@@ -64,9 +67,9 @@ const Posts = styled.div`
     text-decoration: none;
   }
   .post-wrapper {
-    width: 100%;
+    width: ${props => props.hasTrending ? '64%' : '100%'};
     min-height: 209px;
-    display: flex;
+    display: ${(props) => (!props.load ? "flex" : "none")};
     padding: 18px 18px 18px 86px;
     background-color: #171717;
     border-radius: 16px;
@@ -140,6 +143,18 @@ const Posts = styled.div`
     height: 100%;
   }
 
+  @media (max-width: 900px) {
+      width: 60%;
+      
+      .post-wrapper {
+          width: 100%;
+      }
+
+      h6 {
+        width: 100%;
+      }
+  }
+
   @media (max-width: 614px) {
     width: 100%;
     min-width: 0;
@@ -178,12 +193,14 @@ const Posts = styled.div`
     p {
       margin: 4px 0;
     }
-    div {
+
+    .post-wrapper {
       min-height: 164px;
       border-radius: 0;
       padding: 10px 18px 15px 69px;
       display: ${(props) => (!props.load ? "center" : "none")};
     }
+
     .new-post {
       padding: 15px;
       margin-bottom: 16px;
@@ -259,11 +276,13 @@ const Form = styled.form`
 `;
 
 const SnippetBox = styled.div`
-  width: 100%;
+  width: 100% !important;
   min-height: 155px !important;
   border-radius: 11px;
   border: 1px solid #4d4d4d;
   padding: 24px 0 24px 20px !important;
+  margin: 0 !important;
+
   p {
     font-size: 11px;
   }
@@ -306,6 +325,22 @@ const Load = styled.span`
     margin-bottom: 20px;
     width: 20%;
     height: auto;
+    display: ${props => props.load ? 'flex' : 'none'};
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px;
+
+    img {
+        position: static;
+        margin-bottom: 20px;
+        width: 20%;
+        height: auto;
+    }
+
+    h2 {
+        color: #FFFFFF;
+    }
+    
   }
   h2 {
     color: #ffffff;
@@ -315,15 +350,15 @@ const Load = styled.span`
 const Trending = styled.div`
   h3,
   h6 {
-    font-family: "Lato", sans-serif;
     font-weight: 700;
     color: #ffffff;
-    margin-left: 15px;
+    text-align: left;
   }
 
   h3 {
-    font-size: 27px;
-    margin-top: 20px;
+    font-size: 27px !important;
+    font-family: "Oswald", sans-serif;
+    margin: 0 16px;
   }
 
   h6 {
@@ -331,7 +366,8 @@ const Trending = styled.div`
     max-width: calc(100% - 15px);
     line-height: 23px;
     letter-spacing: 0.1em;
-    margin-bottom: 5px;
+    margin: 0 16px 5px 16px;
+    cursor: pointer;
   }
 
   div {
@@ -341,20 +377,25 @@ const Trending = styled.div`
     margin: 20px 0;
   }
 
-  width: 20%;
-  height: 400px;
+  width: 33%;
+  min-height: 100px;
   border-radius: 16px;
   background-color: #171717;
-  margin-top: 150px;
+  margin-top: 82px;
   margin-bottom: 40px;
-  margin-left: 25px;
-  @media (max-width: 614px) {
-    width: 0;
-    margin-left: 0;
+  padding: 20px 0;
+  display: ${(props) => (!props.load ? "initial" : "none")};
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  @media (max-width: 900px) {
+    display: none;
   }
 `;
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
 `;
