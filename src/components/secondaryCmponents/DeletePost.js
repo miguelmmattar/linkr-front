@@ -74,6 +74,8 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
       </IconContext.Provider>
       <ReactModal
         isOpen={showModal}
+        ariaHideApp={false}
+        preventScroll={true}
         style={{ overlay: overlayStyle, content: contentStyle }}
       >
         <PopUp isLoading={isLoading}>
@@ -145,6 +147,10 @@ const Text = styled.span`
   color: white;
   font-size: 34px;
   font-weight: 700;
+
+  @media (max-width: 900px) {
+    font-size: 30px;
+  }
 `;
 
 const Button = styled.span`
@@ -179,10 +185,20 @@ const Button = styled.span`
 
     return config;
   }}
+
+  @media (max-width: 900px) {
+    min-width: 134px;
+    min-height: 30px;
+  }
 `;
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0px 20px;
   margin-top: 39px;
+
+  @media (max-width: 900px) {
+    padding: 0px 0px;
+    margin-top: 40px;
+  }
 `;

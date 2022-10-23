@@ -2,9 +2,12 @@ import { SnippetBox } from "../../styles/TimelineStyles.js";
 import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
 import DeletePost from "./DeletePost.js";
+import EditPost from "./EditPost.js";
+import { useState } from "react/cjs/react.production.min.js";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
+  const [postData, setPostData] = useState(post);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
@@ -15,11 +18,12 @@ export default function Post({ user, post, loadPosts }) {
       <Link to={`/user/${postUser.id}`}>
         <h3>{postUser.name}</h3>
       </Link>
-      <h4>{post.description}</h4>
-      <LikeButton postId={post.id} likes={post.likedBy} isLiked={isLiked} />
-      <DeletePost isUser={isUser} postId={post.id} loadPosts={loadPosts} />
-      <a href={post.link.url} target="_blank" className="snippet">
-        <Snippet link={post.link} />
+      <h4>{postData.description}</h4>
+      <LikeButton postId={postData.id} likes={postData.likedBy} isLiked={isLiked} />
+      <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
+      <EditPost isUser={isUser} postId={postData.id} loadPosts={loadPosts} setPostData={setPostData}/>
+      <a href={postData.link.url} target="_blank" className="snippet">
+        <Snippet link={postData.link} />
       </a>
     </div>
   );

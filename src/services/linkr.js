@@ -73,6 +73,14 @@ function deletePost({ postId, token }) {
   });
 }
 
+function editPost({ body, token }) {
+  return axios.put(`${BASE_URL}/posts`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export default {
   getPosts,
   postUrl,
@@ -83,5 +91,6 @@ export default {
   postLike,
   getTrending,
   deletePost,
-  getHashtagPosts
+  getHashtagPosts,
+  editPost,
 };
