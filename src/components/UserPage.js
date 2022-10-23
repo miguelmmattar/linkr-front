@@ -5,6 +5,7 @@ import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
     const { user } = useContext(UserContext);
@@ -12,8 +13,9 @@ export default function UserPage() {
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
     const [profile, setProfile] = useState({});
+    const navigate = useNavigate();
 
-    console.log(user.picture)
+    console.log(user?.picture)
 
     function loadPosts() {
         const promise = services.getUserPosts(user.token, id);
@@ -30,6 +32,9 @@ export default function UserPage() {
     }
 
     useEffect(() => {
+        if(!user) {
+            return navigate("/");
+          }
         loadPosts();
     }, []);
 
