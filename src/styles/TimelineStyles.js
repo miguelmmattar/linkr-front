@@ -63,7 +63,7 @@ const Posts = styled.div`
   a {
     text-decoration: none;
   }
-  div {
+  .post-wrapper {
     width: 100%;
     min-height: 209px;
     display: flex;
@@ -92,6 +92,30 @@ const Posts = styled.div`
     max-width: 100%;
     text-decoration: none;
   }
+
+  .likeButton-wrapper {
+    position: absolute;
+    left: 33px;
+    cursor: pointer;
+    top: 86px;
+    width: 20px;
+    height: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${(props) => {
+      let config = "";
+
+      return config;
+    }}
+  }
+
+  .likeHeart{
+    width: 100%;
+    height: 100%;
+  }
+
   @media (max-width: 614px) {
     width: 100%;
     min-width: 0;
