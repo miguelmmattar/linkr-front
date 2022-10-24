@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
+import { Puff } from "react-loader-spinner";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -16,6 +17,7 @@ export default function Post({ user, post, loadPosts }) {
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
+  const [isEdited, setIsEdited] = useState(null);
   const navigate = useNavigate();
 
   const tagStyle = {
@@ -38,6 +40,7 @@ export default function Post({ user, post, loadPosts }) {
     }
 
     if (event.key === "Enter") {
+      saveChanges();
     }
   }
 
@@ -56,7 +59,8 @@ export default function Post({ user, post, loadPosts }) {
       .editPost({ token: user.token, body: body })
       .then((response) => {
         setIsLoading(false);
-        loadPosts();
+        setEditMode(false);
+        setIsEdited(true);
       })
       .catch(() => {
         setIsLoading(false);
@@ -76,8 +80,10 @@ export default function Post({ user, post, loadPosts }) {
           onKeyDown={handleKeyboard}
           type="text"
           name="description"
+          disabled={isLoading}
           rows={3}
           cols={40}
+          isLoading={isLoading}
         >
           {postData.description}
         </EditBox>
@@ -100,6 +106,20 @@ export default function Post({ user, post, loadPosts }) {
         editMode={editMode}
         post={post}
       />
+      {isLoading && editMode ? (
+        <LoadingContainer>
+          <Puff
+            height="100%"
+            width="100%"
+            radisu={1}
+            color="#333333"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass="loader"
+            visible={true}
+          />
+        </LoadingContainer>
+      ) : undefined}
 
       <a href={postData.link.url} target="_blank" className="snippet">
         <Snippet link={postData.link} />
@@ -136,4 +156,26 @@ const EditBox = styled.textarea`
   background-color: #efefef;
   vertical-align: baseline;
   font-family: "Lato", sans-serif;
+
+  ${(props) => {
+    let config = "";
+
+    if (props.isLoading === true) {
+      config += "cursor: wait";
+    }
+
+    if (props.isLoading === false) {
+      config += "cursor: auto";
+    }
+
+    return config;
+  }}
+`;
+
+const LoadingContainer = styled.span`
+  position: absolute;
+  top: 85px;
+  right: 23px;
+  width: 20px;
+  height: 20px;
 `;
