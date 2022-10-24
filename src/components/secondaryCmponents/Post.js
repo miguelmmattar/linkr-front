@@ -1,10 +1,11 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
 import DeletePost from "./DeletePost.js";
 import EditPost from "./EditPost.js";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ReactTagify } from "react-tagify";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -13,6 +14,13 @@ export default function Post({ user, post, loadPosts }) {
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
+  const navigate = useNavigate();
+
+  const tagStyle = {
+    color: "white",
+    fontWeight: 700,
+    cursor: "pointer",
+  };
 
   return (
     <div className="post-wrapper">
@@ -21,7 +29,11 @@ export default function Post({ user, post, loadPosts }) {
         <h3>{postUser.name}</h3>
       </Link>
 
-      {editMode ? <EditBox>{postData.description}</EditBox> : <h4>{postData.description}</h4>}
+      {editMode ? (
+        <EditBox>{postData.description}</EditBox>
+      ) : (
+        <h4>{postData.description}</h4>
+      )}
 
       <LikeButton
         postId={postData.id}
@@ -38,6 +50,12 @@ export default function Post({ user, post, loadPosts }) {
       />
       <a href={postData.link.url} target="_blank" className="snippet">
         <Snippet link={postData.link} />
+        <ReactTagify
+          tagStyle={tagStyle}
+          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+        >
+          <h4>{post.description}</h4>
+        </ReactTagify>
       </a>
     </div>
   );
