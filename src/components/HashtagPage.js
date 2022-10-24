@@ -1,11 +1,11 @@
 import { Posts, Load, Trending } from "../styles/TimelineStyles.js";
-import Post from "./secondaryCmponents/Post.js";
+import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import TrendingTopics from "./secondaryCmponents/Trending";
+import TrendingTopics from "./secondaryComponents/Trending";
 
 export default function HashtagPage() {
     const { user } = useContext(UserContext);
