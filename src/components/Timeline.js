@@ -78,7 +78,7 @@ export default function Timeline() {
       <Posts load={load} hasTrending={true}>
         <h1>timeline</h1>
 
-        <NewPost user={user} loadPosts={loadPosts} />
+        <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
 
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>
