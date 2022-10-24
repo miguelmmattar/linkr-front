@@ -1,6 +1,8 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
 import { Link, useNavigate } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
+import date from 'date-and-time';
+import styled from "styled-components";
 import DeletePost from "./DeletePost.js";
 import { ReactTagify } from "react-tagify";
 
@@ -11,6 +13,21 @@ export default function Post({ user, post, loadPosts }) {
   const isUser = postUser.id === user.id;
   const navigate = useNavigate();
 
+  function formatDate(){
+    const time = new Date(post.createdAt).getTime() - 3*3600000;
+    const interval = (Date.now() - time) / 3600000;
+    const now = new Date(Date.now());
+    const isToday =  interval < date.format(now, 'HH');
+
+    if(!isToday) {
+      return date.format(new Date(time), 'DD/MM/YYYY');
+    }
+
+    return date.format(new Date(time), 'HH:mm');
+  }
+
+  const postedAt = formatDate();
+ 
   const tagStyle = {
     color: "white",
     fontWeight: 700,
@@ -20,9 +37,14 @@ export default function Post({ user, post, loadPosts }) {
   return (
     <div className="post-wrapper">
       <img src={postUser.picture} alt="Profile" />
-      <Link to={`/user/${postUser.id}`}>
-        <h3>{postUser.name}</h3>
-      </Link>
+      <Posted>
+        <Link to={`/user/${postUser.id}`}>
+          <h3>{postUser.name}</h3>
+        </Link>
+        <p>{postedAt}</p>
+      </Posted>  
+      
+      <h4>{post.description}</h4>
 
       <ReactTagify
         tagStyle={tagStyle}
@@ -50,3 +72,14 @@ function Snippet({ link }) {
     </SnippetBox>
   );
 }
+
+const Posted = styled.span`
+  width: 100%;
+  margin-top: 10px;
+  
+  p {
+    font-size: 12px;
+    margin-bottom: 0 !important;
+    opacity: 0.3;
+  }
+`;

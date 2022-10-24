@@ -168,4 +168,4 @@ const InvisibleDiv = styled.div`
     display: ${props => props.clicked ? "none" : "initial"};
 `;
 
-export default Search
+export default Search;
