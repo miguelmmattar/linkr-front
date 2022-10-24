@@ -1,5 +1,5 @@
 import { Posts, Load } from "../styles/TimelineStyles.js";
-import Post from "./secondaryCmponents/Post.js";
+import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
@@ -34,7 +34,7 @@ export default function UserPage() {
             return navigate("/");
           }
         loadPosts();
-    }, []);
+    }, [id]);
 
     return (
         <Posts load={load} trending={false}>
@@ -49,9 +49,8 @@ export default function UserPage() {
                 posts.map((post, index) => (
                 <Post
                     key={index}
-                    user={user}
+                    user={post.user}
                     post={post}
-                    loadPosts={loadPosts}
                 />
                 ))
             )}

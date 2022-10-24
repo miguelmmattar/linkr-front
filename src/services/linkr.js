@@ -81,6 +81,14 @@ function editPost({ body, token }) {
   });
 }
 
+function getSearch({ token, searchString }) {
+  return axios.get(`${BASE_URL}/search/${searchString}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export default {
   getPosts,
   postUrl,
@@ -93,4 +101,5 @@ export default {
   deletePost,
   getHashtagPosts,
   editPost,
+  getSearch,
 };

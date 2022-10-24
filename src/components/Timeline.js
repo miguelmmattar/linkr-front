@@ -8,8 +8,8 @@ import {
   Trending,
   Container,
 } from "../styles/TimelineStyles.js";
-import Post from "../components/secondaryCmponents/Post.js";
-import TrendingTopics from "./secondaryCmponents/Trending";
+import Post from "./secondaryComponents/Post.js";
+import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
