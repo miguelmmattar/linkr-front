@@ -8,80 +8,78 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
-    const { user, setUser } = useContext(UserContext);
-    const { id } = useParams();
-    const [posts, setPosts] = useState([]);
-    const [load, setLoad] = useState(false);
-    const [profile, setProfile] = useState({});
-    const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const { id } = useParams();
+  const [posts, setPosts] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [profile, setProfile] = useState({});
+  const navigate = useNavigate();
 
-    function loadPosts() {
-        const promise = services.getUserPosts(user.token, id);
+  function loadPosts() {
+    const promise = services.getUserPosts(user.token, id);
 
-        setLoad(true);
+    setLoad(true);
 
-        promise.then(answer => {
-            setPosts(answer.data);
-            setProfile(answer.data[0].user);
-            setLoad(false);
-        });
+    promise.then((answer) => {
+      setPosts(answer.data);
+      setProfile(answer.data[0].user);
+      setLoad(false);
+    });
 
-        promise.catch(answer => {
-            if(answer.response.status === 401) {
-                localStorage.clear();
-                setUser(null);
-                return (navigate("/"));
-              }
-            alert("An error occured while trying to fetch the posts, please refresh the page")});
+    promise.catch((answer) => {
+      if (answer.response.status === 401) {
+        localStorage.clear();
+        setUser(null);
+        return navigate("/");
+      }
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    });
+  }
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/");
     }
+    loadPosts();
+  }, [id]);
 
-    useEffect(() => {
-        if(!user) {
-            return navigate("/");
-          }
-        loadPosts();
-    }, [id]);
+  return (
+    <Posts load={load} trending={false}>
+      <UserInfo load={load}>
+        <img src={profile.picture} alt="Profile" />
+        <h1>{`${profile.name}’s posts`}</h1>
+      </UserInfo>
 
-    return (
-        <Posts load={load} trending={false}>
-            <UserInfo load={load}>
-                <img src={profile.picture} alt="Profile" />
-                <h1>{`${profile.name}’s posts`}</h1>
-            </UserInfo>
+      {posts.length === 0 ? (
+        <h6>There are no posts yet . . .</h6>
+      ) : (
+        posts.map((post, index) => (
+          <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+        ))
+      )}
 
-            {posts.length === 0 ? (
-                <h6>There are no posts yet . . .</h6>
-            ) : (
-                posts.map((post, index) => (
-                <Post
-                    key={index}
-                    user={post.user}
-                    post={post}
-                />
-                ))
-            )}
-
-            <Load load={load}>
-                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
-                <h2>Loading</h2>
-            </Load>
-        </Posts>
-    );
+      <Load load={load}>
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+        <h2>Loading</h2>
+      </Load>
+    </Posts>
+  );
 }
 
 const UserInfo = styled.span`
-    display: ${props => props.load ? 'none' : 'flex'};
-    align-items: center;
-    padding: 0 18px;
-    margin-bottom: 48px;
+  display: ${(props) => (props.load ? "none" : "flex")};
+  align-items: center;
+  padding: 0 18px;
+  margin-bottom: 48px;
 
+  img {
+    position: initial;
+    margin-right: 18px;
+  }
 
-    img {
-        position: initial;
-        margin-right: 18px;
-    }
-
-    h1{
-        margin: 0;
-    }
+  h1 {
+    margin: 0;
+  }
 `;
