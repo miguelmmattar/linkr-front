@@ -2,12 +2,15 @@ import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import services from "../services/linkr.js"
+import Search from "../components/secondaryCmponents/Search.js";
+
 
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
     const path = useLocation().pathname;
+    const [search, setSearch] = useState(null)
     const [menu, setMenu] = useState(true);
     const navigate = useNavigate();
     function logout() {
@@ -29,19 +32,30 @@ export default function Header() {
             </HeaderMenu>
             {path !== "/signup" && path !== "/" && (
                 <HeaderBar>
-                    <Link to={"/timeline"}>
-                        <h1>linkr</h1>
-                    </Link>
+                        <h1 onClick={()=>{
+                            setSearch(null)
+                            return (navigate("/timeline"));
+                        }}>linkr</h1>
                     <span>
                         {menu ? (
-                            <IoIosArrowDown onClick={() => { setMenu(!menu) }} />
+                            <IoIosArrowDown onClick={() => { 
+                                setSearch(null) 
+                                setMenu(!menu) }} />
                         ) : (
-                            <IoIosArrowUp onClick={() => { setMenu(!menu) }} />
+                            <IoIosArrowUp onClick={() => { 
+                                setSearch(null) 
+                                setMenu(!menu) }} />
                         )}
-                        <img src={user?.picture} alt="ProfilePicture" onClick={() => { setMenu(!menu) }} />
+                        <img src={user?.picture} alt="ProfilePicture" onClick={() => { 
+                            setSearch(null) 
+                            setMenu(!menu) }} />
                     </span>
                 </HeaderBar>
             )}
+            <Search 
+                search={search} 
+                setSearch={setSearch} 
+                setMenu={setMenu}/>
         </>
     );
 }
@@ -57,7 +71,7 @@ const HeaderBar = styled.div`
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     a{
         text-decoration: none;
     }
