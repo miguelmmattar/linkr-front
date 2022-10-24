@@ -1,11 +1,7 @@
-import styled from "styled-components";
 import UserContext from "../../contexts/UserContext.js";
-import { Puff, ThreeDots } from "react-loader-spinner";
 import { IconContext } from "react-icons";
 import { MdModeEdit } from "react-icons/md";
-import services from "../../services/linkr.js";
 import { useContext, useState } from "react";
-import { Form } from "../../styles/TimelineStyles.js";
 
 export default function EditPost({
   postId,
@@ -13,6 +9,8 @@ export default function EditPost({
   loadPosts,
   setPostData,
   setEditMode,
+  editMode,
+  post
 }) {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,26 +20,16 @@ export default function EditPost({
       return;
     }
 
-    setEditMode(true);
-  }
-
-  function deletePost() {
-    if (isLoading) {
-      return;
+    if (!editMode) {
+      setEditMode(true);
+      return
     }
 
-    setIsLoading(true);
-    services
-      .deletePost({ token: user.token, postId })
-      .then((response) => {
-        setIsLoading(false);
-        loadPosts();
-      })
-      .catch(() => {
-        setIsLoading(false);
-        alert("Failed to edit");
-      });
+    setEditMode(false)
+    setPostData(post)
   }
+
+  
 
   return (
     <>

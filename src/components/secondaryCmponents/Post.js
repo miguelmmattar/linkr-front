@@ -6,10 +6,12 @@ import EditPost from "./EditPost.js";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
+import services from "../../services/linkr.js";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
   const [postData, setPostData] = useState(post);
+  const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
@@ -22,32 +24,83 @@ export default function Post({ user, post, loadPosts }) {
     cursor: "pointer",
   };
 
+  function handleChange(event) {
+    setPostData({
+      ...postData,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  function handleKeyboard(event) {
+    if (event.keyCode === 27) {
+      setEditMode(false);
+      setPostData(post);
+    }
+
+    if (event.key === "Enter") {
+    }
+  }
+
+  function saveChanges() {
+    if (isLoading) {
+      return;
+    }
+
+    const body = {
+      id: post.id,
+      description: postData.description,
+    };
+
+    setIsLoading(true);
+    services
+      .editPost({ token: user.token, body: body })
+      .then((response) => {
+        setIsLoading(false);
+        loadPosts();
+      })
+      .catch(() => {
+        setIsLoading(false);
+        alert("Failed to edit");
+      });
+  }
+
   return (
     <div className="post-wrapper">
       <img src={postUser.picture} alt="Profile" />
       <Link to={`/user/${postUser.id}`}>
         <h3>{postUser.name}</h3>
       </Link>
-
       {editMode ? (
-        <EditBox>{postData.description}</EditBox>
+        <EditBox
+          onChange={handleChange}
+          onKeyDown={handleKeyboard}
+          type="text"
+          name="description"
+          rows={3}
+          cols={40}
+        >
+          {postData.description}
+        </EditBox>
       ) : (
         <h4>{postData.description}</h4>
       )}
-
       <LikeButton
         postId={postData.id}
         likes={postData.likedBy}
         isLiked={isLiked}
       />
       <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
+
       <EditPost
         isUser={isUser}
-        postId={postData.id}
+        postId={post.id}
         loadPosts={loadPosts}
         setPostData={setPostData}
         setEditMode={setEditMode}
+        editMode={editMode}
+        post={post}
       />
+
       <a href={postData.link.url} target="_blank" className="snippet">
         <Snippet link={postData.link} />
         <ReactTagify
@@ -78,8 +131,7 @@ const EditBox = styled.textarea`
   border: none;
   padding: 5px 13px;
   border: 1px solid #efefef;
-  height: 30px;
-  margin-bottom: 5px;
+  margin: 15px 0px 10px 0px;
   font-size: 15px;
   background-color: #efefef;
   vertical-align: baseline;
