@@ -1,7 +1,7 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
 import styled from "styled-components";
 import LikeButton from "./LikeButton.js";
-import date from 'date-and-time';
+import date from "date-and-time";
 import DeletePost from "./DeletePost.js";
 import EditPost from "./EditPost.js";
 import { useState } from "react";
@@ -21,21 +21,21 @@ export default function Post({ user, post, loadPosts }) {
   const [isEdited, setIsEdited] = useState(null);
   const navigate = useNavigate();
 
-  function formatDate(){
-    const time = new Date(post.createdAt).getTime() - 3*3600000;
+  function formatDate() {
+    const time = new Date(post.createdAt).getTime() - 3 * 3600000;
     const interval = (Date.now() - time) / 3600000;
     const now = new Date(Date.now());
-    const isToday =  interval < date.format(now, 'HH');
+    const isToday = interval < date.format(now, "HH");
 
-    if(!isToday) {
-      return date.format(new Date(time), 'DD/MM/YYYY');
+    if (!isToday) {
+      return date.format(new Date(time), "DD/MM/YYYY");
     }
 
-    return date.format(new Date(time), 'HH:mm');
+    return date.format(new Date(time), "HH:mm");
   }
 
   const postedAt = formatDate();
- 
+
   const tagStyle = {
     color: "white",
     fontWeight: 700,
@@ -92,23 +92,33 @@ export default function Post({ user, post, loadPosts }) {
           <h3>{postUser.name}</h3>
         </Link>
         <p>{postedAt}</p>
-      </Posted>  
-      
+      </Posted>
+
       {editMode ? (
-        <EditBox
-          onChange={handleChange}
-          onKeyDown={handleKeyboard}
-          type="text"
-          name="description"
-          disabled={isLoading}
-          rows={3}
-          cols={40}
-          isLoading={isLoading}
+        <ReactTagify
+          tagStyle={tagStyle}
+          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
         >
-          {postData.description}
-        </EditBox>
+          <EditBox
+            onChange={handleChange}
+            onKeyDown={handleKeyboard}
+            type="text"
+            name="description"
+            disabled={isLoading}
+            rows={3}
+            cols={40}
+            isLoading={isLoading}
+          >
+            {postData.description}
+          </EditBox>
+        </ReactTagify>
       ) : (
-        <h4>{postData.description}</h4>
+        <ReactTagify
+          tagStyle={tagStyle}
+          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+        >
+          <h4>{postData.description}</h4>
+        </ReactTagify>
       )}
       <LikeButton
         postId={postData.id}
@@ -116,8 +126,7 @@ export default function Post({ user, post, loadPosts }) {
         isLiked={isLiked}
       />
       <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
-      
-      
+
       <EditPost
         isUser={isUser}
         postId={post.id}
@@ -144,12 +153,6 @@ export default function Post({ user, post, loadPosts }) {
 
       <a href={postData.link.url} target="_blank" className="snippet">
         <Snippet link={postData.link} />
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
-        >
-          <h4>{post.description}</h4>
-        </ReactTagify>
       </a>
     </div>
   );
@@ -203,7 +206,7 @@ const LoadingContainer = styled.span`
 const Posted = styled.span`
   width: 100%;
   margin-top: 10px;
-  
+
   p {
     font-size: 12px;
     margin-bottom: 0 !important;
