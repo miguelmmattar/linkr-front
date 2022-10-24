@@ -13,7 +13,7 @@ import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [trending, setTrending] = useState([]);
@@ -29,10 +29,18 @@ export default function Timeline() {
       setLoad(false);
     });
 
-    promise.catch((answer) =>
+    promise.catch((answer) => {
+      if (answer.response.status === 401) {
+        localStorage.clear();
+        setUser(null);
+        return (navigate("/"));
+      }
+
       alert(
         "An error occured while trying to fetch the posts, please refresh the page"
       )
+    }
+
     );
   }
 
@@ -41,15 +49,24 @@ export default function Timeline() {
     promise.then((answer) => {
       setTrending(answer.data);
     });
-    promise.catch((answer) =>
+    promise.catch((answer) => {
+      if(answer.response.status === 401) {
+        setUser(null)
+        localStorage.clear();
+        setUser(null);
+        return (navigate("/"));
+      }
       alert(
         "An error occured while trying to fetch the trending topics, please refresh the page"
       )
+    }
     );
   }
 
   useEffect(() => {
     if (!user) {
+      localStorage.clear();
+      setUser(null);
       return navigate("/");
     }
     loadPosts();

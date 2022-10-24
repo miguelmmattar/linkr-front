@@ -8,7 +8,7 @@ import styled from "styled-components";
 import TrendingTopics from "./secondaryComponents/Trending";
 
 export default function HashtagPage() {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const { hashtag } = useParams();
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
@@ -25,25 +25,37 @@ export default function HashtagPage() {
             setLoad(false);
         });
 
-        promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        promise.catch(answer => {
+            if (answer.response.status === 401) {
+                localStorage.clear();
+                setUser(null);
+                return (navigate("/"));
+            }
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+        });
     }
 
     function loadTrending() {
         const promise = services.getTrending(user.token);
         promise.then((answer) => {
-          setTrending(answer.data);
+            setTrending(answer.data);
         });
-        promise.catch((answer) =>
-          alert(
-            "An error occured while trying to fetch the trending topics, please refresh the page"
-          )
+        promise.catch((answer) =>{
+            if (answer.response.status === 401) {
+                localStorage.clear();
+                setUser(null);
+                return (navigate("/"));
+            }
+            alert(
+                "An error occured while trying to fetch the trending topics, please refresh the page"
+            )}
         );
-      }
+    }
 
     useEffect(() => {
-        if(!user) {
+        if (!user) {
             return navigate("/");
-          }
+        }
         loadPosts();
         loadTrending();
     }, [hashtag]);
@@ -58,11 +70,11 @@ export default function HashtagPage() {
                 <h6>There are no posts yet . . .</h6>
             ) : (
                 posts.map((post, index) => (
-                <Post
-                    key={index}
-                    user={post.user}
-                    post={post}
-                />
+                    <Post
+                        key={index}
+                        user={post.user}
+                        post={post}
+                    />
                 ))
             )}
 
