@@ -87,9 +87,13 @@ export default function Post({ user, post, loadPosts }) {
   return (
     <div className="post-wrapper">
       <img src={postUser.picture} alt="Profile" />
-      <Link to={`/user/${postUser.id}`}>
-        <h3>{postUser.name}</h3>
-      </Link>
+      <Posted>
+        <Link to={`/user/${postUser.id}`}>
+          <h3>{postUser.name}</h3>
+        </Link>
+        <p>{postedAt}</p>
+      </Posted>  
+      
       {editMode ? (
         <EditBox
           onChange={handleChange}
@@ -112,15 +116,8 @@ export default function Post({ user, post, loadPosts }) {
         isLiked={isLiked}
       />
       <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
-      <Posted>
-        <Link to={`/user/${postUser.id}`}>
-          <h3>{postUser.name}</h3>
-        </Link>
-        <p>{postedAt}</p>
-      </Posted>  
       
-      <h4>{post.description}</h4>
-
+      
       <EditPost
         isUser={isUser}
         postId={post.id}
