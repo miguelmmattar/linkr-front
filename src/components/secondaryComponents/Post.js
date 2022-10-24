@@ -95,23 +95,18 @@ export default function Post({ user, post, loadPosts }) {
       </Posted>
 
       {editMode ? (
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+        <EditBox
+          onChange={handleChange}
+          onKeyDown={handleKeyboard}
+          type="text"
+          name="description"
+          disabled={isLoading}
+          rows={3}
+          cols={40}
+          isLoading={isLoading}
         >
-          <EditBox
-            onChange={handleChange}
-            onKeyDown={handleKeyboard}
-            type="text"
-            name="description"
-            disabled={isLoading}
-            rows={3}
-            cols={40}
-            isLoading={isLoading}
-          >
-            {postData.description}
-          </EditBox>
-        </ReactTagify>
+          {postData.description}
+        </EditBox>
       ) : (
         <ReactTagify
           tagStyle={tagStyle}
