@@ -33,6 +33,7 @@ export default function Header() {
                 <HeaderBar>
                         <h1 onClick={()=>{
                             setSearch(null)
+                            setMenu(!menu) 
                             return (navigate("/timeline"));
                         }}>linkr</h1>
                     <span>
