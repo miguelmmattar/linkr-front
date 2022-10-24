@@ -1,16 +1,24 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
-import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import LikeButton from "./LikeButton.js";
 import date from 'date-and-time';
-import styled from "styled-components";
 import DeletePost from "./DeletePost.js";
+import EditPost from "./EditPost.js";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
+import services from "../../services/linkr.js";
+import { Puff } from "react-loader-spinner";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
+  const [postData, setPostData] = useState(post);
+  const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
+  const [editMode, setEditMode] = useState(false);
+  const [isEdited, setIsEdited] = useState(null);
   const navigate = useNavigate();
 
   function formatDate(){
@@ -34,6 +42,48 @@ export default function Post({ user, post, loadPosts }) {
     cursor: "pointer",
   };
 
+  function handleChange(event) {
+    setPostData({
+      ...postData,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  function handleKeyboard(event) {
+    if (event.keyCode === 27) {
+      setEditMode(false);
+      setPostData(post);
+    }
+
+    if (event.key === "Enter") {
+      saveChanges();
+    }
+  }
+
+  function saveChanges() {
+    if (isLoading) {
+      return;
+    }
+
+    const body = {
+      id: post.id,
+      description: postData.description,
+    };
+
+    setIsLoading(true);
+    services
+      .editPost({ token: user.token, body: body })
+      .then((response) => {
+        setIsLoading(false);
+        setEditMode(false);
+        setIsEdited(true);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        alert("Failed to edit");
+      });
+  }
+
   return (
     <div className="post-wrapper">
       <img src={postUser.picture} alt="Profile" />
@@ -44,19 +94,62 @@ export default function Post({ user, post, loadPosts }) {
         <p>{postedAt}</p>
       </Posted>  
       
-      <h4>{post.description}</h4>
+      {editMode ? (
+        <EditBox
+          onChange={handleChange}
+          onKeyDown={handleKeyboard}
+          type="text"
+          name="description"
+          disabled={isLoading}
+          rows={3}
+          cols={40}
+          isLoading={isLoading}
+        >
+          {postData.description}
+        </EditBox>
+      ) : (
+        <h4>{postData.description}</h4>
+      )}
+      <LikeButton
+        postId={postData.id}
+        likes={postData.likedBy}
+        isLiked={isLiked}
+      />
+      <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
+      
+      
+      <EditPost
+        isUser={isUser}
+        postId={post.id}
+        loadPosts={loadPosts}
+        setPostData={setPostData}
+        setEditMode={setEditMode}
+        editMode={editMode}
+        post={post}
+      />
+      {isLoading && editMode ? (
+        <LoadingContainer>
+          <Puff
+            height="100%"
+            width="100%"
+            radisu={1}
+            color="#333333"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass="loader"
+            visible={true}
+          />
+        </LoadingContainer>
+      ) : undefined}
 
-      <ReactTagify
-        tagStyle={tagStyle}
-        tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
-      >
-        <h4>{post.description}</h4>
-      </ReactTagify>
-
-      <LikeButton postId={post.id} likes={post.likedBy} isLiked={isLiked} />
-      <DeletePost isUser={isUser} postId={post.id} loadPosts={loadPosts} />
-      <a href={post.link.url} target="_blank" className="snippet">
-        <Snippet link={post.link} />
+      <a href={postData.link.url} target="_blank" className="snippet">
+        <Snippet link={postData.link} />
+        <ReactTagify
+          tagStyle={tagStyle}
+          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+        >
+          <h4>{post.description}</h4>
+        </ReactTagify>
       </a>
     </div>
   );
@@ -73,6 +166,40 @@ function Snippet({ link }) {
   );
 }
 
+const EditBox = styled.textarea`
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 13px;
+  border: 1px solid #efefef;
+  margin: 15px 0px 10px 0px;
+  font-size: 15px;
+  background-color: #efefef;
+  vertical-align: baseline;
+  font-family: "Lato", sans-serif;
+
+  ${(props) => {
+    let config = "";
+
+    if (props.isLoading === true) {
+      config += "cursor: wait";
+    }
+
+    if (props.isLoading === false) {
+      config += "cursor: auto";
+    }
+
+    return config;
+  }}
+`;
+
+const LoadingContainer = styled.span`
+  position: absolute;
+  top: 85px;
+  right: 23px;
+  width: 20px;
+  height: 20px;
+`;
 const Posted = styled.span`
   width: 100%;
   margin-top: 10px;

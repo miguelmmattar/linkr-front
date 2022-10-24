@@ -73,13 +73,21 @@ function deletePost({ postId, token }) {
   });
 }
 
+function editPost({ body, token }) {
+  return axios.put(`${BASE_URL}/posts`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 function getSearch({ token, searchString }) {
   return axios.get(`${BASE_URL}/search/${searchString}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-};
+}
 
 export default {
   getPosts,
@@ -92,5 +100,6 @@ export default {
   getTrending,
   deletePost,
   getHashtagPosts,
-  getSearch
+  editPost,
+  getSearch,
 };

@@ -5,7 +5,7 @@ const Posts = styled.div`
   margin-top: 120px;
   margin-bottom: 40px;
   position: relative;
-  
+
   h2,
   h3,
   h4,
@@ -67,7 +67,7 @@ const Posts = styled.div`
     text-decoration: none;
   }
   .post-wrapper {
-    width: ${props => props.hasTrending ? '64%' : '100%'};
+    width: ${(props) => (props.hasTrending ? "64%" : "100%")};
     min-height: 209px;
     display: ${(props) => (!props.load ? "flex" : "none")};
     padding: 18px 18px 18px 86px;
@@ -106,6 +106,29 @@ const Posts = styled.div`
     height: 100%;
   }
 
+  .edit-button-wrapper {
+    position: absolute;
+    right: 52px;
+    cursor: pointer;
+    top: 20px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${(props) => {
+      let config = "";
+
+      return config;
+    }}
+  }
+
+  .edit-button {
+    width: 100%;
+    height: 100%;
+  }
+
   img {
     border-radius: 50%;
     width: 50px;
@@ -131,11 +154,10 @@ const Posts = styled.div`
     align-items: center;
     justify-content: center;
 
-    ${(props) => {
-      let config = "";
-
-      return config;
-    }}
+    @media (max-width: 900px) {
+      left: 27px;
+      top: 80px;
+    }
   }
 
   .likeHeart {
@@ -144,15 +166,15 @@ const Posts = styled.div`
   }
 
   @media (max-width: 900px) {
-      width: 60%;
-      
-      .post-wrapper {
-          width: 100%;
-      }
+    width: 60%;
 
-      h6 {
-        width: 100%;
-      }
+    .post-wrapper {
+      width: 100%;
+    }
+
+    h6 {
+      width: 100%;
+    }
   }
 
   @media (max-width: 614px) {
@@ -325,22 +347,21 @@ const Load = styled.span`
     margin-bottom: 20px;
     width: 20%;
     height: auto;
-    display: ${props => props.load ? 'flex' : 'none'};
+    display: ${(props) => (props.load ? "flex" : "none")};
     flex-direction: column;
     align-items: center;
     margin-top: 150px;
 
     img {
-        position: static;
-        margin-bottom: 20px;
-        width: 20%;
-        height: auto;
+      position: static;
+      margin-bottom: 20px;
+      width: 20%;
+      height: auto;
     }
 
     h2 {
-        color: #FFFFFF;
+      color: #ffffff;
     }
-    
   }
   h2 {
     color: #ffffff;

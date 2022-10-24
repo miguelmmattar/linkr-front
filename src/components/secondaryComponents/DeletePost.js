@@ -22,6 +22,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
     alignItems: "center",
     justifyContent: "center",
     border: "0px",
+    padding: "0px",
   };
 
   function clickFunction() {
@@ -74,6 +75,8 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
       </IconContext.Provider>
       <ReactModal
         isOpen={showModal}
+        ariaHideApp={false}
+        preventScroll={true}
         style={{ overlay: overlayStyle, content: contentStyle }}
       >
         <PopUp isLoading={isLoading}>
@@ -126,6 +129,14 @@ const PopUp = styled.div`
   font-family: "Lato", sans-serif;
   padding: 40px 130px;
   text-align: center;
+
+  @media (max-width: 900px) {
+    width: 300px;
+    border-radius: 30px;
+    padding: 30px 5px 60px 5px;
+    height: 300px;
+  }
+
   ${(props) => {
     let config = "";
 
@@ -139,12 +150,19 @@ const PopUp = styled.div`
 
     return config;
   }}
+
+ 
 `;
 
 const Text = styled.span`
   color: white;
   font-size: 34px;
   font-weight: 700;
+
+  @media (max-width: 900px) {
+    font-size: 25px;
+    width: 100%;
+  }
 `;
 
 const Button = styled.span`
@@ -179,10 +197,25 @@ const Button = styled.span`
 
     return config;
   }}
+
+  @media (max-width: 900px) {
+    max-width: 134px;
+    max-height: 30px;
+    font-size: 15px;
+  }
 `;
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0px 20px;
   margin-top: 39px;
+
+  @media (max-width: 900px) {
+    padding: 0px 0px;
+    height: 70%;
+    padding: 10px;
+    max-height: 210px;
+    flex-direction: column;
+    justify-content: space-around;
+  }
 `;
