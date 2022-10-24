@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useLocation, useNavigate } from "react-router-dom";
 import services from "../services/linkr.js"
-import Search from "../components/secondaryCmponents/Search.js";
+import Search from "./secondaryCmponents/Search.js";
 
 
 export default function Header() {
