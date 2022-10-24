@@ -22,6 +22,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
     alignItems: "center",
     justifyContent: "center",
     border: "0px",
+    padding: "0px",
   };
 
   function clickFunction() {
@@ -128,6 +129,14 @@ const PopUp = styled.div`
   font-family: "Lato", sans-serif;
   padding: 40px 130px;
   text-align: center;
+
+  @media (max-width: 900px) {
+    width: 300px;
+    border-radius: 30px;
+    padding: 30px 5px 60px 5px;
+    height: 300px;
+  }
+
   ${(props) => {
     let config = "";
 
@@ -141,6 +150,8 @@ const PopUp = styled.div`
 
     return config;
   }}
+
+ 
 `;
 
 const Text = styled.span`
@@ -149,7 +160,8 @@ const Text = styled.span`
   font-weight: 700;
 
   @media (max-width: 900px) {
-    font-size: 30px;
+    font-size: 25px;
+    width: 100%;
   }
 `;
 
@@ -187,8 +199,9 @@ const Button = styled.span`
   }}
 
   @media (max-width: 900px) {
-    min-width: 134px;
-    min-height: 30px;
+    max-width: 134px;
+    max-height: 30px;
+    font-size: 15px;
   }
 `;
 const ButtonContainer = styled.div`
@@ -199,6 +212,10 @@ const ButtonContainer = styled.div`
 
   @media (max-width: 900px) {
     padding: 0px 0px;
-    margin-top: 40px;
+    height: 70%;
+    padding: 10px;
+    max-height: 210px;
+    flex-direction: column;
+    justify-content: space-around;
   }
 `;
