@@ -1,5 +1,5 @@
 import { Posts, Load } from "../styles/TimelineStyles.js";
-import Post from "./secondaryCmponents/Post.js";
+import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";

@@ -1,13 +1,17 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
 import date from 'date-and-time';
 import styled from "styled-components";
+import DeletePost from "./DeletePost.js";
+import { ReactTagify } from "react-tagify";
 
-export default function Post({ user, post }) {
+export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
+  const isUser = postUser.id === user.id;
+  const navigate = useNavigate();
 
   function formatDate(){
     const time = new Date(post.createdAt).getTime() - 3*3600000;
@@ -23,6 +27,12 @@ export default function Post({ user, post }) {
   }
 
   const postedAt = formatDate();
+ 
+  const tagStyle = {
+    color: "white",
+    fontWeight: 700,
+    cursor: "pointer",
+  };
 
   return (
     <div className="post-wrapper">
@@ -35,7 +45,16 @@ export default function Post({ user, post }) {
       </Posted>  
       
       <h4>{post.description}</h4>
+
+      <ReactTagify
+        tagStyle={tagStyle}
+        tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+      >
+        <h4>{post.description}</h4>
+      </ReactTagify>
+
       <LikeButton postId={post.id} likes={post.likedBy} isLiked={isLiked} />
+      <DeletePost isUser={isUser} postId={post.id} loadPosts={loadPosts} />
       <a href={post.link.url} target="_blank" className="snippet">
         <Snippet link={post.link} />
       </a>

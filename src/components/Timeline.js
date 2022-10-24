@@ -8,8 +8,8 @@ import {
   Trending,
   Container,
 } from "../styles/TimelineStyles.js";
-import Post from "../components/secondaryCmponents/Post.js";
-import TrendingTopics from "./secondaryCmponents/Trending";
+import Post from "./secondaryComponents/Post.js";
+import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 
 export default function Timeline() {
@@ -49,7 +49,7 @@ export default function Timeline() {
   }
 
   useEffect(() => {
-    if(!user) {
+    if (!user) {
       return navigate("/");
     }
     loadPosts();
@@ -67,7 +67,7 @@ export default function Timeline() {
           <h6>There are no posts yet . . .</h6>
         ) : (
           posts.map((post, index) => (
-            <Post key={index} user={user} post={post} />
+            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
           ))
         )}
 
@@ -82,7 +82,7 @@ export default function Timeline() {
           {trending.map((value, index) => (
             <TrendingTopics key={index} hashtag={value.hashtag} />
           ))}
-      </Trending>
+        </Trending>
       </Posts>
     </Container>
   );
