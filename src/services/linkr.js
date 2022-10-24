@@ -73,6 +73,14 @@ function deletePost({ postId, token }) {
   });
 }
 
+function getSearch({ token, searchString }) {
+  return axios.get(`${BASE_URL}/search/${searchString}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export default {
   getPosts,
   postUrl,
@@ -83,5 +91,6 @@ export default {
   postLike,
   getTrending,
   deletePost,
-  getHashtagPosts
+  getHashtagPosts,
+  getSearch
 };

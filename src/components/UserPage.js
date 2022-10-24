@@ -34,7 +34,7 @@ export default function UserPage() {
             return navigate("/");
           }
         loadPosts();
-    }, []);
+    }, [id]);
 
     return (
         <Posts load={load} trending={false}>

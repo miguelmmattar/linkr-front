@@ -3,7 +3,7 @@ import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
 import services from "../services/linkr.js";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TrendingTopics from "./secondaryComponents/Trending";
 
@@ -13,6 +13,7 @@ export default function HashtagPage() {
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
     const [trending, setTrending] = useState([]);
+    const navigate = useNavigate("/");
 
     function loadPosts() {
         const promise = services.getHashtagPosts(user.token, hashtag);
@@ -40,6 +41,9 @@ export default function HashtagPage() {
       }
 
     useEffect(() => {
+        if(!user) {
+            return navigate("/");
+          }
         loadPosts();
         loadTrending();
     }, [hashtag]);
