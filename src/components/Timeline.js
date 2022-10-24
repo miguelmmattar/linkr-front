@@ -136,6 +136,7 @@ function NewPost({ user, loadPosts, loadTrending }) {
     });
 
     promise.catch((answer) => {
+      console.log(answer)
       setSending(false);
       alert(answer.response.data);
     });
