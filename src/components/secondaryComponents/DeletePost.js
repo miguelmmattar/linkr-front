@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContext.js";
-import { Puff, ThreeDots } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 import { IconContext } from "react-icons";
 import { FaTrash } from "react-icons/fa";
 import services from "../../services/linkr.js";
@@ -82,7 +82,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
         <PopUp isLoading={isLoading}>
           <Text>Are you sure you want to delete this post?</Text>
           <ButtonContainer>
-            <Button type="no" onClick={closeModal} isLoading={isLoading}>
+            <Button type="no" onClick={closeModal} isLoading={isLoading} disabled={isLoading}>
               {isLoading ? (
                 <ThreeDots
                   height="13"
@@ -98,7 +98,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
                 "No, go back"
               )}
             </Button>
-            <Button type="yes" onClick={deletePost} isLoading={isLoading}>
+            <Button type="yes" onClick={deletePost} isLoading={isLoading} disabled={isLoading}>
               {isLoading ? (
                 <ThreeDots
                   height="13"
@@ -150,8 +150,6 @@ const PopUp = styled.div`
 
     return config;
   }}
-
- 
 `;
 
 const Text = styled.span`

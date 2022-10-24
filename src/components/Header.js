@@ -84,6 +84,7 @@ const HeaderBar = styled.div`
         font-size: 49px;
         color: #FFFFFF;
         font-weight: 700;
+        cursor: pointer;
     }
 
     img {
