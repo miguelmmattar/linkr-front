@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { ThreeDots } from 'react-loader-spinner';
-import { useContext } from "react";
-import UserContext from "../contexts/UserContext.js";
+import UserContext from "../contexts/UserContext";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import services from "../services/linkr.js"
 import {
@@ -16,8 +15,9 @@ import {
 } from "../styles/AuthenticationStyle.js";
 
 function SignIn() {
-    const { setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [isDisable, setIsDisable] = useState(false);
+
     const load = (isDisable ? <ThreeDots
         height="80"
         width="80"
@@ -30,6 +30,13 @@ function SignIn() {
         : "Log In");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if(user) {
+            return (navigate("/timeline"));
+          }
+      }, []);
+
+    
     function handleForm(e) {
         e.preventDefault();
         setIsDisable(true);

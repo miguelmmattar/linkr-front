@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
@@ -26,7 +26,13 @@ export default function UserPage() {
             setLoad(false);
         });
 
-        promise.catch(answer => alert("An error occured while trying to fetch the posts, please refresh the page"));
+        promise.catch(answer => {
+            if(answer.response.status === 401) {
+                localStorage.clear();
+                setUser(null);
+                return (navigate("/"));
+              }
+            alert("An error occured while trying to fetch the posts, please refresh the page")});
     }
 
     useEffect(() => {

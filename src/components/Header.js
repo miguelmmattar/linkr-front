@@ -31,31 +31,34 @@ export default function Header() {
             </HeaderMenu>
             {path !== "/signup" && path !== "/" && (
                 <HeaderBar>
-                        <h1 onClick={()=>{
-                            setSearch(null)
-                            setMenu(!menu) 
-                            return (navigate("/timeline"));
-                        }}>linkr</h1>
+                    <h1 onClick={() => {
+                        setSearch(null)
+                        setMenu(true)
+                        return (navigate("/timeline"));
+                    }}>linkr</h1>
                     <span>
                         {menu ? (
-                            <IoIosArrowDown onClick={() => { 
-                                setSearch(null) 
-                                setMenu(!menu) }} />
+                            <IoIosArrowDown onClick={() => {
+                                setSearch(null)
+                                setMenu(!menu)
+                            }} />
                         ) : (
-                            <IoIosArrowUp onClick={() => { 
-                                setSearch(null) 
-                                setMenu(!menu) }} />
+                            <IoIosArrowUp onClick={() => {
+                                setSearch(null)
+                                setMenu(!menu)
+                            }} />
                         )}
-                        <img src={user?.picture} alt="ProfilePicture" onClick={() => { 
-                            setSearch(null) 
-                            setMenu(!menu) }} />
+                        <img src={user?.picture} alt="ProfilePicture" onClick={() => {
+                            setSearch(null)
+                            setMenu(!menu)
+                        }} />
                     </span>
                 </HeaderBar>
             )}
-            <Search 
-                search={search} 
-                setSearch={setSearch} 
-                setMenu={setMenu}/>
+            <Search
+                search={search}
+                setSearch={setSearch}
+                setMenu={setMenu} />
         </>
     );
 }

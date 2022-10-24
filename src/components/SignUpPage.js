@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import UserContext from "../contexts/UserContext";
+import { useContext, useState, useEffect } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 import services from "../services/linkr.js"
 import {
@@ -15,6 +16,8 @@ import {
 
 function SignUp() {
     const [isDisable, setIsDisable] = useState(false);
+    const { user } = useContext(UserContext);
+
     const load = (isDisable ? <ThreeDots
         height="80"
         width="80"
@@ -26,6 +29,12 @@ function SignUp() {
         visible={true} />
         : "Sign Up");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(user) {
+            return (navigate("/timeline"));
+          }
+      }, []);
 
     function handleForm(e) {
         e.preventDefault();
