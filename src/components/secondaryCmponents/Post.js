@@ -1,9 +1,10 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import LikeButton from "./LikeButton.js";
 import DeletePost from "./DeletePost.js";
 import EditPost from "./EditPost.js";
-import { useState } from "react/cjs/react.production.min.js";
+import { useState } from "react";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -11,6 +12,7 @@ export default function Post({ user, post, loadPosts }) {
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
+  const [editMode, setEditMode] = useState(false);
 
   return (
     <div className="post-wrapper">
@@ -18,10 +20,22 @@ export default function Post({ user, post, loadPosts }) {
       <Link to={`/user/${postUser.id}`}>
         <h3>{postUser.name}</h3>
       </Link>
-      <h4>{postData.description}</h4>
-      <LikeButton postId={postData.id} likes={postData.likedBy} isLiked={isLiked} />
+
+      {editMode ? <EditBox>{postData.description}</EditBox> : <h4>{postData.description}</h4>}
+
+      <LikeButton
+        postId={postData.id}
+        likes={postData.likedBy}
+        isLiked={isLiked}
+      />
       <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
-      <EditPost isUser={isUser} postId={postData.id} loadPosts={loadPosts} setPostData={setPostData}/>
+      <EditPost
+        isUser={isUser}
+        postId={postData.id}
+        loadPosts={loadPosts}
+        setPostData={setPostData}
+        setEditMode={setEditMode}
+      />
       <a href={postData.link.url} target="_blank" className="snippet">
         <Snippet link={postData.link} />
       </a>
@@ -39,3 +53,17 @@ function Snippet({ link }) {
     </SnippetBox>
   );
 }
+
+const EditBox = styled.textarea`
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 13px;
+  border: 1px solid #efefef;
+  height: 30px;
+  margin-bottom: 5px;
+  font-size: 15px;
+  background-color: #efefef;
+  vertical-align: baseline;
+  font-family: "Lato", sans-serif;
+`;

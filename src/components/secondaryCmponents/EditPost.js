@@ -5,8 +5,15 @@ import { IconContext } from "react-icons";
 import { MdModeEdit } from "react-icons/md";
 import services from "../../services/linkr.js";
 import { useContext, useState } from "react";
+import { Form } from "../../styles/TimelineStyles.js";
 
-export default function EditPost({ postId, isUser, loadPosts, setPostData }) {
+export default function EditPost({
+  postId,
+  isUser,
+  loadPosts,
+  setPostData,
+  setEditMode,
+}) {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,6 +21,8 @@ export default function EditPost({ postId, isUser, loadPosts, setPostData }) {
     if (isLoading) {
       return;
     }
+
+    setEditMode(true);
   }
 
   function deletePost() {
