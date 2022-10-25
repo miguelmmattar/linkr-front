@@ -58,6 +58,7 @@ export default function HashtagPage() {
         }
         loadPosts();
         loadTrending();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hashtag]);
 
     return (

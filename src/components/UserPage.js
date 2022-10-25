@@ -43,6 +43,7 @@ export default function UserPage() {
       return navigate("/");
     }
     loadPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
