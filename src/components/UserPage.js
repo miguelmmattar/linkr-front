@@ -1,4 +1,4 @@
-import { Posts, Load } from "../styles/TimelineStyles.js";
+import { Posts, Load, Trending } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
@@ -6,6 +6,7 @@ import services from "../services/linkr.js";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import TrendingTopics from "./secondaryComponents/Trending";
 
 export default function UserPage() {
   const { user, setUser } = useContext(UserContext);
@@ -13,6 +14,7 @@ export default function UserPage() {
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [profile, setProfile] = useState({});
+  const [trending, setTrending] = useState([]);
   const navigate = useNavigate();
 
   function loadPosts() {
@@ -38,15 +40,24 @@ export default function UserPage() {
     });
   }
 
+  function loadTrending() {
+      const promise = services.getTrending(user.token);
+      promise.then((answer) => {
+      setTrending(answer.data);
+    });
+  }   
+
   useEffect(() => {
     if (!user) {
       return navigate("/");
     }
     loadPosts();
+    loadTrending();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
-    <Posts load={load} trending={false}>
+    <Posts load={load} hasTrending={true}>
       <UserInfo load={load}>
         <img src={profile.picture} alt="Profile" />
         <h1>{`${profile.name}’s posts`}</h1>
@@ -64,6 +75,14 @@ export default function UserPage() {
         <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
         <h2>Loading</h2>
       </Load>
+
+      <Trending load={load}>
+        <h3>trending</h3>
+        <div></div>
+        {trending.map((value, index) => (
+        <TrendingTopics key={index} hashtag={value.hashtag} />
+        ))}
+      </Trending>
     </Posts>
   );
 }
@@ -72,7 +91,7 @@ const UserInfo = styled.span`
   display: ${(props) => (props.load ? "none" : "flex")};
   align-items: center;
   padding: 0 18px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 
   img {
     position: initial;

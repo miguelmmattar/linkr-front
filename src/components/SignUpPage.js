@@ -31,10 +31,11 @@ function SignUp() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(user) {
+        if (user) {
             return (navigate("/timeline"));
-          }
-      }, []);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function handleForm(e) {
         e.preventDefault();
