@@ -71,6 +71,7 @@ export default function Timeline() {
     }
     loadPosts();
     loadTrending();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -136,6 +137,7 @@ function NewPost({ user, loadPosts, loadTrending }) {
     });
 
     promise.catch((answer) => {
+      console.log(answer)
       setSending(false);
       alert(answer.response.data);
     });

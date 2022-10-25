@@ -21,6 +21,10 @@ export default function Post({ user, post, loadPosts }) {
   const [isEdited, setIsEdited] = useState(null);
   const navigate = useNavigate();
 
+  if (post.description === null) {
+    post.description = "";
+  }
+
   function formatDate() {
     const time = new Date(post.createdAt).getTime() - 3 * 3600000;
     const interval = (Date.now() - time) / 3600000;
@@ -105,16 +109,15 @@ export default function Post({ user, post, loadPosts }) {
           cols={40}
           isLoading={isLoading}
         >
-          {postData.description}
+          {postData.description === null ? "" : postData.description}
         </EditBox>
       ) : (
-        <>
         <ReactTagify
           tagStyle={tagStyle}
           tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
         >
-          <h4>{postData.description}</h4>
-        </ReactTagify></>
+          <h4>{postData.description === null ? "" : postData.description}</h4>
+        </ReactTagify>
       )}
       <LikeButton
         postId={postData.id}
