@@ -108,12 +108,13 @@ export default function Post({ user, post, loadPosts }) {
           {postData.description}
         </EditBox>
       ) : (
+        <>
         <ReactTagify
           tagStyle={tagStyle}
           tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
         >
           <h4>{postData.description}</h4>
-        </ReactTagify>
+        </ReactTagify></>
       )}
       <LikeButton
         postId={postData.id}
