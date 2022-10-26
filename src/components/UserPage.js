@@ -23,8 +23,9 @@ export default function UserPage() {
     setLoad(true);
 
     promise.then((answer) => {
-      setPosts(answer.data);
-      setProfile(answer.data[0].user);
+      console.log(answer.data)
+      setPosts(answer.data.posts);
+      setProfile(answer.data.user);
       setLoad(false);
     });
 
@@ -59,8 +60,8 @@ export default function UserPage() {
   return (
     <Posts load={load} hasTrending={true}>
       <UserInfo load={load}>
-        <img src={profile.picture} alt="Profile" />
-        <h1>{`${profile.name}’s posts`}</h1>
+        <img src={profile?.picture} alt="Profile" />
+        <h1>{`${profile?.name}’s posts`}</h1>
       </UserInfo>
 
       {posts.length === 0 ? (

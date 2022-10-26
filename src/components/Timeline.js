@@ -44,6 +44,7 @@ export default function Timeline() {
     const promise = services.getPosts(user.token);
 
     promise.then((answer) => {
+      console.log(answer.data)
       setPosts(answer.data);
       setLoad(false);
     });
