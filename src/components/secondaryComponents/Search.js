@@ -12,7 +12,11 @@ function Search({ search, setSearch, setMenu }) {
     const token = user?.token
     let searchString = "";
 
-    function searchUser(searchString) {
+    function searchUser(e) {
+        
+        if(e?._reactName) {
+            e.preventDefault();
+        }
         if (searchString.length > 0) {
             services.getSearch({ token, searchString }).then(async (res) => {
                 setSearch(res.data);
@@ -28,13 +32,13 @@ function Search({ search, setSearch, setMenu }) {
         if (searchString.length === 0) {
             setSearch(null);
         } else if (searchString.length > 2) {
-            searchUser(searchString);
+            searchUser();
         }
     }
 
     return (
         <>
-            <SearcherForm >
+            <SearcherForm onSubmit={searchUser}>
                 <DebounceInput 
                     minLength={1}
                     debounceTimeout={300}
@@ -57,8 +61,12 @@ function Search({ search, setSearch, setMenu }) {
                                 <p onClick={() => {
                                     setSearch(null);
                                     return navigate(`/user/${account.id}`)
-                                }}
-                                >{account.name}</p>
+                                }}>
+                                    {account.name}
+                                </p>  
+                                {(account.followedAt) ? (<Following>• following</Following>) : ("")}
+                                
+                                
                             </UserAccount>
                         )
                     })) : ("")}
@@ -126,7 +134,16 @@ const UserList = styled.div`
     padding-left: 17px;
     border-radius: 5px;
     background-color: #E7E7E7;
-    overflow: scroll;
+    overflow-y: scroll;
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    ::-webkit-scrollbar {
+    display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+
     @media (min-width: 614px) {
         width: calc(100% - 300px);
         max-width: 563px;
@@ -136,6 +153,16 @@ const UserList = styled.div`
         transform: translate(-50%, 0);
         z-index:3;
     }
+`;
+
+const Following = styled.h2`
+    margin-left: 10px;
+    font-family: "Lato", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 23px;
+    color: #C5C5C5;
 `;
 
 const UserAccount = styled.div`
@@ -148,6 +175,7 @@ const UserAccount = styled.div`
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        cursor: pointer;
     }
     p{
         margin-left: 15px;
@@ -157,6 +185,7 @@ const UserAccount = styled.div`
         font-size: 19px;
         line-height: 23px;
         color: #515151;
+        cursor: pointer;
     }
 `;
 

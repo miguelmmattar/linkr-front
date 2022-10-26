@@ -92,6 +92,7 @@ const HeaderBar = styled.div`
         height: 53px;
         border-radius: 50%;
         object-fit: cover;
+        cursor: pointer;
     }
 
     span {
@@ -139,6 +140,7 @@ const HeaderMenu = styled.div`
     justify-content: center;
     border-radius: 0px 0px 20px 20px;
     background-color: #171717;
+    
     p{
         display: ${props => props.clicked ? "none" : "initial"};
         color: #ffffff;
@@ -147,6 +149,7 @@ const HeaderMenu = styled.div`
         font-size: 17px;
         line-height: 20px;
         letter-spacing: 0.05em;
+        cursor: pointer;
     }
     transition: height 0.5s;
 `;
