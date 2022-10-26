@@ -17,12 +17,31 @@ export default function Timeline() {
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [trending, setTrending] = useState([]);
+  const [follows, setFollows] = useState({});
+  const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
   const navigate = useNavigate();
 
-  function loadPosts() {
-    const promise = services.getPosts(user.token);
+  function loadFollows() {
+    const promise = services.getFollows(user.token);
+    
+    promise.then(answer => {
+      setFollows(answer.data)
 
+      if(answer.data.following.length === 0) {
+        setNoPostsMessage("You don't follow anyone yet. Search for new friends!");
+      }  
+    });
+
+    promise.catch((answer) => {
+      alert("An error occured while trying to fetch the posts, please refresh the page!")
+    });
+  }
+
+  function loadPosts() {
     setLoad(true);
+    loadFollows();
+
+    const promise = services.getPosts(user.token);
 
     promise.then((answer) => {
       setPosts(answer.data);
@@ -36,11 +55,8 @@ export default function Timeline() {
         return (navigate("/"));
       }
 
-      alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
-      )
+      alert("An error occured while trying to fetch the posts, please refresh the page");
     }
-
     );
   }
 
@@ -82,7 +98,7 @@ export default function Timeline() {
         <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
 
         {posts.length === 0 ? (
-          <h6>There are no posts yet . . .</h6>
+          <h6>{noPostsMessage}</h6>
         ) : (
           posts.map((post, index) => (
             <Post key={index} user={user} post={post} loadPosts={loadPosts} />

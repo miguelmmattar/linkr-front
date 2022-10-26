@@ -57,7 +57,7 @@ const Posts = styled.div`
     text-align: center;
     margin-top: 50px;
     margin-right: 0;
-    width: 70%;
+    width: 60%;
   }
   p {
     margin: 5px 0 10px 0;
@@ -163,6 +163,10 @@ const Posts = styled.div`
   .likeHeart {
     width: 100%;
     height: 100%;
+  }
+
+  @media(min-width: 1450px) {
+    width: 50%;
   }
 
   @media (max-width: 900px) {
