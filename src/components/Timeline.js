@@ -37,9 +37,29 @@ export default function Timeline() {
     });
   }
 
+  function loadTrending() {
+    const promise = services.getTrending(user.token);
+    promise.then((answer) => {
+      setTrending(answer.data);
+    });
+    promise.catch((answer) => {
+      if(answer.response.status === 401) {
+        setUser(null)
+        localStorage.clear();
+        setUser(null);
+        return (navigate("/"));
+      }
+      alert(
+        "An error occured while trying to fetch the trending topics, please refresh the page"
+      )
+    }
+    );
+  }
+
   function loadPosts() {
     setLoad(true);
     loadFollows();
+    loadTrending();
 
     const promise = services.getPosts(user.token);
 
@@ -60,25 +80,6 @@ export default function Timeline() {
     );
   }
 
-  function loadTrending() {
-    const promise = services.getTrending(user.token);
-    promise.then((answer) => {
-      setTrending(answer.data);
-    });
-    promise.catch((answer) => {
-      if(answer.response.status === 401) {
-        setUser(null)
-        localStorage.clear();
-        setUser(null);
-        return (navigate("/"));
-      }
-      alert(
-        "An error occured while trying to fetch the trending topics, please refresh the page"
-      )
-    }
-    );
-  }
-
   useEffect(() => {
     if (!user) {
       localStorage.clear();
@@ -86,7 +87,6 @@ export default function Timeline() {
       return navigate("/");
     }
     loadPosts();
-    loadTrending();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -147,10 +147,8 @@ function NewPost({ user, loadPosts, loadTrending }) {
       });
 
       setSending(false);
-
-      loadPosts();
-      loadTrending();
     });
+    loadPosts();
 
     promise.catch((answer) => {
       console.log(answer)
