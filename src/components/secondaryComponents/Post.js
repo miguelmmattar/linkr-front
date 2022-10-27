@@ -9,9 +9,17 @@ import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
 import { Puff } from "react-loader-spinner";
 import { useEffect, useRef } from "react";
-import { EditBox, LoadingContainer, Posted } from "../../styles/PostStyles.js";
+import {
+  EditBox,
+  LoadingContainer,
+  Posted,
+  RepostBar,
+} from "../../styles/PostStyles.js";
+import { IconContext } from "react-icons";
+import { IoMdRepeat } from "react-icons/io";
 
-export default function Post({ user, post, loadPosts }) {
+
+export default function Post({ user, post, loadPosts, load }) {
   const postUser = post.user;
   const [postData, setPostData] = useState(post);
   const [isLoading, setIsLoading] = useState(false);
@@ -93,77 +101,91 @@ export default function Post({ user, post, loadPosts }) {
   }, [editMode]);
 
   return (
-    <div className="post-wrapper">
-      <img src={postUser.picture} alt="Profile" />
-      <Posted>
-        <Link to={`/user/${postUser.id}`}>
-          <h3>{postUser.name}</h3>
-        </Link>
-        <p>{postedAt}</p>
-      </Posted>
-
-      {editMode ? (
-        <EditBox
-          onChange={handleChange}
-          onKeyDown={handleKeyboard}
-          type="text"
-          name="description"
-          disabled={isLoading}
-          rows={3}
-          cols={40}
-          isLoading={isLoading}
-          ref={inputFocus}
+    <>
+      <RepostBar>
+        <IconContext.Provider
+          value={{ color: "white", className: "repost-icon" }}
         >
-          {postData.description === null ? "" : postData.description}
-        </EditBox>
-      ) : (
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+          <IoMdRepeat />
+          <h6>Re-posted by <h3>you</h3></h6>
+        </IconContext.Provider>
+      </RepostBar>
+      <div className="post-wrapper">
+        <img src={postUser.picture} alt="Profile" />
+        <Posted>
+          <Link to={`/user/${postUser.id}`}>
+            <h3>{postUser.name}</h3>
+          </Link>
+          <p>{postedAt}</p>
+        </Posted>
+
+        {editMode ? (
+          <EditBox
+            onChange={handleChange}
+            onKeyDown={handleKeyboard}
+            type="text"
+            name="description"
+            disabled={isLoading}
+            rows={3}
+            cols={40}
+            isLoading={isLoading}
+            ref={inputFocus}
+          >
+            {postData.description === null ? "" : postData.description}
+          </EditBox>
+        ) : (
+          <ReactTagify
+            tagStyle={tagStyle}
+            tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+          >
+            <h4>{postData.description === null ? "" : postData.description}</h4>
+          </ReactTagify>
+        )}
+        <LikeButton
+          postId={postData.id}
+          likes={postData.likedBy}
+          isLiked={isLiked}
+        />
+        <DeletePost
+          isUser={isUser}
+          postId={postData.id}
+          loadPosts={loadPosts}
+        />
+
+        <EditPost
+          isUser={isUser}
+          postId={post.id}
+          loadPosts={loadPosts}
+          setPostData={setPostData}
+          setEditMode={setEditMode}
+          editMode={editMode}
+          post={post}
+        />
+        {isLoading && editMode ? (
+          <LoadingContainer>
+            <Puff
+              height="100%"
+              width="100%"
+              radisu={1}
+              color="#333333"
+              ariaLabel="puff-loading"
+              wrapperStyle={{}}
+              wrapperClass="loader"
+              visible={true}
+            />
+          </LoadingContainer>
+        ) : undefined}
+
+        <a
+          href={postData.link.url}
+          rel="noreferrer"
+          target="_blank"
+          className="snippet"
         >
-          <h4>{postData.description === null ? "" : postData.description}</h4>
-        </ReactTagify>
-      )}
-      <LikeButton
-        postId={postData.id}
-        likes={postData.likedBy}
-        isLiked={isLiked}
-      />
-      <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
-
-      <EditPost
-        isUser={isUser}
-        postId={post.id}
-        loadPosts={loadPosts}
-        setPostData={setPostData}
-        setEditMode={setEditMode}
-        editMode={editMode}
-        post={post}
-      />
-      {isLoading && editMode ? (
-        <LoadingContainer>
-          <Puff
-            height="100%"
-            width="100%"
-            radisu={1}
-            color="#333333"
-            ariaLabel="puff-loading"
-            wrapperStyle={{}}
-            wrapperClass="loader"
-            visible={true}
-          />
-        </LoadingContainer>
-      ) : undefined}
-
-      <a
-        href={postData.link.url}
-        rel="noreferrer"
-        target="_blank"
-        className="snippet"
-      >
-        <Snippet link={postData.link} />
-      </a>
-    </div>
+          <Snippet link={postData.link} />
+        </a>
+      </div>
+    </>
   );
 }
 

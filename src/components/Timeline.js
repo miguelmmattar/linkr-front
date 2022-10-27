@@ -102,7 +102,7 @@ export default function Timeline() {
           <h6>{noPostsMessage}</h6>
         ) : (
           posts.map((post, index) => (
-            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+            <Post key={index} user={user} post={post} loadPosts={loadPosts} load = {load}/>
           ))
         )}
 

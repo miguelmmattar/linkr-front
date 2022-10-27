@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Posts = styled.div`
-  width: ${props => props.hasTrending ? '70%' : '50%'};
+  width: ${(props) => (props.hasTrending ? "70%" : "50%")};
   margin-top: 120px;
   margin-bottom: 40px;
   position: relative;
@@ -165,7 +165,7 @@ const Posts = styled.div`
     height: 100%;
   }
 
-  @media(min-width: 1450px) {
+  @media (min-width: 1450px) {
     width: 50%;
   }
 

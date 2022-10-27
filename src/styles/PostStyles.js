@@ -45,4 +45,29 @@ const Posted = styled.span`
   }
 `;
 
-export { EditBox, LoadingContainer, Posted };
+const RepostBar = styled.div`
+  width: 64%;
+  height: 30px;
+  display: ${(props) => (!props.load ? "flex" : "none")};
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #1e1e1e;
+  border-radius: 16px 16px 0 0;
+  padding-left: 20px;
+  h3,
+  h6 {
+    font-family: "Lato", sans-serif;
+    color: white;
+    font-size: 11px !important;
+    width: auto;
+    margin: 0;
+  }
+  h3 {
+    font-weight: 700;
+  }
+  h6 {
+    font-weight: 400;
+  }
+`;
+
+export { EditBox, LoadingContainer, Posted, RepostBar };
