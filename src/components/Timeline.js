@@ -7,18 +7,22 @@ import {
   Load,
   Trending,
   Container,
+  ScrollLoader
 } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroller";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [trending, setTrending] = useState([]);
+  // eslint-disable-next-line
   const [follows, setFollows] = useState({});
   const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
+  const [loadMore, setLoadMore] = useState(false);
   const navigate = useNavigate();
 
   function loadFollows() {
@@ -35,30 +39,6 @@ export default function Timeline() {
     promise.catch((answer) => {
       alert("An error occured while trying to fetch the posts, please refresh the page!")
     });
-  }
-
-  function loadPosts() {
-    setLoad(true);
-    loadFollows();
-
-    const promise = services.getPosts(user.token);
-
-    promise.then((answer) => {
-      console.log(answer.data)
-      setPosts(answer.data);
-      setLoad(false);
-    });
-
-    promise.catch((answer) => {
-      if (answer.response.status === 401) {
-        localStorage.clear();
-        setUser(null);
-        return (navigate("/"));
-      }
-
-      alert("An error occured while trying to fetch the posts, please refresh the page");
-    }
-    );
   }
 
   function loadTrending() {
@@ -80,14 +60,43 @@ export default function Timeline() {
     );
   }
 
+  function loadPosts(firstLoad) {
+    if(firstLoad === true) {
+      setLoad(true);
+      loadFollows();
+      loadTrending();
+    }
+
+    const promise = services.getPosts(user.token, posts.length);
+    promise.then((answer) => {
+      setLoad(false);
+      if(answer.data.length === 0) {
+        setLoadMore(false);
+        return;
+      }
+      setPosts(posts.concat(answer.data));
+      setLoadMore(true);
+    });
+
+    promise.catch((answer) => {
+      if (answer.response.status === 401) {
+        localStorage.clear();
+        setUser(null);
+        return (navigate("/"));
+      }
+
+      alert("An error occured while trying to fetch the posts, please refresh the page");
+    }
+    );
+  }
+
   useEffect(() => {
     if (!user) {
       localStorage.clear();
       setUser(null);
       return navigate("/");
     }
-    loadPosts();
-    loadTrending();
+    loadPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -98,13 +107,20 @@ export default function Timeline() {
 
         <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
 
-        {posts.length === 0 ? (
-          <h6>{noPostsMessage}</h6>
-        ) : (
-          posts.map((post, index) => (
-            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
-          ))
-        )}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadPosts}
+          hasMore={true}
+          loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+        >
+          {posts.length === 0 ? (
+            <h6>{noPostsMessage}</h6>
+          ) : (
+            posts.map((post, index) => (
+              <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+            ))
+          )}
+        </InfiniteScroll>
 
         <Load load={load}>
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -148,16 +164,14 @@ function NewPost({ user, loadPosts, loadTrending }) {
       });
 
       setSending(false);
-
-      loadPosts();
-      loadTrending();
     });
 
     promise.catch((answer) => {
-      console.log(answer)
       setSending(false);
-      alert(answer.response.data);
+      return alert(answer.response.data);
     });
+
+    loadPosts(true);
   }
 
   return (
