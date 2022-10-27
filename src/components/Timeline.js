@@ -17,6 +17,7 @@ export default function Timeline() {
   const [posts, setPosts] = useState([]);
   const [load, setLoad] = useState(false);
   const [trending, setTrending] = useState([]);
+  // eslint-disable-next-line
   const [follows, setFollows] = useState({});
   const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
   const navigate = useNavigate();
@@ -151,7 +152,6 @@ function NewPost({ user, loadPosts, loadTrending }) {
     loadPosts();
 
     promise.catch((answer) => {
-      console.log(answer)
       setSending(false);
       alert(answer.response.data);
     });
