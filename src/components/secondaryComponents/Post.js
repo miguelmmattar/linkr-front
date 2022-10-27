@@ -21,7 +21,7 @@ export default function Post({ user, post, loadPosts }) {
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
   const inputFocus = useRef();
-
+  
   if (post.description === null) {
     post.description = "";
   }

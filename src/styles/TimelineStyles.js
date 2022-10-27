@@ -425,4 +425,29 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-export { Posts, Form, SnippetBox, Load, Trending, Container };
+const ScrollLoader = styled.div`
+  width: 64%;
+  display: ${props => !props.rendered ? 'none' : 'flex'};
+  justify-content: center;
+  margin: 50px 0;
+
+  img {
+    width: 30px;
+    height: 30px;
+    position: static;
+  }
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+`;
+
+export { 
+  Posts,
+  Form,
+  SnippetBox,
+  Load,
+  Trending,
+  Container,
+  ScrollLoader
+};

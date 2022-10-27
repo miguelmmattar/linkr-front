@@ -1,4 +1,4 @@
-import { Posts, Load, Trending } from "../styles/TimelineStyles.js";
+import { Posts, Load, Trending, ScrollLoader } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import TrendingTopics from "./secondaryComponents/Trending";
+import InfiniteScroll from "react-infinite-scroller";
 
 export default function UserPage() {
   const { user, setUser } = useContext(UserContext);
@@ -17,19 +18,27 @@ export default function UserPage() {
   const [trending, setTrending] = useState([]);
   const [following, setFollowing] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
   const navigate = useNavigate();
   const path = Number(useLocation().pathname.replace("/user/", ""));
 
-  function loadPosts() {
-    const promise = services.getUserPosts(user.token, id);
-
-    setLoad(true);
-
+  function loadPosts(firstLoad) {
+    if(firstLoad === true) {
+      setLoad(true);
+      loadTrending();
+    }
+    
+    const promise = services.getUserPosts(user.token, id, posts.length);
     promise.then((answer) => {
-      setPosts(answer.data.posts);
-      setProfile(answer.data.user);
-      setFollowing(answer.data.user.followedAt)
       setLoad(false);
+      setProfile(answer.data.user);
+      setFollowing(answer.data.user.followedAt);
+      if(answer.data.posts.length === 0) {
+        setLoadMore(false);
+        return;
+      }
+      setPosts(posts.concat(answer.data.posts));
+      setLoadMore(true);
     });
 
     promise.catch((answer) => {
@@ -95,11 +104,10 @@ export default function UserPage() {
     if (!user) {
       return navigate("/");
     }
-    loadPosts();
-    loadTrending();
+    loadPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
+  
   return (
     <>
       <Posts load={load} hasTrending={true}>
@@ -114,14 +122,21 @@ export default function UserPage() {
           }
 
         </UserInfo>
-
-        {posts.length === 0 ? (
-          <h6>There are no posts yet . . .</h6>
-        ) : (
-          posts.map((post, index) => (
-            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
-          ))
-        )}
+        
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadPosts}
+          hasMore={true}
+          loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+        >
+          {posts.length === 0 ? (
+            <h6>There are no posts yet . . .</h6>
+          ) : (
+            posts.map((post, index) => (
+              <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+            ))
+          )}
+        </InfiniteScroll>
 
         <Load load={load}>
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
