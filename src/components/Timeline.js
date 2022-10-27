@@ -7,10 +7,12 @@ import {
   Load,
   Trending,
   Container,
+  ScrollLoader
 } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroller";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -20,6 +22,7 @@ export default function Timeline() {
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
   const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
+  const [loadMore, setLoadMore] = useState(false);
   const navigate = useNavigate();
 
   function loadFollows() {
@@ -57,16 +60,22 @@ export default function Timeline() {
     );
   }
 
-  function loadPosts() {
-    setLoad(true);
-    loadFollows();
-    loadTrending();
+  function loadPosts(firstLoad) {
+    if(firstLoad === true) {
+      setLoad(true);
+      loadFollows();
+      loadTrending();
+    }
 
-    const promise = services.getPosts(user.token);
-
+    const promise = services.getPosts(user.token, posts.length);
     promise.then((answer) => {
-      setPosts(answer.data);
       setLoad(false);
+      if(answer.data.length === 0) {
+        setLoadMore(false);
+        return;
+      }
+      setPosts(posts.concat(answer.data));
+      setLoadMore(true);
     });
 
     promise.catch((answer) => {
@@ -87,7 +96,7 @@ export default function Timeline() {
       setUser(null);
       return navigate("/");
     }
-    loadPosts();
+    loadPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -98,13 +107,20 @@ export default function Timeline() {
 
         <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
 
-        {posts.length === 0 ? (
-          <h6>{noPostsMessage}</h6>
-        ) : (
-          posts.map((post, index) => (
-            <Post key={index} user={user} post={post} loadPosts={loadPosts} />
-          ))
-        )}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadPosts}
+          hasMore={true}
+          loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+        >
+          {posts.length === 0 ? (
+            <h6>{noPostsMessage}</h6>
+          ) : (
+            posts.map((post, index) => (
+              <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+            ))
+          )}
+        </InfiniteScroll>
 
         <Load load={load}>
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -149,12 +165,13 @@ function NewPost({ user, loadPosts, loadTrending }) {
 
       setSending(false);
     });
-    loadPosts();
 
     promise.catch((answer) => {
       setSending(false);
-      alert(answer.response.data);
+      return alert(answer.response.data);
     });
+
+    loadPosts(true);
   }
 
   return (
