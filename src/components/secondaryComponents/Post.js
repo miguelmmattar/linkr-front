@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
 import { Puff } from "react-loader-spinner";
+import { useEffect, useRef } from "react";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -18,8 +19,8 @@ export default function Post({ user, post, loadPosts }) {
   const isLiked = post.likedBy.some(likeOfTheUser);
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
-  const [isEdited, setIsEdited] = useState(null);
   const navigate = useNavigate();
+  const inputFocus = useRef();
 
   if (post.description === null) {
     post.description = "";
@@ -80,13 +81,16 @@ export default function Post({ user, post, loadPosts }) {
       .then((response) => {
         setIsLoading(false);
         setEditMode(false);
-        setIsEdited(true);
       })
       .catch(() => {
         setIsLoading(false);
         alert("Failed to edit");
       });
   }
+
+  useEffect(() => {
+    inputFocus.current?.focus();
+  }, [editMode]);
 
   return (
     <div className="post-wrapper">
@@ -108,6 +112,7 @@ export default function Post({ user, post, loadPosts }) {
           rows={3}
           cols={40}
           isLoading={isLoading}
+          ref={inputFocus}
         >
           {postData.description === null ? "" : postData.description}
         </EditBox>
@@ -150,7 +155,12 @@ export default function Post({ user, post, loadPosts }) {
         </LoadingContainer>
       ) : undefined}
 
-      <a href={postData.link.url} target="_blank" className="snippet">
+      <a
+        href={postData.link.url}
+        rel="noreferrer"
+        target="_blank"
+        className="snippet"
+      >
         <Snippet link={postData.link} />
       </a>
     </div>
