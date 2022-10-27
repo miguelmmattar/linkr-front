@@ -97,6 +97,22 @@ function getSearch({ token, searchString }) {
   });
 }
 
+function postFollow(token, body) {
+  return axios.post(`${BASE_URL}/follow`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+function postUnfollow(token, body) {
+  return axios.post(`${BASE_URL}/unfollow`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export default {
   getPosts,
   postUrl,
@@ -110,5 +126,7 @@ export default {
   getHashtagPosts,
   editPost,
   getSearch,
-  getFollows
+  getFollows,
+  postFollow,
+  postUnfollow
 };

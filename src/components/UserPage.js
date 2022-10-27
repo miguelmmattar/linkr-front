@@ -52,11 +52,35 @@ export default function UserPage() {
   }
 
   function followUser() {
-    if(!isDisabled) {
-      if(following) {
-        console.log("dar unfollow")
-      } else{
-        console.log("dar follow")
+    if (!isDisabled) {
+
+      const body = { id: path }
+      setIsDisabled(true);
+      if (following) {
+        const promise = services.postUnfollow(user.token, body);
+
+        promise.then((res) => {
+          setFollowing(false)
+          setIsDisabled(false);
+        })
+
+        promise.catch((error) => {
+          console.log(error);
+          setIsDisabled(false);
+        })
+
+      } else {
+        const promise = services.postFollow(user.token, body);
+
+        promise.then((res) => {
+          setFollowing(true)
+          setIsDisabled(false);
+        })
+
+        promise.catch((error) => {
+          console.log(error);
+          setIsDisabled(false);
+        })
       }
     }
   }
@@ -78,8 +102,8 @@ export default function UserPage() {
           <h1>{`${profile?.name}’s posts`}</h1>
 
           {(path !== user.id) ? (
-            <FollowButton following={following} onClick={() => {followUser()}}>
-              {following? ("Unfollow") : ("Follow")}
+            <FollowButton following={following} onClick={() => { followUser() }}>
+              {following ? ("Unfollow") : ("Follow")}
             </FollowButton>) : (<></>)
           }
 
@@ -117,7 +141,7 @@ const UserInfo = styled.span`
   align-items: center;
   padding: 0 18px;
   margin-bottom: 32px;
-
+  height: auto;
   img {
     position: initial;
     margin-right: 18px;
@@ -144,4 +168,16 @@ const FollowButton = styled.div`
   font-size: 14px;
   line-height: 17px;
   color: ${(props) => (!props.following ? "#FFFFFF" : "#1877F2")};
+  @media (max-width: 900px) {
+    top: -35px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 200px;
+  }
+  @media (max-width: 614px) {
+    top: -35px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 200px;
+  }
 `;
