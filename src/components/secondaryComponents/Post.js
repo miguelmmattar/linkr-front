@@ -1,5 +1,4 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
-import styled from "styled-components";
 import LikeButton from "./LikeButton.js";
 import date from "date-and-time";
 import DeletePost from "./DeletePost.js";
@@ -10,6 +9,7 @@ import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
 import { Puff } from "react-loader-spinner";
 import { useEffect, useRef } from "react";
+import { EditBox, LoadingContainer, Posted } from "../../styles/PostStyles.js";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -177,48 +177,3 @@ function Snippet({ link }) {
     </SnippetBox>
   );
 }
-
-const EditBox = styled.textarea`
-  width: 100%;
-  border-radius: 5px;
-  border: none;
-  padding: 5px 13px;
-  border: 1px solid #efefef;
-  margin: 15px 0px 10px 0px;
-  font-size: 15px;
-  background-color: #efefef;
-  vertical-align: baseline;
-  font-family: "Lato", sans-serif;
-
-  ${(props) => {
-    let config = "";
-
-    if (props.isLoading === true) {
-      config += "cursor: wait";
-    }
-
-    if (props.isLoading === false) {
-      config += "cursor: auto";
-    }
-
-    return config;
-  }}
-`;
-
-const LoadingContainer = styled.span`
-  position: absolute;
-  top: 85px;
-  right: 23px;
-  width: 20px;
-  height: 20px;
-`;
-const Posted = styled.span`
-  width: 100%;
-  margin-top: 10px;
-
-  p {
-    font-size: 12px;
-    margin-bottom: 0 !important;
-    opacity: 0.3;
-  }
-`;
