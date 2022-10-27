@@ -113,6 +113,7 @@ function postUnfollow(token, body) {
   });
 }
 
+// eslint-disable-next-line
 export default {
   getPosts,
   postUrl,
