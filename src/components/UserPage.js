@@ -67,6 +67,9 @@ export default function UserPage() {
         promise.catch((error) => {
           console.log(error);
           setIsDisabled(false);
+          alert(
+            "An error occured while trying to unfollow this user, please refresh the page"
+          );
         })
 
       } else {
@@ -80,6 +83,9 @@ export default function UserPage() {
         promise.catch((error) => {
           console.log(error);
           setIsDisabled(false);
+          alert(
+            "An error occured while trying to follow this user, please refresh the page"
+          );
         })
       }
     }
