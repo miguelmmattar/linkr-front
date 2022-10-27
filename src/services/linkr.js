@@ -97,6 +97,7 @@ function getSearch({ token, searchString }) {
   });
 }
 
+// eslint-disable-next-line
 export default {
   getPosts,
   postUrl,
@@ -110,5 +111,5 @@ export default {
   getHashtagPosts,
   editPost,
   getSearch,
-  getFollows
+  getFollows,
 };
