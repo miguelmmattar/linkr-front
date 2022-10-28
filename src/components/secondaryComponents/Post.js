@@ -33,8 +33,6 @@ export default function Post({ user, post, loadPosts }) {
     const isToday = interval < Number(date.format(now, "HH"));
 
     if(!isToday) {
-      console.log(time)
-      console.log(Date.now())
       return date.format(new Date(time), "DD/MM/YYYY");
     }
 
