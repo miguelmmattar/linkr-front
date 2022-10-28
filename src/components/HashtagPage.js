@@ -1,4 +1,4 @@
-import { Posts, Load, Trending } from "../styles/TimelineStyles.js";
+import { Posts, Load, Trending, ScrollLoader } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import UserContext from "../contexts/UserContext";
 import { useContext, useState, useEffect } from "react";
@@ -6,6 +6,8 @@ import services from "../services/linkr.js";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TrendingTopics from "./secondaryComponents/Trending";
+import InfiniteScroll from "react-infinite-scroller";
+import date from "date-and-time";
 
 export default function HashtagPage() {
     const { user, setUser } = useContext(UserContext);
@@ -13,16 +15,30 @@ export default function HashtagPage() {
     const [posts, setPosts] = useState([]);
     const [load, setLoad] = useState(false);
     const [trending, setTrending] = useState([]);
+    const [loadMore, setLoadMore] = useState(false);
     const navigate = useNavigate("/");
 
-    function loadPosts() {
-        const promise = services.getHashtagPosts(user.token, hashtag);
+    function loadPosts(firstLoad) {
+        let lastPost;
+        
+        if(firstLoad === true) {
+            lastPost = Date.now()  + 3 * 3600000;
+            setLoad(true);
+            loadTrending();
+          } else {
+            lastPost = posts[posts.length - 1].createdAt;
+        }
 
-        setLoad(true);
+        const promise = services.getHashtagPosts(user.token, hashtag, lastPost);
 
         promise.then(answer => {
-            setPosts(answer.data);
             setLoad(false);
+            if(answer.data.length === 0) {
+                setLoadMore(false);
+                return;
+            }
+            setPosts(posts.concat(answer.data));
+            setLoadMore(true);
         });
 
         promise.catch(answer => {
@@ -56,8 +72,7 @@ export default function HashtagPage() {
         if (!user) {
             return navigate("/");
         }
-        loadPosts();
-        loadTrending();
+        loadPosts(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hashtag]);
 
@@ -67,17 +82,21 @@ export default function HashtagPage() {
                 <h1>{`# ${hashtag}`}</h1>
             </HashtagInfo>
 
-            {posts.length === 0 ? (
-                <h6>There are no posts yet . . .</h6>
-            ) : (
-                posts.map((post, index) => (
-                    <Post
-                        key={index}
-                        user={post.user}
-                        post={post}
-                    />
-                ))
-            )}
+        {posts.length === 0 ? (
+          <h6>There are no posts yet . . .</h6>
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={() => loadPosts(false)}
+            hasMore={true}
+            loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+          >
+              {posts.map((post, index) => (
+                <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+              ))}
+            
+          </InfiniteScroll>
+        )}
 
             <Load load={load}>
                 <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />

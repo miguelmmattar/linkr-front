@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Posts = styled.div`
-  width: ${props => props.hasTrending ? '70%' : '50%'};
+  width: ${(props) => (props.hasTrending ? "70%" : "50%")};
   margin-top: 120px;
   margin-bottom: 40px;
   position: relative;
@@ -165,7 +165,7 @@ const Posts = styled.div`
     height: 100%;
   }
 
-  @media(min-width: 1450px) {
+  @media (min-width: 1450px) {
     width: 50%;
   }
 
@@ -425,4 +425,29 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-export { Posts, Form, SnippetBox, Load, Trending, Container };
+const ScrollLoader = styled.div`
+  width: 64%;
+  display: ${props => !props.rendered ? 'none' : 'flex'};
+  justify-content: center;
+  margin: 50px 0;
+
+  img {
+    width: 30px;
+    height: 30px;
+    position: static;
+  }
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+`;
+
+export { 
+  Posts,
+  Form,
+  SnippetBox,
+  Load,
+  Trending,
+  Container,
+  ScrollLoader
+};

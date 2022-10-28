@@ -10,24 +10,24 @@ function getFollows(token) {
   });
 }
 
-function getPosts(token) {
-  return axios.get(`${BASE_URL}/posts`, {
+function getPosts(token, offset) {
+  return axios.get(`${BASE_URL}/posts?offset=${offset}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 }
 
-function getUserPosts(token, userId) {
-  return axios.get(`${BASE_URL}/user/${userId}`, {
+function getUserPosts(token, userId, offset) {
+  return axios.get(`${BASE_URL}/user/${userId}?offset=${offset}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 }
 
-function getHashtagPosts(token, hashtag) {
-  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, {
+function getHashtagPosts(token, hashtag, offset) {
+  return axios.get(`${BASE_URL}/hashtag/${hashtag}?offset=${offset}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -42,7 +42,7 @@ function getTrending(token) {
   });
 }
 
-function postUrl(token, body) {
+function postUrl( token, body ) {
   return axios.post(`${BASE_URL}/posts`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,6 +57,14 @@ function postLogin(body) {
 
 function postSignup(body) {
   return axios.post(`${BASE_URL}/sign-up`, body);
+}
+
+function postRepost(token, body) {
+  return axios.post(`${BASE_URL}/reposts`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 function deleteLogout(token) {
@@ -128,6 +136,7 @@ export default {
   editPost,
   getSearch,
   getFollows,
+  postRepost,
   postFollow,
-  postUnfollow
+  postUnfollow,
 };

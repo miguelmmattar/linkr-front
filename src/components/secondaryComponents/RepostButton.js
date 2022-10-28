@@ -1,19 +1,21 @@
 import styled from "styled-components";
 import UserContext from "../../contexts/UserContext.js";
 import { ThreeDots } from "react-loader-spinner";
-import { IconContext } from "react-icons";
-import { FaTrash } from "react-icons/fa";
 import services from "../../services/linkr.js";
+import { IconContext } from "react-icons";
+import { IoMdRepeat } from "react-icons/io";
 import { useContext, useState } from "react";
 import ReactModal from "react-modal";
 
-ReactModal.defaultStyles.overlay.backgroundColor = "rgba(255, 255, 255, 0.75)";
-ReactModal.defaultStyles.content.backgroundColor = "rgba(255, 255, 255, 0.05)";
-
-export default function DeletePost({ postId, isUser, loadPosts }) {
+export default function RepostButton({ postId, isUser, loadPosts, userId }) {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  
+  const body = {
+    userId,
+    postId,
+  };
   const overlayStyle = {
     zIndex: 6,
   };
@@ -33,23 +35,23 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
     setShowModal(true);
   }
 
-  function deletePost() {
+  function setRepost() {
     if (isLoading) {
       return;
     }
 
     setIsLoading(true);
     services
-      .deletePost({ token: user.token, postId })
+      .postRepost(user.token, body)
       .then((response) => {
         setIsLoading(false);
-        loadPosts(true);
+        loadPosts();
         setShowModal(false);
       })
       .catch(() => {
         setIsLoading(false);
         setShowModal(false);
-        alert("Failed to delete");
+        alert("Failed to re-post");
       });
   }
 
@@ -63,16 +65,13 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
 
   return (
     <>
-      <IconContext.Provider
-        value={{
-          color: "white",
-          className: "delete-button",
-        }}
-      >
-        <span onClick={clickFunction} className="delete-button-wrapper">
-          {isUser ? <FaTrash /> : ""}
-        </span>
-      </IconContext.Provider>
+      <RepostsCount>
+        <IconContext.Provider
+          value={{ color: "white", className: "repost-button" }}
+        >
+          <IoMdRepeat onClick={clickFunction} />1 re-posts
+        </IconContext.Provider>
+      </RepostsCount>
       <ReactModal
         isOpen={showModal}
         ariaHideApp={false}
@@ -80,9 +79,14 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
         style={{ overlay: overlayStyle, content: contentStyle }}
       >
         <PopUp isLoading={isLoading}>
-          <Text>Are you sure you want to delete this post?</Text>
+          <Text>Do you want to re-post this link?</Text>
           <ButtonContainer>
-            <Button type="no" onClick={closeModal} isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="no"
+              onClick={closeModal}
+              isLoading={isLoading}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <ThreeDots
                   height="13"
@@ -95,10 +99,15 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
                   visible={true}
                 />
               ) : (
-                "No, go back"
+                "No, cancel"
               )}
             </Button>
-            <Button type="yes" onClick={deletePost} isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="yes"
+              onClick={setRepost}
+              isLoading={isLoading}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <ThreeDots
                   height="13"
@@ -111,7 +120,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
                   visible={true}
                 />
               ) : (
-                "Yes, delete it"
+                "Yes, share!"
               )}
             </Button>
           </ButtonContainer>
@@ -121,6 +130,25 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
   );
 }
 
+const RepostsCount = styled.div`
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  font-size: 11px;
+  top: 135px;
+  left: 18px;
+  color: white;
+
+  @media (max-width: 900px) {
+    top: 130px;
+    left: 14px;
+  }
+`;
 const PopUp = styled.div`
   width: 600px;
   height: 262px;
