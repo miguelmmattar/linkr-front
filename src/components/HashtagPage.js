@@ -22,9 +22,11 @@ export default function HashtagPage() {
         let lastPost;
         
         if(firstLoad === true) {
-            lastPost = Date.now()  + 3 * 3600000;
+            lastPost = Date.now() + 3 * 3600000;
             setLoad(true);
+            setLoadMore(false);
             loadTrending();
+            setPosts([]);
           } else {
             lastPost = posts[posts.length - 1].createdAt;
         }
@@ -37,8 +39,15 @@ export default function HashtagPage() {
                 setLoadMore(false);
                 return;
             }
-            setPosts(posts.concat(answer.data));
-            setLoadMore(true);
+
+            if (firstLoad === false) {
+                setLoadMore(true);
+                const newPosts = posts.concat(answer.data);
+                setPosts(newPosts);
+            } else {
+                const newPosts = answer.data;
+                setPosts(newPosts);
+            }
         });
 
         promise.catch(answer => {
@@ -89,6 +98,7 @@ export default function HashtagPage() {
             pageStart={0}
             loadMore={() => loadPosts(false)}
             hasMore={true}
+            initialLoad={false}
             loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
           >
               {posts.map((post, index) => (
