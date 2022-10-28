@@ -13,6 +13,7 @@ import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
+import loadSpinner from "../assets/loadSpinner.gif"
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -26,8 +27,6 @@ export default function Timeline() {
   );
   const [loadMore, setLoadMore] = useState(false);
   const navigate = useNavigate();
-
-  console.log(posts)
 
   function loadFollows() {
     const promise = services.getFollows(user.token);
@@ -145,7 +144,7 @@ export default function Timeline() {
             initialLoad={false}
             loader={
               <ScrollLoader key={0} rendered={loadMore}>
-                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+                <img src={loadSpinner} alt="loading" />
               </ScrollLoader>
             }
           >
@@ -161,7 +160,7 @@ export default function Timeline() {
           </InfiniteScroll>
         )}
         <Load load={load}>
-          <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          <img src={loadSpinner} alt="loading" />
           <h2>Loading</h2>
         </Load>
 
