@@ -14,7 +14,6 @@ import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
-import date from "date-and-time";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -24,7 +23,7 @@ export default function Timeline() {
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
   const [initialPostsNumber, setInitialPostsNumber] = useState(10);
-  const [newPostsNumber, setNewPostsNumber] = useState(20);
+  const [newPostsNumber, setNewPostsNumber] = useState(10);
   const [noPostsMessage, setNoPostsMessage] = useState(
     "No posts found from your friends"
   );
@@ -75,22 +74,30 @@ export default function Timeline() {
     if (firstLoad === true) {
       lastPost = Date.now() + 3 * 3600000;
       setLoad(true);
+      setLoadMore(false);
       loadFollows();
       loadTrending();
+      setPosts([]);
     } else {
       lastPost = posts[posts.length - 1].createdAt;
     }
 
     const promise = services.getPosts(user.token, lastPost);
     promise.then((answer) => {
-      console.log(answer.data);
       setLoad(false);
       if (answer.data.length === 0) {
         setLoadMore(false);
         return;
       }
-      setPosts(posts.concat(answer.data));
-      setLoadMore(true);
+      
+      if (firstLoad === false) {
+        setLoadMore(true);
+        const newPosts = posts.concat(answer.data);
+        setPosts(newPosts);
+      } else {
+        const newPosts = answer.data;
+        setPosts(newPosts);
+      }
     });
 
     promise.catch((answer) => {
@@ -124,18 +131,23 @@ export default function Timeline() {
         <NewPost 
           user={user}
           loadPosts={loadPosts}
-          loadTrending={loadTrending} 
-          />
+          loadTrending={loadTrending}
+          posts={posts}
+          setPosts={setPosts}
+        />
 
-        {(newPostsNumber > initialPostsNumber)? <Teste>{newPostsNumber - initialPostsNumber} new posts, load more!</Teste> : ""}    
+        {(newPostsNumber > initialPostsNumber)? 
+          <Teste>{newPostsNumber - initialPostsNumber} new posts, load more!</Teste> 
+          : ""}
 
         {posts.length === 0 ? (
           <h6>{noPostsMessage}</h6>
         ) : (
           <InfiniteScroll
-            pageStart={0}
+            pageStart={2}
             loadMore={() => loadPosts(false)}
             hasMore={true}
+            initialLoad={false}
             loader={
               <ScrollLoader key={0} rendered={loadMore}>
                 <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
@@ -170,7 +182,7 @@ export default function Timeline() {
   );
 }
 
-function NewPost({ user, loadPosts, loadTrending }) {
+function NewPost({ user, loadPosts, loadTrending, posts, setPosts }) {
   const [sending, setSending] = useState(false);
   const [form, setForm] = useState({
     url: "",
@@ -195,11 +207,13 @@ function NewPost({ user, loadPosts, loadTrending }) {
       });
 
       setSending(false);
+      loadPosts(true);
     });
-    loadPosts(true);
+    
     promise.catch((answer) => {
       setSending(false);
-      return alert(answer.response.data);
+      alert("Unable to post");
+      loadPosts(true);
     });
   }
 
