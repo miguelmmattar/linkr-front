@@ -10,6 +10,7 @@ import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
 import { Puff } from "react-loader-spinner";
 import { useEffect, useRef } from "react";
+import Comment from "./Comment.js";
 
 export default function Post({ user, post, loadPosts }) {
   const postUser = post.user;
@@ -21,7 +22,7 @@ export default function Post({ user, post, loadPosts }) {
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
   const inputFocus = useRef();
-  
+
   if (post.description === null) {
     post.description = "";
   }
@@ -93,7 +94,7 @@ export default function Post({ user, post, loadPosts }) {
   }, [editMode]);
 
   return (
-    <div className="post-wrapper">
+    <div className="post-wrapper" style={{ marginBottom: "200px" }}>
       <img src={postUser.picture} alt="Profile" />
       <Posted>
         <Link to={`/user/${postUser.id}`}>
@@ -133,8 +134,8 @@ export default function Post({ user, post, loadPosts }) {
 
       <EditPost
         isUser={isUser}
-        postId={post.id}
         loadPosts={loadPosts}
+        isLoading={isLoading}
         setPostData={setPostData}
         setEditMode={setEditMode}
         editMode={editMode}
@@ -154,6 +155,10 @@ export default function Post({ user, post, loadPosts }) {
           />
         </LoadingContainer>
       ) : undefined}
+
+      <Comments className="comments">
+        <Comment user={user} />
+      </Comments>
 
       <a
         href={postData.link.url}
@@ -212,6 +217,7 @@ const LoadingContainer = styled.span`
   width: 20px;
   height: 20px;
 `;
+
 const Posted = styled.span`
   width: 100%;
   margin-top: 10px;
@@ -221,4 +227,18 @@ const Posted = styled.span`
     margin-bottom: 0 !important;
     opacity: 0.3;
   }
+`;
+
+const Comments = styled.div`
+  position: absolute;
+  bottom: -180px;
+  z-index: 0;
+  border-radius: 0px 0px 16px 16px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 200px;
+  background-color: #1e1e1e;
 `;

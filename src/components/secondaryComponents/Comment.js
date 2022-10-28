@@ -6,7 +6,7 @@ export default function Comment({ isAuthor, isFollower, user, index, text }) {
   return (
     <UserAccount key={index}>
       <img
-        src={user.url}
+        src={user.picture}
         alt="Profile"
         onClick={() => {
           return navigate(`/user/${user.id}`);

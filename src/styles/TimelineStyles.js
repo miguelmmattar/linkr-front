@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Posts = styled.div`
-  width: ${props => props.hasTrending ? '70%' : '50%'};
+  width: ${(props) => (props.hasTrending ? "70%" : "50%")};
   margin-top: 120px;
   margin-bottom: 40px;
   position: relative;
@@ -76,6 +76,7 @@ const Posts = styled.div`
     margin-bottom: 16px;
     position: relative;
     flex-direction: column;
+    z-index: 1;
   }
   .new-post {
     background-color: #ffffff !important;
@@ -165,7 +166,7 @@ const Posts = styled.div`
     height: 100%;
   }
 
-  @media(min-width: 1450px) {
+  @media (min-width: 1450px) {
     width: 50%;
   }
 
@@ -427,7 +428,7 @@ const Container = styled.div`
 
 const ScrollLoader = styled.div`
   width: 64%;
-  display: ${props => !props.rendered ? 'none' : 'flex'};
+  display: ${(props) => (!props.rendered ? "none" : "flex")};
   justify-content: center;
   margin: 50px 0;
 
@@ -442,12 +443,4 @@ const ScrollLoader = styled.div`
   }
 `;
 
-export { 
-  Posts,
-  Form,
-  SnippetBox,
-  Load,
-  Trending,
-  Container,
-  ScrollLoader
-};
+export { Posts, Form, SnippetBox, Load, Trending, Container, ScrollLoader };
