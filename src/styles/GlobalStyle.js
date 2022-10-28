@@ -63,6 +63,15 @@ table {
     background-color: #333333;
 }
 
+.repost-icon {
+	margin-right: 5px;
+}
+
+.repost-button {
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+
 * {
     box-sizing: border-box;
 }

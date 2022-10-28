@@ -7,7 +7,7 @@ import {
   Load,
   Trending,
   Container,
-  ScrollLoader
+  ScrollLoader,
 } from "../styles/TimelineStyles.js";
 import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
@@ -22,23 +22,29 @@ export default function Timeline() {
   const [trending, setTrending] = useState([]);
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
-  const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
+  const [noPostsMessage, setNoPostsMessage] = useState(
+    "No posts found from your friends"
+  );
   const [loadMore, setLoadMore] = useState(false);
   const navigate = useNavigate();
 
   function loadFollows() {
     const promise = services.getFollows(user.token);
-    
-    promise.then(answer => {
-      setFollows(answer.data)
 
-      if(answer.data.following.length === 0) {
-        setNoPostsMessage("You don't follow anyone yet. Search for new friends!");
-      }  
+    promise.then((answer) => {
+      setFollows(answer.data);
+
+      if (answer.data.following.length === 0) {
+        setNoPostsMessage(
+          "You don't follow anyone yet. Search for new friends!"
+        );
+      }
     });
 
     promise.catch((answer) => {
-      alert("An error occured while trying to fetch the posts, please refresh the page!")
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page!"
+      );
     });
   }
 
@@ -48,25 +54,23 @@ export default function Timeline() {
       setTrending(answer.data);
     });
     promise.catch((answer) => {
-      if(answer.response.status === 401) {
-        setUser(null)
+      if (answer.response.status === 401) {
+        setUser(null);
         localStorage.clear();
         setUser(null);
-        return (navigate("/"));
+        return navigate("/");
       }
       alert(
         "An error occured while trying to fetch the trending topics, please refresh the page"
-      )
-    }
-    );
+      );
+    });
   }
 
   function loadPosts(firstLoad) {
     let lastPost;
-    
-    
-    if(firstLoad === true) {
-      lastPost = Date.now()  + 3 * 3600000;
+
+    if (firstLoad === true) {
+      lastPost = Date.now() + 3 * 3600000;
       setLoad(true);
       loadFollows();
       loadTrending();
@@ -76,8 +80,9 @@ export default function Timeline() {
 
     const promise = services.getPosts(user.token, lastPost);
     promise.then((answer) => {
+      console.log(answer.data);
       setLoad(false);
-      if(answer.data.length === 0) {
+      if (answer.data.length === 0) {
         setLoadMore(false);
         return;
       }
@@ -89,12 +94,13 @@ export default function Timeline() {
       if (answer.response.status === 401) {
         localStorage.clear();
         setUser(null);
-        return (navigate("/"));
+        return navigate("/");
       }
 
-      alert("An error occured while trying to fetch the posts, please refresh the page");
-    }
-    );
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    });
   }
 
   useEffect(() => {
@@ -112,8 +118,12 @@ export default function Timeline() {
       <Posts load={load} hasTrending={true}>
         <h1>timeline</h1>
 
-        <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
-        
+        <NewPost
+          user={user}
+          loadPosts={loadPosts}
+          loadTrending={loadTrending}
+        />
+
         {posts.length === 0 ? (
           <h6>{noPostsMessage}</h6>
         ) : (
@@ -121,12 +131,21 @@ export default function Timeline() {
             pageStart={0}
             loadMore={() => loadPosts(false)}
             hasMore={true}
-            loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+            loader={
+              <ScrollLoader key={0} rendered={loadMore}>
+                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+              </ScrollLoader>
+            }
           >
-              {posts.map((post, index) => (
-                <Post key={index} user={user} post={post} loadPosts={loadPosts} />
-              ))}
-            
+            {posts.map((post, index) => (
+              <Post
+                key={index}
+                user={user}
+                post={post}
+                loadPosts={loadPosts}
+                load={load}
+              />
+            ))}
           </InfiniteScroll>
         )}
         <Load load={load}>
@@ -172,13 +191,11 @@ function NewPost({ user, loadPosts, loadTrending }) {
 
       setSending(false);
     });
-
+    loadPosts(true);
     promise.catch((answer) => {
       setSending(false);
       return alert(answer.response.data);
     });
-
-    loadPosts(true);
   }
 
   return (
