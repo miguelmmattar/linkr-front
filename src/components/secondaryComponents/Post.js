@@ -25,6 +25,7 @@ export default function Post({ user, post, loadPosts, load }) {
   const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
+
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
@@ -35,10 +36,10 @@ export default function Post({ user, post, loadPosts, load }) {
   }
 
   function formatDate() {
-    const time = new Date(post.createdAt).getTime() - 3 * 3600000;
+    const time = post.createdAt * 1000 - 3 * 3600000;
     const interval = (Date.now() - time) / 3600000;
     const now = new Date(Date.now());
-    const isToday = interval < date.format(now, "HH");
+    const isToday = interval < Number(date.format(now, "HH"));
 
     if (!isToday) {
       return date.format(new Date(time), "DD/MM/YYYY");

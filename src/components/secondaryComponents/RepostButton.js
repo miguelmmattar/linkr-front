@@ -11,7 +11,7 @@ export default function RepostButton({ postId, isUser, loadPosts, userId }) {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  console.log(postId);
+  
   const body = {
     userId,
     postId,
