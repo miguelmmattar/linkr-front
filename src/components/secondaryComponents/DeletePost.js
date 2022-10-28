@@ -43,7 +43,7 @@ export default function DeletePost({ postId, isUser, loadPosts }) {
       .deletePost({ token: user.token, postId })
       .then((response) => {
         setIsLoading(false);
-        loadPosts();
+        loadPosts(true);
         setShowModal(false);
       })
       .catch(() => {
