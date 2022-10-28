@@ -8,6 +8,7 @@ import {
   Trending,
   Container,
 } from "../styles/TimelineStyles.js";
+import { Teste } from "../styles/NewPostsAlertStyle.js"
 import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,9 @@ export default function Timeline() {
   const [trending, setTrending] = useState([]);
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
+  const [initialPostsNumber, setInitialPostsNumber] = useState(10);
+  const [newPostsNumber, setNewPostsNumber] = useState(20);
+
   const [noPostsMessage, setNoPostsMessage] = useState("No posts found from your friends");
   const navigate = useNavigate();
 
@@ -97,6 +101,7 @@ export default function Timeline() {
         <h1>timeline</h1>
 
         <NewPost user={user} loadPosts={loadPosts} loadTrending={loadTrending} />
+        {(newPostsNumber > initialPostsNumber)? <Teste>{newPostsNumber - initialPostsNumber} new posts, load more!</Teste> : ""}    
 
         {posts.length === 0 ? (
           <h6>{noPostsMessage}</h6>
