@@ -17,7 +17,7 @@ import {
 } from "../../styles/PostStyles.js";
 import { IconContext } from "react-icons";
 import { IoMdRepeat } from "react-icons/io";
-
+import RepostButton from "./RepostButton.js";
 
 export default function Post({ user, post, loadPosts, load }) {
   const postUser = post.user;
@@ -102,12 +102,17 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
-      <RepostBar>
+      <RepostBar load={load} repost={post.isRepost}>
         <IconContext.Provider
           value={{ color: "white", className: "repost-icon" }}
         >
           <IoMdRepeat />
-          <h6>Re-posted by <h3>you</h3></h6>
+          <p>
+            Re-posted by{" "}
+            <b>
+              {post.repostUserName === user.name ? `You` : post.repostUserName}
+            </b>
+          </p>
         </IconContext.Provider>
       </RepostBar>
       <div className="post-wrapper">
@@ -145,6 +150,13 @@ export default function Post({ user, post, loadPosts, load }) {
           postId={postData.id}
           likes={postData.likedBy}
           isLiked={isLiked}
+        />
+
+        <RepostButton
+          isUser={isUser}
+          postId={postData.postId ? postData.postId : postData.id}
+          userId={postData.repostUserId}
+          loadPosts={loadPosts}
         />
         <DeletePost
           isUser={isUser}

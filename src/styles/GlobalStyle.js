@@ -67,6 +67,11 @@ table {
 	margin-right: 5px;
 }
 
+.repost-button {
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+
 * {
     box-sizing: border-box;
 }

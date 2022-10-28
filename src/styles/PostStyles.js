@@ -54,19 +54,32 @@ const RepostBar = styled.div`
   background-color: #1e1e1e;
   border-radius: 16px 16px 0 0;
   padding-left: 20px;
-  h3,
-  h6 {
-    font-family: "Lato", sans-serif;
+
+  p {
+    font-size: 11px !important;
+    font-weight: 400;
     color: white;
+    font-family: "Lato", sans-serif;
+    margin: 0;
+  }
+  b {
+    font-family: "Lato", sans-serif;
     font-size: 11px !important;
     width: auto;
     margin: 0;
-  }
-  h3 {
     font-weight: 700;
+    color: white;
   }
-  h6 {
-    font-weight: 400;
+  ${(props) => {
+    if (!props.repost) {
+      return `
+      display: none;
+      `;
+    }
+  }}
+
+  @media (max-width: 900px) {
+    width: 100%;
   }
 `;
 
