@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import TrendingTopics from "./secondaryComponents/Trending";
 import InfiniteScroll from "react-infinite-scroller";
+import date from "date-and-time";
 
 export default function UserPage() {
   const { user, setUser } = useContext(UserContext);
@@ -23,12 +24,17 @@ export default function UserPage() {
   const path = Number(useLocation().pathname.replace("/user/", ""));
 
   function loadPosts(firstLoad) {
+    let lastPost;
+
     if(firstLoad === true) {
+      lastPost = Date.now()  + 3 * 3600000;
       setLoad(true);
       loadTrending();
+    } else {
+      lastPost = posts[posts.length - 1].createdAt;
     }
     
-    const promise = services.getUserPosts(user.token, id, posts.length);
+    const promise = services.getUserPosts(user.token, id, lastPost);
     promise.then((answer) => {
       setLoad(false);
       setProfile(answer.data.user);
@@ -123,20 +129,21 @@ export default function UserPage() {
 
         </UserInfo>
         
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={loadPosts}
-          hasMore={true}
-          loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
-        >
-          {posts.length === 0 ? (
-            <h6>There are no posts yet . . .</h6>
-          ) : (
-            posts.map((post, index) => (
-              <Post key={index} user={user} post={post} loadPosts={loadPosts} />
-            ))
-          )}
-        </InfiniteScroll>
+        {posts.length === 0 ? (
+          <h6>There are no posts yet . . .</h6>
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={() => loadPosts(false)}
+            hasMore={true}
+            loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+          >
+              {posts.map((post, index) => (
+                <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+              ))}
+            
+          </InfiniteScroll>
+        )}
 
         <Load load={load}>
           <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />

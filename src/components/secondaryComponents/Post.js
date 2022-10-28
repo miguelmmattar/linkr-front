@@ -1,5 +1,4 @@
 import { SnippetBox } from "../../styles/TimelineStyles.js";
-import styled from "styled-components";
 import LikeButton from "./LikeButton.js";
 import date from "date-and-time";
 import DeletePost from "./DeletePost.js";
@@ -10,14 +9,23 @@ import { ReactTagify } from "react-tagify";
 import services from "../../services/linkr.js";
 import { Puff } from "react-loader-spinner";
 import { useEffect, useRef } from "react";
-import Comment from "./Comment.js";
+import {
+  EditBox,
+  LoadingContainer,
+  Posted,
+  RepostBar,
+} from "../../styles/PostStyles.js";
+import { IconContext } from "react-icons";
+import { IoMdRepeat } from "react-icons/io";
+import RepostButton from "./RepostButton.js";
 
-export default function Post({ user, post, loadPosts }) {
+export default function Post({ user, post, loadPosts, load }) {
   const postUser = post.user;
   const [postData, setPostData] = useState(post);
   const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
+
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
@@ -28,10 +36,10 @@ export default function Post({ user, post, loadPosts }) {
   }
 
   function formatDate() {
-    const time = new Date(post.createdAt).getTime() - 3 * 3600000;
+    const time = post.createdAt * 1000 - 3 * 3600000;
     const interval = (Date.now() - time) / 3600000;
     const now = new Date(Date.now());
-    const isToday = interval < date.format(now, "HH");
+    const isToday = interval < Number(date.format(now, "HH"));
 
     if (!isToday) {
       return date.format(new Date(time), "DD/MM/YYYY");
@@ -94,81 +102,103 @@ export default function Post({ user, post, loadPosts }) {
   }, [editMode]);
 
   return (
-    <div className="post-wrapper" style={{ marginBottom: "200px" }}>
-      <img src={postUser.picture} alt="Profile" />
-      <Posted>
-        <Link to={`/user/${postUser.id}`}>
-          <h3>{postUser.name}</h3>
-        </Link>
-        <p>{postedAt}</p>
-      </Posted>
-
-      {editMode ? (
-        <EditBox
-          onChange={handleChange}
-          onKeyDown={handleKeyboard}
-          type="text"
-          name="description"
-          disabled={isLoading}
-          rows={3}
-          cols={40}
-          isLoading={isLoading}
-          ref={inputFocus}
+    <>
+      <RepostBar load={load} repost={post.isRepost}>
+        <IconContext.Provider
+          value={{ color: "white", className: "repost-icon" }}
         >
-          {postData.description === null ? "" : postData.description}
-        </EditBox>
-      ) : (
-        <ReactTagify
-          tagStyle={tagStyle}
-          tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+          <IoMdRepeat />
+          <p>
+            Re-posted by{" "}
+            <b>
+              {post.repostUserName === user.name ? `You` : post.repostUserName}
+            </b>
+          </p>
+        </IconContext.Provider>
+      </RepostBar>
+      <div className="post-wrapper">
+        <img src={postUser.picture} alt="Profile" />
+        <Posted>
+          <Link to={`/user/${postUser.id}`}>
+            <h3>{postUser.name}</h3>
+          </Link>
+          <p>{postedAt}</p>
+        </Posted>
+
+        {editMode ? (
+          <EditBox
+            onChange={handleChange}
+            onKeyDown={handleKeyboard}
+            type="text"
+            name="description"
+            disabled={isLoading}
+            rows={3}
+            cols={40}
+            isLoading={isLoading}
+            ref={inputFocus}
+          >
+            {postData.description === null ? "" : postData.description}
+          </EditBox>
+        ) : (
+          <ReactTagify
+            tagStyle={tagStyle}
+            tagClicked={(tag) => navigate(`/hashtag/${tag.slice(1)}`)}
+          >
+            <h4>{postData.description === null ? "" : postData.description}</h4>
+          </ReactTagify>
+        )}
+        <LikeButton
+          postId={postData.id}
+          likes={postData.likedBy}
+          isLiked={isLiked}
+        />
+
+        <RepostButton
+          isUser={isUser}
+          postId={postData.id}
+          userId={postData.repostUserId}
+          loadPosts={loadPosts}
+        />
+        <DeletePost
+          isUser={isUser}
+          postId={postData.id}
+          loadPosts={loadPosts}
+        />
+
+        <EditPost
+          isUser={isUser}
+          postId={post.id}
+          loadPosts={loadPosts}
+          setPostData={setPostData}
+          setEditMode={setEditMode}
+          editMode={editMode}
+          post={post}
+        />
+        {isLoading && editMode ? (
+          <LoadingContainer>
+            <Puff
+              height="100%"
+              width="100%"
+              radisu={1}
+              color="#333333"
+              ariaLabel="puff-loading"
+              wrapperStyle={{}}
+              wrapperClass="loader"
+              visible={true}
+            />
+          </LoadingContainer>
+        ) : undefined}
+
+        <a
+          href={postData.link.url}
+          rel="noreferrer"
+          target="_blank"
+          className="snippet"
         >
-          <h4>{postData.description === null ? "" : postData.description}</h4>
-        </ReactTagify>
-      )}
-      <LikeButton
-        postId={postData.id}
-        likes={postData.likedBy}
-        isLiked={isLiked}
-      />
-      <DeletePost isUser={isUser} postId={postData.id} loadPosts={loadPosts} />
-
-      <EditPost
-        isUser={isUser}
-        loadPosts={loadPosts}
-        isLoading={isLoading}
-        setPostData={setPostData}
-        setEditMode={setEditMode}
-        editMode={editMode}
-        post={post}
-      />
-      {isLoading && editMode ? (
-        <LoadingContainer>
-          <Puff
-            height="100%"
-            width="100%"
-            radisu={1}
-            color="#333333"
-            ariaLabel="puff-loading"
-            wrapperStyle={{}}
-            wrapperClass="loader"
-            visible={true}
-          />
-        </LoadingContainer>
-      ) : undefined}
-
-      <Comments className="comments">
-        <Comment user={user} />
-      </Comments>
-
-      <a
-        href={postData.link.url}
-        rel="noreferrer"
-        target="_blank"
-        className="snippet"
-      >
-        <Snippet link={postData.link} />
-      </a>
-    </div>
+          <Snippet link={postData.link} />
+        </a>
+      </div>
+    </>
   );
 }
 
@@ -182,63 +212,3 @@ function Snippet({ link }) {
     </SnippetBox>
   );
 }
-
-const EditBox = styled.textarea`
-  width: 100%;
-  border-radius: 5px;
-  border: none;
-  padding: 5px 13px;
-  border: 1px solid #efefef;
-  margin: 15px 0px 10px 0px;
-  font-size: 15px;
-  background-color: #efefef;
-  vertical-align: baseline;
-  font-family: "Lato", sans-serif;
-
-  ${(props) => {
-    let config = "";
-
-    if (props.isLoading === true) {
-      config += "cursor: wait";
-    }
-
-    if (props.isLoading === false) {
-      config += "cursor: auto";
-    }
-
-    return config;
-  }}
-`;
-
-const LoadingContainer = styled.span`
-  position: absolute;
-  top: 85px;
-  right: 23px;
-  width: 20px;
-  height: 20px;
-`;
-
-const Posted = styled.span`
-  width: 100%;
-  margin-top: 10px;
-
-  p {
-    font-size: 12px;
-    margin-bottom: 0 !important;
-    opacity: 0.3;
-  }
-`;
-
-const Comments = styled.div`
-  position: absolute;
-  bottom: -180px;
-  z-index: 0;
-  border-radius: 0px 0px 16px 16px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  height: 200px;
-  background-color: #1e1e1e;
-`;

@@ -42,7 +42,7 @@ function getTrending(token) {
   });
 }
 
-function postUrl(token, body) {
+function postUrl( token, body ) {
   return axios.post(`${BASE_URL}/posts`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,6 +57,14 @@ function postLogin(body) {
 
 function postSignup(body) {
   return axios.post(`${BASE_URL}/sign-up`, body);
+}
+
+function postRepost(token, body) {
+  return axios.post(`${BASE_URL}/reposts`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 function deleteLogout(token) {
@@ -128,6 +136,7 @@ export default {
   editPost,
   getSearch,
   getFollows,
+  postRepost,
   postFollow,
-  postUnfollow
+  postUnfollow,
 };
