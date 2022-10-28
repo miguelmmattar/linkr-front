@@ -154,7 +154,7 @@ export default function Post({ user, post, loadPosts, load }) {
 
         <RepostButton
           isUser={isUser}
-          postId={postData.postId ? postData.postId : postData.id}
+          postId={postData.id}
           userId={postData.repostUserId}
           loadPosts={loadPosts}
         />
