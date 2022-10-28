@@ -27,12 +27,12 @@ export default function Post({ user, post, loadPosts }) {
   }
 
   function formatDate() {
-    const time = new Date(post.createdAt).getTime() - 3 * 3600000;
+    const time = post.createdAt*1000 - 3 * 3600000;
     const interval = (Date.now() - time) / 3600000;
     const now = new Date(Date.now());
-    const isToday = interval < date.format(now, "HH");
+    const isToday = interval < Number(date.format(now, "HH"));
 
-    if (!isToday) {
+    if(!isToday) {
       return date.format(new Date(time), "DD/MM/YYYY");
     }
 
