@@ -45,7 +45,7 @@ export default function RepostButton({ postId, isUser, loadPosts, userId }) {
       .postRepost(user.token, body)
       .then((response) => {
         setIsLoading(false);
-        loadPosts();
+        loadPosts(true);
         setShowModal(false);
       })
       .catch(() => {

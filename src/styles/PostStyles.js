@@ -35,7 +35,7 @@ const LoadingContainer = styled.span`
   height: 20px;
 `;
 const Posted = styled.span`
-  width: 100%;
+  width: 80%;
   margin-top: 10px;
 
   p {

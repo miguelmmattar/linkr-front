@@ -30,6 +30,8 @@ export default function UserPage() {
       lastPost = Date.now()  + 3 * 3600000;
       setLoad(true);
       loadTrending();
+      setLoadMore(false);
+      setPosts([]);
     } else {
       lastPost = posts[posts.length - 1].createdAt;
     }
@@ -37,14 +39,22 @@ export default function UserPage() {
     const promise = services.getUserPosts(user.token, id, lastPost);
     promise.then((answer) => {
       setLoad(false);
-      setProfile(answer.data.user);
-      setFollowing(answer.data.user.followedAt);
       if(answer.data.posts.length === 0) {
         setLoadMore(false);
         return;
       }
-      setPosts(posts.concat(answer.data.posts));
-      setLoadMore(true);
+      
+      if (firstLoad === false) {
+        setLoadMore(true);
+        const newPosts = posts.concat(answer.data.posts);
+        setPosts(newPosts);
+      } else {
+        const newPosts = answer.data.posts;
+        setPosts(newPosts);
+      }
+      
+      setProfile(answer.data.user);
+      setFollowing(answer.data.user.followedAt);
     });
 
     promise.catch((answer) => {
@@ -133,9 +143,10 @@ export default function UserPage() {
           <h6>There are no posts yet . . .</h6>
         ) : (
           <InfiniteScroll
-            pageStart={0}
+            pageStart={2}
             loadMore={() => loadPosts(false)}
             hasMore={true}
+            initialLoad={false}
             loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
           >
               {posts.map((post, index) => (
@@ -159,8 +170,6 @@ export default function UserPage() {
         </Trending>
       </Posts>
     </>
-
-
   );
 }
 
