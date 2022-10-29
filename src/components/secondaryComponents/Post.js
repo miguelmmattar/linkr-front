@@ -103,6 +103,8 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
+      
+      <div className="post-wrapper">
       <RepostBar load={load} repost={post.isRepost}>
         <IconContext.Provider
           value={{ color: "white", className: "repost-icon" }}
@@ -116,7 +118,6 @@ export default function Post({ user, post, loadPosts, load }) {
           </p>
         </IconContext.Provider>
       </RepostBar>
-      <div className="post-wrapper">
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
