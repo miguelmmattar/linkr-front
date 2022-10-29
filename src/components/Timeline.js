@@ -13,7 +13,7 @@ import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
-import loadSpinner from "../assets/loadSpinner.gif"
+import loadSpinner from "../assets/loadSpinner.gif";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -87,7 +87,7 @@ export default function Timeline() {
         setLoadMore(false);
         return;
       }
-      
+
       if (firstLoad === false) {
         setLoadMore(true);
         const newPosts = posts.concat(answer.data);
@@ -203,7 +203,7 @@ function NewPost({ user, loadPosts, loadTrending, posts, setPosts }) {
       setSending(false);
       loadPosts(true);
     });
-    
+
     promise.catch((answer) => {
       setSending(false);
       alert("Unable to post");

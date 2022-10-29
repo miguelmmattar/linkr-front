@@ -46,7 +46,7 @@ const Posted = styled.span`
 `;
 
 const RepostBar = styled.div`
-  width: 64%;
+  width: 100%;
   height: 30px;
   display: ${(props) => (!props.load ? "flex" : "none")};
   justify-content: flex-start;
@@ -54,6 +54,10 @@ const RepostBar = styled.div`
   background-color: #1e1e1e;
   border-radius: 16px 16px 0 0;
   padding-left: 20px;
+  position: absolute;
+  top: -30px;
+  right: 0px;
+
 
   p {
     font-size: 11px !important;
@@ -77,10 +81,6 @@ const RepostBar = styled.div`
       `;
     }
   }}
-
-  @media (max-width: 900px) {
-    width: 100%;
-  }
 `;
 
 export { EditBox, LoadingContainer, Posted, RepostBar };

@@ -80,6 +80,7 @@ const Posts = styled.div`
     margin-bottom: 16px;
     position: relative;
     flex-direction: column;
+    z-index: 2;
   }
   .new-post {
     background-color: #ffffff !important;
