@@ -58,7 +58,6 @@ const RepostBar = styled.div`
   top: -30px;
   right: 0px;
 
-
   p {
     font-size: 11px !important;
     font-weight: 400;
@@ -87,18 +86,23 @@ const CommentBox = styled.textarea`
   width: 100%;
   border-radius: 8px;
   border: none;
-  padding: 5px 13px;
+  padding: 11px 13px;
   margin: 15px 0px 10px 0px;
   font-size: 14px;
   height: 39px;
   color: #acacac;
   max-width: 563px;
   background-color: #252525;
+  outline: none;
   resize: none;
   font-family: "Lato", sans-serif;
 
   ::placeholder {
     font-style: italic;
+  }
+
+  :focus {
+    color: white;
   }
 
   ${(props) => {
@@ -122,11 +126,54 @@ const CommentBoxContainer = styled.div`
   justify-content: space-between;
   height: 83px;
   width: 100%;
+
+  .send-button-wrapper {
+    position: absolute;
+    right: 37px;
+    bottom: 30px;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ${(props) => {
+      let config = "";
+
+      if (props.isLoading === true) {
+        config += "cursor: wait";
+      }
+
+      if (props.isLoading === false) {
+        config += "cursor: pointer";
+      }
+
+      return config;
+    }}
+  }
+
+  .send-button {
+    width: 100%;
+    height: 100%;
+  }
+
+  ${(props) => {
+    let config = "";
+
+    if (props.isLoading === true) {
+      config += "cursor: wait";
+    }
+
+    if (props.isLoading === false) {
+      config += "cursor: auto";
+    }
+
+    return config;
+  }}
 `;
 
 const Comments = styled.div`
   position: absolute;
-  //bottom: -180px;
   bottom: -80px;
   z-index: 0;
   border-radius: 0px 0px 16px 16px;
@@ -138,7 +185,7 @@ const Comments = styled.div`
   height: 83px;
   background-color: #1e1e1e;
   justify-content: space-between;
-  padding: 0px 25px;
+  padding: 0px 20px;
 `;
 
 const UserPicture = styled.img`
@@ -146,6 +193,12 @@ const UserPicture = styled.img`
   height: 39px !important;
   border-radius: 50%;
   margin: 5px 10px 5px 5px;
+`;
+
+const SectionLine = styled.div`
+  height: 0px;
+  border: 1px solid #353535;
+  width: 100%;
 `;
 
 export {
@@ -157,4 +210,5 @@ export {
   CommentBox,
   CommentBoxContainer,
   UserPicture,
+  SectionLine,
 };

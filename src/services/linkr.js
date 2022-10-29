@@ -121,7 +121,7 @@ function postUnfollow(token, body) {
   });
 }
 
-function postComment(token, body) {
+function postComment({ token, body }) {
   return axios.post(`${BASE_URL}/comments`, body, {
     headers: {
       Authorization: `Bearer ${token}`,

@@ -1,21 +1,25 @@
-import styled from "styled-components";
 import { useState } from "react";
 import services from "../../services/linkr.js";
+import { IconContext } from "react-icons";
+import { FiSend } from "react-icons/fi";
 import {
   CommentBox,
   CommentBoxContainer,
+  SectionLine,
   UserPicture,
 } from "../../styles/PostStyles.js";
-import { Comment } from "react-loader-spinner";
 
 export default function NewComment({ user, index, postId }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [comment, setComment] = useState(null);
+  const [comment, setComment] = useState("");
 
+  console.log(user);
   function clickFunction() {
     if (isLoading) {
       return;
     }
+
+    saveComment();
   }
 
   function handleChange(event) {
@@ -24,11 +28,11 @@ export default function NewComment({ user, index, postId }) {
 
   function handleKeyboard(event) {
     if (event.key === "Enter") {
-      saveChanges();
+      saveComment();
     }
   }
 
-  function saveChanges() {
+  function saveComment() {
     if (isLoading) {
       return;
     }
@@ -43,6 +47,7 @@ export default function NewComment({ user, index, postId }) {
       .postComment({ token: user.token, body: body })
       .then((response) => {
         setIsLoading(false);
+        setComment("");
       })
       .catch(() => {
         setIsLoading(false);
@@ -51,9 +56,39 @@ export default function NewComment({ user, index, postId }) {
   }
 
   return (
-    <CommentBoxContainer className="commentBoxContainer">
-      <UserPicture src={user.picture} className="userPicture" />
-      <CommentBox placeholder="write a comment..."></CommentBox>
-    </CommentBoxContainer>
+    <IconContext.Provider
+      value={{
+        color: "#F3F3F3",
+        className: "send-button",
+      }}
+    >
+      <SectionLine />
+      <CommentBoxContainer
+        isLoading={isLoading}
+        className="commentBoxContainer"
+      >
+        <UserPicture
+          src={user.picture}
+          className="userPicture"
+          style={{ position: "static" }}
+        />
+
+        <CommentBox
+          isLoading={isLoading}
+          onChange={handleChange}
+          onKeyDown={handleKeyboard}
+          value={comment}
+          placeholder="write a comment..."
+          disabled={isLoading}
+        ></CommentBox>
+        <span
+          className="send-button-wrapper"
+          isLoading={isLoading}
+          onClick={clickFunction}
+        >
+          <FiSend />
+        </span>
+      </CommentBoxContainer>
+    </IconContext.Provider>
   );
 }

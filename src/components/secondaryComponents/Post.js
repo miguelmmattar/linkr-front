@@ -105,7 +105,7 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
-      <div className="post-wrapper">
+      <div className="post-wrapper" style={{ marginBottom: "200px" }}>
         <RepostBar load={load} repost={post.isRepost}>
           <IconContext.Provider
             value={{ color: "white", className: "repost-icon" }}
@@ -171,7 +171,7 @@ export default function Post({ user, post, loadPosts, load }) {
         />
 
         <Comments className="comments">
-          <NewComment user={user} />
+          <NewComment user={user} postId={post.id} />
         </Comments>
 
         <EditPost
