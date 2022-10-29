@@ -103,21 +103,22 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
-      
       <div className="post-wrapper">
-      <RepostBar load={load} repost={post.isRepost}>
-        <IconContext.Provider
-          value={{ color: "white", className: "repost-icon" }}
-        >
-          <IoMdRepeat />
-          <p>
-            Re-posted by{" "}
-            <b>
-              {post.repostUserName === user.name ? `You` : post.repostUserName}
-            </b>
-          </p>
-        </IconContext.Provider>
-      </RepostBar>
+        <RepostBar load={load} repost={post.isRepost}>
+          <IconContext.Provider
+            value={{ color: "white", className: "repost-icon" }}
+          >
+            <IoMdRepeat />
+            <p>
+              Re-posted by{" "}
+              <b>
+                {post.repostUserName === user.name
+                  ? `You`
+                  : post.repostUserName}
+              </b>
+            </p>
+          </IconContext.Provider>
+        </RepostBar>
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
@@ -159,6 +160,7 @@ export default function Post({ user, post, loadPosts, load }) {
           postId={postData.id}
           userId={postData.repostUserId}
           loadPosts={loadPosts}
+          count={post.count}
         />
         <DeletePost
           isUser={isUser}
