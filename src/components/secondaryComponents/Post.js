@@ -47,7 +47,7 @@ export default function Post({ user, post, loadPosts, load }) {
       return date.format(new Date(time), "DD/MM/YYYY");
     }
 
-    return date.format(new Date(time), "HH:mm");
+    return date.format(new Date(time + 3 * 3600000), "HH:mm");
   }
 
   const postedAt = formatDate();
@@ -105,20 +105,22 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
-      <RepostBar load={load} repost={post.isRepost}>
-        <IconContext.Provider
-          value={{ color: "white", className: "repost-icon" }}
-        >
-          <IoMdRepeat />
-          <p>
-            Re-posted by{" "}
-            <b>
-              {post.repostUserName === user.name ? `You` : post.repostUserName}
-            </b>
-          </p>
-        </IconContext.Provider>
-      </RepostBar>
-      <div className="post-wrapper" style={{ marginBottom: "200px" }}>
+      <div className="post-wrapper">
+        <RepostBar load={load} repost={post.isRepost}>
+          <IconContext.Provider
+            value={{ color: "white", className: "repost-icon" }}
+          >
+            <IoMdRepeat />
+            <p>
+              Re-posted by{" "}
+              <b>
+                {post.repostUserName === user.name
+                  ? `You`
+                  : post.repostUserName}
+              </b>
+            </p>
+          </IconContext.Provider>
+        </RepostBar>
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
@@ -160,6 +162,7 @@ export default function Post({ user, post, loadPosts, load }) {
           postId={postData.id}
           userId={postData.repostUserId}
           loadPosts={loadPosts}
+          count={post.count}
         />
         <DeletePost
           isUser={isUser}

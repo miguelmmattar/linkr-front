@@ -42,7 +42,7 @@ function getTrending(token) {
   });
 }
 
-function postUrl( token, body ) {
+function postUrl(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -147,5 +147,5 @@ export default {
   postRepost,
   postFollow,
   postUnfollow,
-  postComment
+  postComment,
 };

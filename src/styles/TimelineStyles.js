@@ -13,6 +13,7 @@ const Posts = styled.div`
   h6 {
     font-family: "Lato", sans-serif;
     font-weight: 400;
+    word-wrap: break-word;
   }
   h1 {
     font-family: "Oswald", sans-serif;
@@ -39,12 +40,14 @@ const Posts = styled.div`
     max-width: calc(100% - 170px);
   }
   h3 {
-    font-size: 19px !important;
+    font-size: 19px;
+    max-width: 80%;
   }
   h4 {
     margin: 12px 0;
     font-size: 17px;
     line-height: 20px;
+    max-width: 100% !important;
   }
   h5 {
     font-size: 16px;
@@ -65,6 +68,7 @@ const Posts = styled.div`
   }
   a {
     text-decoration: none;
+    max-width: 80%;
   }
   .post-wrapper {
     width: ${(props) => (props.hasTrending ? "64%" : "100%")};
@@ -76,7 +80,7 @@ const Posts = styled.div`
     margin-bottom: 16px;
     position: relative;
     flex-direction: column;
-    z-index: 1;
+    z-index: 2;
   }
   .new-post {
     background-color: #ffffff !important;
