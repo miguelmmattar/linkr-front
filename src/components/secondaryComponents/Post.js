@@ -45,7 +45,7 @@ export default function Post({ user, post, loadPosts, load }) {
       return date.format(new Date(time), "DD/MM/YYYY");
     }
 
-    return date.format(new Date(time), "HH:mm");
+    return date.format(new Date(time + 3 * 3600000), "HH:mm");
   }
 
   const postedAt = formatDate();
