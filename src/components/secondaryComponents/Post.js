@@ -14,10 +14,13 @@ import {
   LoadingContainer,
   Posted,
   RepostBar,
+  Comments,
 } from "../../styles/PostStyles.js";
 import { IconContext } from "react-icons";
 import { IoMdRepeat } from "react-icons/io";
 import RepostButton from "./RepostButton.js";
+import Comment from "../secondaryComponents/Comment.js";
+import NewComment from "./NewComment.js";
 
 export default function Post({ user, post, loadPosts, load }) {
   const postUser = post.user;
@@ -25,7 +28,6 @@ export default function Post({ user, post, loadPosts, load }) {
   const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
-
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
@@ -116,7 +118,7 @@ export default function Post({ user, post, loadPosts, load }) {
           </p>
         </IconContext.Provider>
       </RepostBar>
-      <div className="post-wrapper">
+      <div className="post-wrapper" style={{ marginBottom: "200px" }}>
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
@@ -164,6 +166,10 @@ export default function Post({ user, post, loadPosts, load }) {
           postId={postData.id}
           loadPosts={loadPosts}
         />
+
+        <Comments className="comments">
+          <NewComment user={user} />
+        </Comments>
 
         <EditPost
           isUser={isUser}

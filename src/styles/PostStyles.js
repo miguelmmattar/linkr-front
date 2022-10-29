@@ -83,4 +83,78 @@ const RepostBar = styled.div`
   }
 `;
 
-export { EditBox, LoadingContainer, Posted, RepostBar };
+const CommentBox = styled.textarea`
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  padding: 5px 13px;
+  margin: 15px 0px 10px 0px;
+  font-size: 14px;
+  height: 39px;
+  color: #acacac;
+  max-width: 563px;
+  background-color: #252525;
+  resize: none;
+  font-family: "Lato", sans-serif;
+
+  ::placeholder {
+    font-style: italic;
+  }
+
+  ${(props) => {
+    let config = "";
+
+    if (props.isLoading === true) {
+      config += "cursor: wait";
+    }
+
+    if (props.isLoading === false) {
+      config += "cursor: auto";
+    }
+
+    return config;
+  }}
+`;
+
+const CommentBoxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 83px;
+  width: 100%;
+`;
+
+const Comments = styled.div`
+  position: absolute;
+  //bottom: -180px;
+  bottom: -80px;
+  z-index: 0;
+  border-radius: 0px 0px 16px 16px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 83px;
+  background-color: #1e1e1e;
+  justify-content: space-between;
+  padding: 0px 25px;
+`;
+
+const UserPicture = styled.img`
+  width: 39px !important;
+  height: 39px !important;
+  border-radius: 50%;
+  margin: 5px 10px 5px 5px;
+`;
+
+export {
+  EditBox,
+  LoadingContainer,
+  Posted,
+  RepostBar,
+  Comments,
+  CommentBox,
+  CommentBoxContainer,
+  UserPicture,
+};
