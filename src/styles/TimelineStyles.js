@@ -83,7 +83,7 @@ const Posts = styled.div`
     width: ${(props) => (props.hasTrending ? "64%" : "100%")};
     min-height: 209px;
     display: ${(props) => (!props.load ? "flex" : "none")};
-    padding: 18px 18px 18px 86px;
+    padding: 18px 18px 18px 90px;
     background-color: #171717;
     border-radius: 16px;
     margin-bottom: 16px;
@@ -117,6 +117,28 @@ const Posts = styled.div`
   }
 
   .delete-button {
+    width: 100%;
+    height: 100%;
+  }
+
+  .comment-button-wrapper {
+    position: absolute;
+    left: 33px;
+    cursor: pointer;
+    top: 134px;
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 900px) {
+      left: 27px;
+      top: 113px;
+    }
+  }
+
+  .comment-button {
     width: 100%;
     height: 100%;
   }
@@ -172,7 +194,7 @@ const Posts = styled.div`
 
     @media (max-width: 900px) {
       left: 27px;
-      top: 80px;
+      top: 65px;
     }
   }
 

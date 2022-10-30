@@ -9,11 +9,16 @@ import {
   UserPicture,
 } from "../../styles/PostStyles.js";
 
-export default function NewComment({ user, index, postId }) {
+export default function NewComment({
+  user,
+  index,
+  postId,
+  setComments,
+  comments,
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [comment, setComment] = useState("");
 
-  console.log(user);
   function clickFunction() {
     if (isLoading) {
       return;
@@ -46,7 +51,14 @@ export default function NewComment({ user, index, postId }) {
     services
       .postComment({ token: user.token, body: body })
       .then((response) => {
+        const commentBody = {
+          comment: comment,
+          id: user.id,
+          name: user.name,
+          picture: user.picture,
+        };
         setIsLoading(false);
+        setComments([...comments, commentBody]);
         setComment("");
       })
       .catch(() => {
@@ -62,7 +74,6 @@ export default function NewComment({ user, index, postId }) {
         className: "send-button",
       }}
     >
-      <SectionLine />
       <CommentBoxContainer
         isLoading={isLoading}
         className="commentBoxContainer"

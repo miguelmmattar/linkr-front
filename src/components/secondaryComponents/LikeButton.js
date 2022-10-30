@@ -117,7 +117,7 @@ const LikesCount = styled.span`
   width: 50px;
 
   @media (max-width: 900px) {
-    top: 105px;
-    left: 14px;
+    top: 90px;
+    left: 11px;
   }
 `;

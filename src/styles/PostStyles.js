@@ -91,7 +91,6 @@ const CommentBox = styled.textarea`
   font-size: 14px;
   height: 39px;
   color: #acacac;
-  max-width: 563px;
   background-color: #252525;
   outline: none;
   resize: none;
@@ -124,7 +123,7 @@ const CommentBoxContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 83px;
+  min-height: 83px;
   width: 100%;
 
   .send-button-wrapper {
@@ -174,7 +173,6 @@ const CommentBoxContainer = styled.div`
 
 const Comments = styled.div`
   position: absolute;
-  bottom: -80px;
   z-index: 0;
   border-radius: 0px 0px 16px 16px;
   left: 0;
@@ -182,10 +180,24 @@ const Comments = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 83px;
   background-color: #1e1e1e;
   justify-content: space-between;
   padding: 0px 20px;
+
+  ${(props) => {
+    let config = "";
+
+    if (props.commentsLength !== undefined) {
+      config += `bottom: -${props.commentsLength * 73 + 83}px;`;
+      config += `height: ${props.commentsLength * 73 + 83}px;`;
+    }
+
+    return config;
+  }}
+
+  @media (max-width: 900px) {
+    border-radius: 0px;
+  }
 `;
 
 const UserPicture = styled.img`

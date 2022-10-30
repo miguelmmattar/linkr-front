@@ -147,12 +147,12 @@ const RepostsCount = styled.div`
   align-items: center;
   position: absolute;
   font-size: 11px;
-  top: 135px;
+  top: 192px;
   left: 18px;
   color: white;
 
   @media (max-width: 900px) {
-    top: 130px;
+    top: 155px;
     left: 14px;
   }
 `;
