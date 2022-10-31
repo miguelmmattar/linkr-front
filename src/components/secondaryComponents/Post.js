@@ -14,20 +14,25 @@ import {
   LoadingContainer,
   Posted,
   RepostBar,
+  Comments,
 } from "../../styles/PostStyles.js";
 import { IconContext } from "react-icons";
 import { IoMdRepeat } from "react-icons/io";
 import RepostButton from "./RepostButton.js";
+import Comment from "../secondaryComponents/Comment.js";
+import NewComment from "./NewComment.js";
+import CommentButton from "./CommentButton.js";
 
-export default function Post({ user, post, loadPosts, load }) {
+export default function Post({ user, post, loadPosts, load, follows = [] }) {
   const postUser = post.user;
   const [postData, setPostData] = useState(post);
   const [isLoading, setIsLoading] = useState(false);
   const likeOfTheUser = (like) => like.id === user.id;
   const isLiked = post.likedBy.some(likeOfTheUser);
-
   const isUser = postUser.id === user.id;
   const [editMode, setEditMode] = useState(false);
+  const [commentMode, setCommentMode] = useState(false);
+  const [comments, setComments] = useState(post.comments);
   const navigate = useNavigate();
   const inputFocus = useRef();
 
@@ -103,20 +108,27 @@ export default function Post({ user, post, loadPosts, load }) {
 
   return (
     <>
-      <RepostBar load={load} repost={post.isRepost}>
-        <IconContext.Provider
-          value={{ color: "white", className: "repost-icon" }}
-        >
-          <IoMdRepeat />
-          <p>
-            Re-posted by{" "}
-            <b>
-              {post.repostUserName === user.name ? `You` : post.repostUserName}
-            </b>
-          </p>
-        </IconContext.Provider>
-      </RepostBar>
-      <div className="post-wrapper">
+      <div
+        className="post-wrapper"
+        style={{
+          marginBottom: `${commentMode ? comments.length * 73 + 133 : 44}px`,
+        }}
+      >
+        <RepostBar load={load} repost={post.isRepost}>
+          <IconContext.Provider
+            value={{ color: "white", className: "repost-icon" }}
+          >
+            <IoMdRepeat />
+            <p>
+              Re-posted by{" "}
+              <b>
+                {post.repostUserName === user.name
+                  ? `You`
+                  : post.repostUserName}
+              </b>
+            </p>
+          </IconContext.Provider>
+        </RepostBar>
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
@@ -147,6 +159,7 @@ export default function Post({ user, post, loadPosts, load }) {
             <h4>{postData.description === null ? "" : postData.description}</h4>
           </ReactTagify>
         )}
+
         <LikeButton
           postId={postData.id}
           likes={postData.likedBy}
@@ -158,12 +171,45 @@ export default function Post({ user, post, loadPosts, load }) {
           postId={postData.id}
           userId={postData.repostUserId}
           loadPosts={loadPosts}
+          count={post.count}
         />
+
         <DeletePost
           isUser={isUser}
           postId={postData.id}
           loadPosts={loadPosts}
         />
+
+        <CommentButton
+          setCommentMode={setCommentMode}
+          commentMode={commentMode}
+          comments={comments}
+        />
+        {commentMode ? (
+          <Comments className="comments" commentsLength={comments.length}>
+            {comments.map((comment, index) => {
+              const isAuthor = comment.id === post.user.id;
+              const following = follows?.following?.find((follow) => {
+                if (follow.followed === comment.id) return true;
+              });
+              const isFollowing = following !== undefined ? true : false;
+              return (
+                <Comment
+                  isAuthor={isAuthor}
+                  isFollowing={isFollowing}
+                  comment={comment}
+                  index={index}
+                />
+              );
+            })}
+            <NewComment
+              user={user}
+              setComments={setComments}
+              comments={comments}
+              postId={post.id}
+            />
+          </Comments>
+        ) : undefined}
 
         <EditPost
           isUser={isUser}

@@ -7,7 +7,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TrendingTopics from "./secondaryComponents/Trending";
 import InfiniteScroll from "react-infinite-scroller";
-import date from "date-and-time";
 
 export default function HashtagPage() {
     const { user, setUser } = useContext(UserContext);
@@ -50,46 +49,53 @@ export default function HashtagPage() {
             }
         });
 
-        promise.catch(answer => {
-            if (answer.response.status === 401) {
-                localStorage.clear();
-                setUser(null);
-                return (navigate("/"));
-            }
-            alert("An error occured while trying to fetch the posts, please refresh the page")
-        });
+    promise.catch((answer) => {
+      if (answer.response.status === 401) {
+        localStorage.clear();
+        setUser(null);
+        return navigate("/");
+      }
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    });
+  }
+
+  function loadTrending() {
+    const promise = services.getTrending(user.token);
+    promise.then((answer) => {
+      setTrending(answer.data);
+    });
+    promise.catch((answer) => {
+      if (answer.response.status === 401) {
+        localStorage.clear();
+        setUser(null);
+        return navigate("/");
+      }
+      alert(
+        "An error occured while trying to fetch the trending topics, please refresh the page"
+      );
+    });
+  }
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/");
     }
+    loadPosts();
+    loadTrending();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hashtag]);
 
-    function loadTrending() {
-        const promise = services.getTrending(user.token);
-        promise.then((answer) => {
-            setTrending(answer.data);
-        });
-        promise.catch((answer) =>{
-            if (answer.response.status === 401) {
-                localStorage.clear();
-                setUser(null);
-                return (navigate("/"));
-            }
-            alert(
-                "An error occured while trying to fetch the trending topics, please refresh the page"
-            )}
-        );
-    }
-
-    useEffect(() => {
-        if (!user) {
-            return navigate("/");
-        }
-        loadPosts(true);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hashtag]);
-
-    return (
-        <Posts load={load} hasTrending={true}>
-            <HashtagInfo load={load}>
-                <h1>{`# ${hashtag}`}</h1>
-            </HashtagInfo>
+  return (
+    <Posts load={load} hasTrending={true}>
+      <HashtagInfo load={load}>
+        <h1>{`# ${hashtag}`}</h1>
+      </HashtagInfo>
+      <Load load={load}>
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+        <h2>Loading</h2>
+      </Load>
 
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>
@@ -125,12 +131,12 @@ export default function HashtagPage() {
 }
 
 const HashtagInfo = styled.span`
-    display: ${props => props.load ? 'none' : 'flex'};
-    align-items: center;
-    padding: 0 18px;
-    margin-bottom: 42px;
+  display: ${(props) => (props.load ? "none" : "flex")};
+  align-items: center;
+  padding: 0 18px;
+  margin-bottom: 42px;
 
-    h1{
-        margin: 0;
-    }
+  h1 {
+    margin: 0;
+  }
 `;

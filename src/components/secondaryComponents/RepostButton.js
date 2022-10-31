@@ -7,11 +7,17 @@ import { IoMdRepeat } from "react-icons/io";
 import { useContext, useState } from "react";
 import ReactModal from "react-modal";
 
-export default function RepostButton({ postId, isUser, loadPosts, userId }) {
+export default function RepostButton({
+  postId,
+  isUser,
+  loadPosts,
+  userId,
+  count,
+}) {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  
+
   const body = {
     userId,
     postId,
@@ -69,7 +75,8 @@ export default function RepostButton({ postId, isUser, loadPosts, userId }) {
         <IconContext.Provider
           value={{ color: "white", className: "repost-button" }}
         >
-          <IoMdRepeat onClick={clickFunction} />1 re-posts
+          <IoMdRepeat onClick={clickFunction} />
+          {`${count} re-posts`}
         </IconContext.Provider>
       </RepostsCount>
       <ReactModal
@@ -140,12 +147,12 @@ const RepostsCount = styled.div`
   align-items: center;
   position: absolute;
   font-size: 11px;
-  top: 135px;
+  top: 192px;
   left: 18px;
   color: white;
 
   @media (max-width: 900px) {
-    top: 130px;
+    top: 155px;
     left: 14px;
   }
 `;

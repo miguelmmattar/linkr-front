@@ -42,7 +42,7 @@ function getTrending(token) {
   });
 }
 
-function postUrl( token, body ) {
+function postUrl(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -121,6 +121,14 @@ function postUnfollow(token, body) {
   });
 }
 
+function postComment({ token, body }) {
+  return axios.post(`${BASE_URL}/comments`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 // eslint-disable-next-line
 export default {
   getPosts,
@@ -139,4 +147,5 @@ export default {
   postRepost,
   postFollow,
   postUnfollow,
+  postComment,
 };
