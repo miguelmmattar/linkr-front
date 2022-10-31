@@ -1,20 +1,14 @@
-import UserContext from "../../contexts/UserContext.js";
 import { IconContext } from "react-icons";
 import { MdModeEdit } from "react-icons/md";
-import { useContext, useState } from "react";
 
 export default function EditPost({
-  postId,
   isUser,
-  loadPosts,
+  isLoading,
   setPostData,
   setEditMode,
   editMode,
-  post
+  post,
 }) {
-  const { user } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(false);
-
   function clickFunction() {
     if (isLoading) {
       return;
@@ -22,14 +16,12 @@ export default function EditPost({
 
     if (!editMode) {
       setEditMode(true);
-      return
+      return;
     }
 
-    setEditMode(false)
-    setPostData(post)
+    setEditMode(false);
+    setPostData(post);
   }
-
-  
 
   return (
     <>

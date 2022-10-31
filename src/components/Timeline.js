@@ -155,6 +155,7 @@ export default function Timeline() {
                 post={post}
                 loadPosts={loadPosts}
                 load={load}
+                follows={follows}
               />
             ))}
           </InfiniteScroll>

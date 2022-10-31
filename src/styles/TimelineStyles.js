@@ -15,6 +15,7 @@ const Posts = styled.div`
     font-weight: 400;
     word-wrap: break-word;
   }
+
   h1 {
     font-family: "Oswald", sans-serif;
     color: #ffffff;
@@ -25,6 +26,7 @@ const Posts = styled.div`
     line-height: 40px;
     margin-bottom: 43px;
   }
+
   h2 {
     color: #949494;
     font-size: 20px;
@@ -39,20 +41,24 @@ const Posts = styled.div`
     color: #ffffff;
     max-width: calc(100% - 170px);
   }
+
   h3 {
     font-size: 19px;
     max-width: 80%;
   }
+
   h4 {
     margin: 12px 0;
     font-size: 17px;
     line-height: 20px;
     max-width: 100% !important;
   }
+
   h5 {
     font-size: 16px;
     line-height: 20px;
   }
+
   h6 {
     color: #949494;
     font-size: 24px;
@@ -62,19 +68,22 @@ const Posts = styled.div`
     margin-right: 0;
     width: 60%;
   }
+
   p {
     margin: 5px 0 10px 0;
     line-height: 14px;
   }
+
   a {
     text-decoration: none;
     max-width: 80%;
   }
+
   .post-wrapper {
     width: ${(props) => (props.hasTrending ? "64%" : "100%")};
     min-height: 209px;
     display: ${(props) => (!props.load ? "flex" : "none")};
-    padding: 18px 18px 18px 86px;
+    padding: 18px 18px 18px 90px;
     background-color: #171717;
     border-radius: 16px;
     margin-bottom: 16px;
@@ -82,6 +91,7 @@ const Posts = styled.div`
     flex-direction: column;
     z-index: 2;
   }
+
   .new-post {
     background-color: #ffffff !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -107,6 +117,28 @@ const Posts = styled.div`
   }
 
   .delete-button {
+    width: 100%;
+    height: 100%;
+  }
+
+  .comment-button-wrapper {
+    position: absolute;
+    left: 33px;
+    cursor: pointer;
+    top: 134px;
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 900px) {
+      left: 27px;
+      top: 113px;
+    }
+  }
+
+  .comment-button {
     width: 100%;
     height: 100%;
   }
@@ -143,6 +175,7 @@ const Posts = styled.div`
     top: 18px;
     object-fit: cover;
   }
+
   .snippet {
     max-width: 100%;
     text-decoration: none;
@@ -161,7 +194,7 @@ const Posts = styled.div`
 
     @media (max-width: 900px) {
       left: 27px;
-      top: 80px;
+      top: 65px;
     }
   }
 
@@ -197,30 +230,37 @@ const Posts = styled.div`
     a {
       max-width: calc(100% - 105px);
     }
+
     h1 {
       font-size: 33px;
       margin-bottom: 20px;
       margin-left: 17px;
       width: calc(100% - 17px);
     }
+
     h2 {
       font-size: 17px;
       margin-bottom: 12px;
     }
+
     h3 {
       font-size: 17px;
     }
+
     h4 {
       font-size: 15px;
       margin: 7px 0 13px 0;
     }
+
     h5 {
       font-size: 11px;
     }
+
     p,
     a {
       font-size: 9px;
     }
+
     p {
       margin: 4px 0;
     }
@@ -241,6 +281,7 @@ const Posts = styled.div`
         display: none;
       }
     }
+
     img {
       width: 40px;
       height: 40px;
@@ -267,12 +308,14 @@ const Form = styled.form`
     vertical-align: baseline;
     font-family: "Lato", sans-serif;
   }
+
   textarea {
     min-height: 66px;
     height: auto;
     resize: vertical;
     overflow: auto;
   }
+
   input[type="submit"] {
     height: 31px;
     width: 112px;
@@ -284,12 +327,14 @@ const Form = styled.form`
     cursor: pointer;
     opacity: ${(props) => (!props.disabled ? "1" : "0.3")};
   }
+
   input::placeholder,
   textarea::placeholder {
     color: #949494;
     font-size: 15px;
     font-weight: 300;
   }
+
   @media (max-width: 614px) {
     margin-bottom: 28px;
     textarea {
@@ -317,12 +362,14 @@ const SnippetBox = styled.div`
   p {
     font-size: 11px;
   }
+
   p:last-child {
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis !important;
     white-space: nowrap;
   }
+
   img {
     height: 100%;
     width: 150px;
@@ -331,6 +378,7 @@ const SnippetBox = styled.div`
     top: 0;
     border-radius: 0 11px 11px 0 !important;
   }
+
   @media (max-width: 614px) {
     border-radius: 11px !important;
     min-height: 115px !important;
@@ -351,6 +399,7 @@ const Load = styled.span`
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
+
   img {
     position: static;
     margin-bottom: 20px;
@@ -432,7 +481,7 @@ const Container = styled.div`
 
 const ScrollLoader = styled.div`
   width: 64%;
-  display: ${props => !props.rendered ? 'none' : 'flex'};
+  display: ${(props) => (!props.rendered ? "none" : "flex")};
   justify-content: center;
   margin: 50px 0;
 
@@ -447,12 +496,4 @@ const ScrollLoader = styled.div`
   }
 `;
 
-export { 
-  Posts,
-  Form,
-  SnippetBox,
-  Load,
-  Trending,
-  Container,
-  ScrollLoader
-};
+export { Posts, Form, SnippetBox, Load, Trending, Container, ScrollLoader };
