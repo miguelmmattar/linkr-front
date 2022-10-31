@@ -23,7 +23,7 @@ export default function Timeline() {
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
   const [initialPostsNumber, setInitialPostsNumber] = useState(10);
-  const [newPostsNumber, setNewPostsNumber] = useState(10);
+  const [newPostsNumber, setNewPostsNumber] = useState(15);
   const [noPostsMessage, setNoPostsMessage] = useState(
     "No posts found from your friends"
   );
