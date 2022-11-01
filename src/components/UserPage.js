@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import TrendingTopics from "./secondaryComponents/Trending";
 import InfiniteScroll from "react-infinite-scroller";
-import date from "date-and-time";
+import loadSpinner from "../assets/loadSpinner.gif";
 
 export default function UserPage() {
   const { user, setUser } = useContext(UserContext);
@@ -147,7 +147,7 @@ export default function UserPage() {
             loadMore={() => loadPosts(false)}
             hasMore={true}
             initialLoad={false}
-            loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+            loader={<ScrollLoader key={0} rendered={loadMore}><img src={loadSpinner} alt="loading" /></ScrollLoader>}
           >
               {posts.map((post, index) => (
                 <Post key={index} user={user} post={post} loadPosts={loadPosts} />
@@ -157,7 +157,7 @@ export default function UserPage() {
         )}
 
         <Load load={load}>
-          <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+          <img src={loadSpinner} alt="loading" />
           <h2>Loading</h2>
         </Load>
 
