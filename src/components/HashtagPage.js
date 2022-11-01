@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TrendingTopics from "./secondaryComponents/Trending";
 import InfiniteScroll from "react-infinite-scroller";
+import loadSpinner from "../assets/loadSpinner.gif";
 
 export default function HashtagPage() {
     const { user, setUser } = useContext(UserContext);
@@ -82,7 +83,7 @@ export default function HashtagPage() {
     if (!user) {
       return navigate("/");
     }
-    loadPosts();
+    loadPosts(true);
     loadTrending();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hashtag]);
@@ -92,10 +93,6 @@ export default function HashtagPage() {
       <HashtagInfo load={load}>
         <h1>{`# ${hashtag}`}</h1>
       </HashtagInfo>
-      <Load load={load}>
-        <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
-        <h2>Loading</h2>
-      </Load>
 
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>
@@ -105,7 +102,7 @@ export default function HashtagPage() {
             loadMore={() => loadPosts(false)}
             hasMore={true}
             initialLoad={false}
-            loader={<ScrollLoader key={0} rendered={loadMore}><img src="https://i.gifer.com/ZZ5H.gif" alt="loading" /></ScrollLoader>}
+            loader={<ScrollLoader key={0} rendered={loadMore}><img src={loadSpinner} alt="loading" /></ScrollLoader>}
           >
               {posts.map((post, index) => (
                 <Post key={index} user={user} post={post} loadPosts={loadPosts} />
@@ -115,7 +112,7 @@ export default function HashtagPage() {
         )}
 
             <Load load={load}>
-                <img src="https://i.gifer.com/ZZ5H.gif" alt="loading" />
+                <img src={loadSpinner} alt="loading" />
                 <h2>Loading</h2>
             </Load>
 
