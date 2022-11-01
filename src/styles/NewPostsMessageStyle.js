@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Teste = styled.div`
+const NewPostMessageButtom = styled.div`
     width: 64%;
     height: 61px;
     background-color: #1877F2;
@@ -16,6 +16,7 @@ const Teste = styled.div`
     font-size: 16px;
     line-height: 19px;
     color: #FFFFFF;
+    cursor: pointer;
 
     @media (max-width: 900px) {
         width: 100%;
@@ -28,4 +29,4 @@ const Teste = styled.div`
 `;
 
 
-export { Teste };
+export { NewPostMessageButtom };

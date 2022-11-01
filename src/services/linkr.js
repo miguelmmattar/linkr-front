@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://linkr-postgres-17.herokuapp.com";
+const BASE_URL = "http://localhost:4000";
 
 function getFollows(token) {
   return axios.get(`${BASE_URL}/follows`, {
@@ -129,6 +129,14 @@ function postComment({ token, body }) {
   });
 }
 
+function getPostNumbers(token, filter) {
+  return axios.get(`${BASE_URL}/numbers${filter}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 // eslint-disable-next-line
 export default {
   getPosts,
@@ -148,4 +156,5 @@ export default {
   postFollow,
   postUnfollow,
   postComment,
+  getPostNumbers
 };

@@ -9,12 +9,12 @@ import {
   Container,
   ScrollLoader,
 } from "../styles/TimelineStyles.js";
-import { Teste } from "../styles/NewPostsAlertStyle.js"
 import Post from "./secondaryComponents/Post.js";
 import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import loadSpinner from "../assets/loadSpinner.gif";
+import { NewPostMessage } from "./secondaryComponents/NewPostMessage.js";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -23,8 +23,6 @@ export default function Timeline() {
   const [trending, setTrending] = useState([]);
   // eslint-disable-next-line
   const [follows, setFollows] = useState({});
-  const [initialPostsNumber, setInitialPostsNumber] = useState(10);
-  const [newPostsNumber, setNewPostsNumber] = useState(15);
   const [noPostsMessage, setNoPostsMessage] = useState(
     "No posts found from your friends"
   );
@@ -136,10 +134,7 @@ export default function Timeline() {
           posts={posts}
           setPosts={setPosts}
         />
-
-        {(newPostsNumber > initialPostsNumber)? 
-          <Teste>{newPostsNumber - initialPostsNumber} new posts, load more!</Teste> 
-          : ""}
+        <NewPostMessage />
 
         {posts.length === 0 ? (
           <h6>{noPostsMessage}</h6>

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import TrendingTopics from "./secondaryComponents/Trending";
 import InfiniteScroll from "react-infinite-scroller";
 import loadSpinner from "../assets/loadSpinner.gif";
+import { NewPostMessage } from "./secondaryComponents/NewPostMessage.js";
 
 export default function UserPage() {
   const { user, setUser } = useContext(UserContext);
@@ -138,7 +139,7 @@ export default function UserPage() {
           }
 
         </UserInfo>
-        
+        <NewPostMessage />
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>
         ) : (
@@ -205,6 +206,7 @@ const FollowButton = styled.div`
   font-size: 14px;
   line-height: 17px;
   color: ${(props) => (!props.following ? "#FFFFFF" : "#1877F2")};
+  cursor: pointer;
   @media (max-width: 900px) {
     top: -35px;
     left: 50%;
