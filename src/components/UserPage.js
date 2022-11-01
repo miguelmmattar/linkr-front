@@ -139,7 +139,9 @@ export default function UserPage() {
           }
 
         </UserInfo>
-        <NewPostMessage />
+
+        <NewPostMessage loadPosts={loadPosts} />
+        
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>
         ) : (

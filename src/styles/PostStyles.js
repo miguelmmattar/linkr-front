@@ -72,6 +72,7 @@ const RepostBar = styled.div`
     margin: 0;
     font-weight: 700;
     color: white;
+    cursor: pointer;
   }
   ${(props) => {
     if (!props.repost) {

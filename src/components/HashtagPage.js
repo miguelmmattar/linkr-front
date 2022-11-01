@@ -96,7 +96,7 @@ export default function HashtagPage() {
         <h1>{`# ${hashtag}`}</h1>
       </HashtagInfo>
       
-      <NewPostMessage />
+      <NewPostMessage loadPosts={loadPosts} />
 
         {posts.length === 0 ? (
           <h6>There are no posts yet . . .</h6>

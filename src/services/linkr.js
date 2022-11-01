@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "https://linkr-postgres-17.herokuapp.com";
 
 function getFollows(token) {
   return axios.get(`${BASE_URL}/follows`, {

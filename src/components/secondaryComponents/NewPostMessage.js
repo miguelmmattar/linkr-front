@@ -5,11 +5,12 @@ import UserContext from "../../contexts/UserContext";
 import useInterval from "use-interval";
 import { useLocation } from "react-router-dom";
 
-function NewPostMessage() {
+function NewPostMessage({ loadPosts, disableMessageButtom }) {
     let path = useLocation().pathname;
     const [initialPostsNumber, setInitialPostsNumber] = useState(0);
     const [newPostsNumber, setNewPostsNumber] = useState(0);
-    const { user, setUser } = useContext(UserContext);
+    const [reload, setReload] = useState(true);
+    const { user } = useContext(UserContext);
     const token = user.token;
     let filter = "";
     let promise;
@@ -21,6 +22,10 @@ function NewPostMessage() {
         filter = `?hashtag=${path.replace("/hashtag/", "")}`;
     }
 
+    
+
+    
+
     useInterval(() => {
         promise = services.getPostNumbers(token, filter);
         promise.then((res) => {
@@ -28,9 +33,10 @@ function NewPostMessage() {
         }).catch((error) => {
             console.error(error);
         })
-    }, 1000); //  15000
+    }, 15000);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         promise = services.getPostNumbers(token, filter);
         promise.then((res) => {
             setInitialPostsNumber(res.data);
@@ -38,13 +44,17 @@ function NewPostMessage() {
             console.error(error);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [reload, disableMessageButtom]);
 
+    function handlleClick() {
+        setReload(!reload);
+        loadPosts(true);
+    }    
 
     return (
         <>
             {(newPostsNumber > initialPostsNumber) ?
-                <NewPostMessageButtom onClick={()=> {console.log("clivou") }}>{newPostsNumber - initialPostsNumber} new posts, load more!</NewPostMessageButtom>
+                <NewPostMessageButtom onClick={ ()=>{handlleClick()} }>{newPostsNumber - initialPostsNumber} new posts, load more!</NewPostMessageButtom>
                 : ""}
         </>
     )
