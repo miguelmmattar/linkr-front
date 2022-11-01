@@ -78,7 +78,6 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
       saveChanges();
     }
   }
-
   function saveChanges() {
     if (isLoading) {
       return;
@@ -121,7 +120,7 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
             <IoMdRepeat />
             <p>
               Re-posted by{" "}
-              <b>
+              <b onClick={()=>{navigate(`/user/${post.repostUserId}`)}}>
                 {post.repostUserName === user.name
                   ? `You`
                   : post.repostUserName}

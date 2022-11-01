@@ -109,7 +109,9 @@ const SearcherForm = styled.form`
     input:focus{
         color: #5c5656;
     }
-
+    svg{
+        cursor: pointer;
+    }
     @media (min-width: 614px) {
         width: calc(100% - 300px);
         max-width: 563px;

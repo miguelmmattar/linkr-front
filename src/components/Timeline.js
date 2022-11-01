@@ -14,6 +14,7 @@ import TrendingTopics from "./secondaryComponents/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import loadSpinner from "../assets/loadSpinner.gif";
+import { NewPostMessage } from "./secondaryComponents/NewPostMessage.js";
 
 export default function Timeline() {
   const { user, setUser } = useContext(UserContext);
@@ -26,6 +27,7 @@ export default function Timeline() {
     "No posts found from your friends"
   );
   const [loadMore, setLoadMore] = useState(false);
+  const [disableMessageButtom, setDisableMessageButtom] = useState(false)
   const navigate = useNavigate();
 
   function loadFollows() {
@@ -129,38 +131,41 @@ export default function Timeline() {
         <NewPost
           user={user}
           loadPosts={loadPosts}
-          loadTrending={loadTrending}
-          posts={posts}
-          setPosts={setPosts}
+          setDisableMessageButtom={setDisableMessageButtom}
+          disableMessageButtom={disableMessageButtom}
         />
 
-        {posts.length === 0 ? (
-          <h6>{noPostsMessage}</h6>
-        ) : (
-          <InfiniteScroll
-            pageStart={2}
-            loadMore={() => loadPosts(false)}
-            hasMore={true}
-            initialLoad={false}
-            loader={
-              <ScrollLoader key={0} rendered={loadMore}>
-                <img src={loadSpinner} alt="loading" />
-              </ScrollLoader>
-            }
-          >
-            {posts.map((post, index) => (
-              <Post
-                key={index}
-                user={user}
-                post={post}
-                loadPosts={loadPosts}
-                load={load}
-                follows={follows}
-              />
-            ))}
-          </InfiniteScroll>
-        )}
-        <Load load={load}>
+        <NewPostMessage loadPosts={loadPosts} disableMessageButtom={disableMessageButtom} />
+
+          {
+            posts.length === 0 ? (
+              <h6>{noPostsMessage}</h6>
+            ) : (
+              <InfiniteScroll
+                pageStart={2}
+                loadMore={() => loadPosts(false)}
+                hasMore={true}
+                initialLoad={false}
+                loader={
+                  <ScrollLoader key={0} rendered={loadMore}>
+                    <img src={loadSpinner} alt="loading" />
+                  </ScrollLoader>
+                }
+              >
+                {posts.map((post, index) => (
+                  <Post
+                    key={index}
+                    user={user}
+                    post={post}
+                    loadPosts={loadPosts}
+                    load={load}
+                    follows={follows}
+                  />
+                ))}
+              </InfiniteScroll>
+            )
+          }
+            < Load load={load}>
           <img src={loadSpinner} alt="loading" />
           <h2>Loading</h2>
         </Load>
@@ -177,7 +182,7 @@ export default function Timeline() {
   );
 }
 
-function NewPost({ user, loadPosts, loadTrending, posts, setPosts }) {
+function NewPost({ user, loadPosts, setDisableMessageButtom, disableMessageButtom }) {
   const [sending, setSending] = useState(false);
   const [form, setForm] = useState({
     url: "",
@@ -202,6 +207,7 @@ function NewPost({ user, loadPosts, loadTrending, posts, setPosts }) {
       });
 
       setSending(false);
+      setDisableMessageButtom(!disableMessageButtom);
       loadPosts(true);
     });
 

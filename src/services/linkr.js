@@ -129,6 +129,14 @@ function postComment({ token, body }) {
   });
 }
 
+function getPostNumbers(token, filter) {
+  return axios.get(`${BASE_URL}/numbers${filter}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 // eslint-disable-next-line
 export default {
   getPosts,
@@ -148,4 +156,5 @@ export default {
   postFollow,
   postUnfollow,
   postComment,
+  getPostNumbers
 };
