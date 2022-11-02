@@ -47,16 +47,18 @@ const Posted = styled.span`
 
 const RepostBar = styled.div`
   width: 100%;
-  height: 30px;
+  height: 80px;
   display: ${(props) => (!props.load ? "flex" : "none")};
   justify-content: flex-start;
-  align-items: center;
+  align-items: top;
   background-color: #1e1e1e;
   border-radius: 16px 16px 0 0;
+  padding-top: 8px;
   padding-left: 20px;
   position: absolute;
   top: -30px;
   right: 0px;
+  z-index: 0;
 
   p {
     font-size: 11px !important;
@@ -81,6 +83,10 @@ const RepostBar = styled.div`
       `;
     }
   }}
+
+  @media (max-width: 614px) {
+    border-radius: 0px;
+  }
 `;
 
 const CommentBox = styled.textarea`
@@ -176,6 +182,7 @@ const Comments = styled.div`
   position: absolute;
   z-index: 0;
   border-radius: 0px 0px 16px 16px;
+  bottom: 0;
   left: 0;
   width: 100%;
   display: flex;
@@ -183,20 +190,21 @@ const Comments = styled.div`
   flex-direction: column;
   background-color: #1e1e1e;
   justify-content: space-between;
-  padding: 0px 20px;
+  padding: 0 20px;
 
-  ${(props) => {
-    let config = "";
-
-    if (props.commentsLength !== undefined) {
-      config += `bottom: -${props.commentsLength * 73 + 83}px;`;
-      config += `height: ${props.commentsLength * 73 + 83}px;`;
+  div:first-child {
+    margin-top: 20px;
+    
+    img {
+      margin: 5px 18px 5px 5px;
     }
 
-    return config;
-  }}
+    span:first-child {
+      margin-top: 5px;
+    }
+  }
 
-  @media (max-width: 900px) {
+  @media (max-width: 614px) {
     border-radius: 0px;
   }
 `;

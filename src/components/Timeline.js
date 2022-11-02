@@ -160,6 +160,7 @@ export default function Timeline() {
                     loadPosts={loadPosts}
                     load={load}
                     follows={follows}
+                    hasTrending={true}
                   />
                 ))}
               </InfiniteScroll>

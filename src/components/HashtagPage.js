@@ -109,7 +109,7 @@ export default function HashtagPage() {
             loader={<ScrollLoader key={0} rendered={loadMore}><img src={loadSpinner} alt="loading" /></ScrollLoader>}
           >
               {posts.map((post, index) => (
-                <Post key={index} user={user} post={post} loadPosts={loadPosts} />
+                <Post key={index} user={user} post={post} loadPosts={loadPosts} hasTrending={true}/>
               ))}
             
           </InfiniteScroll>

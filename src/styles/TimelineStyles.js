@@ -80,13 +80,11 @@ const Posts = styled.div`
   }
 
   .post-wrapper {
-    width: ${(props) => (props.hasTrending ? "64%" : "100%")};
+    width: 100%;
     min-height: 209px;
-    display: ${(props) => (!props.load ? "flex" : "none")};
     padding: 18px 18px 18px 90px;
     background-color: #171717;
     border-radius: 16px;
-    margin-bottom: 16px;
     position: relative;
     flex-direction: column;
     z-index: 2;
@@ -96,6 +94,8 @@ const Posts = styled.div`
     background-color: #ffffff !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin-bottom: 30px;
+    width: ${(props) => (props.hasTrending ? "64%" : "100%")};
+    display: ${(props) => (!props.load ? "flex" : "none")};
   }
 
   .delete-button-wrapper {
@@ -210,11 +210,11 @@ const Posts = styled.div`
   @media (max-width: 900px) {
     width: 60%;
 
-    .post-wrapper {
+    h6 {
       width: 100%;
     }
 
-    h6 {
+    .new-post {
       width: 100%;
     }
   }

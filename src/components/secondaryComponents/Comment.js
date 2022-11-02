@@ -67,6 +67,12 @@ const CommentContainer = styled.div`
 const CommentContent = styled.div`
   display: flex;
   flex-direction: column;
+
+  //Hide scrollbar for Chrome, Safari and Opera
+  span::-webkit-scrollbar {
+    display: none;
+  }
+
 `;
 
 const Content = styled.span`
@@ -75,6 +81,10 @@ const Content = styled.span`
   line-height: 17px;
   margin-top: 3px;
   overflow-y: scroll;
+
+  //Hide scrollbar
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 `;
 
 const UserPicture = styled.img`

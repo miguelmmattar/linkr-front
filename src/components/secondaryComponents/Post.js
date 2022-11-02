@@ -22,8 +22,9 @@ import RepostButton from "./RepostButton.js";
 import Comment from "../secondaryComponents/Comment.js";
 import NewComment from "./NewComment.js";
 import CommentButton from "./CommentButton.js";
+import styled from "styled-components";
 
-export default function Post({ user, post, loadPosts, load, follows = [] }) {
+export default function Post({ user, post, loadPosts, load, follows = [], hasTrending }) {
   const postUser = post.user;
   const [postData, setPostData] = useState(post);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,9 +36,14 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
   const [comments, setComments] = useState(post.comments);
   const navigate = useNavigate();
   const inputFocus = useRef();
-
+  let isRepost = false;
+  
   if (post.description === null) {
     post.description = "";
+  }
+
+  if(post.repostId) {
+    isRepost = true;
   }
 
   function formatDate() {
@@ -106,28 +112,29 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
   }, [editMode]);
 
   return (
-    <>
+    <PostContainer load={load} hasTrending={hasTrending} isRepost={isRepost}>
+      <RepostBar load={load} repost={post.isRepost}>
+        <IconContext.Provider
+          value={{ color: "white", className: "repost-icon" }}
+        >
+          <IoMdRepeat />
+          <p>
+            Re-posted by{" "}
+            <b onClick={()=>{navigate(`/user/${post.repostUserId}`)}}>
+              {post.repostUserName === user.name
+                ? `You`
+                : post.repostUserName}
+            </b>
+          </p>
+        </IconContext.Provider>
+      </RepostBar>
+      
       <div
         className="post-wrapper"
         style={{
-          marginBottom: `${commentMode ? comments.length * 73 + 133 : 44}px`,
+          marginBottom: `${commentMode ? comments.length * 73 + 80 : 0}px`,
         }}
       >
-        <RepostBar load={load} repost={post.isRepost}>
-          <IconContext.Provider
-            value={{ color: "white", className: "repost-icon" }}
-          >
-            <IoMdRepeat />
-            <p>
-              Re-posted by{" "}
-              <b onClick={()=>{navigate(`/user/${post.repostUserId}`)}}>
-                {post.repostUserName === user.name
-                  ? `You`
-                  : post.repostUserName}
-              </b>
-            </p>
-          </IconContext.Provider>
-        </RepostBar>
         <img src={postUser.picture} alt="Profile" />
         <Posted>
           <Link to={`/user/${postUser.id}`}>
@@ -184,33 +191,8 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
           commentMode={commentMode}
           comments={comments}
         />
-        {commentMode ? (
-          <Comments className="comments" commentsLength={comments.length}>
-            {comments.map((comment, index) => {
-              const isAuthor = comment.id === post.user.id;
-              const following = follows?.following?.find((follow) => {
-                if (follow.followed === comment.id) return true;
-              });
-              const isFollowing = following !== undefined ? true : false;
-              return (
-                <Comment
-                  isAuthor={isAuthor}
-                  isFollowing={isFollowing}
-                  comment={comment}
-                  index={index}
-                />
-              );
-            })}
-            <NewComment
-              user={user}
-              setComments={setComments}
-              comments={comments}
-              postId={post.id}
-            />
-          </Comments>
-        ) : undefined}
 
-        <EditPost
+<EditPost
           isUser={isUser}
           postId={post.id}
           loadPosts={loadPosts}
@@ -243,7 +225,33 @@ export default function Post({ user, post, loadPosts, load, follows = [] }) {
           <Snippet link={postData.link} />
         </a>
       </div>
-    </>
+
+      {commentMode ? (
+          <Comments className="comments" commentsLength={comments.length}>
+            {comments.map((comment, index) => {
+              const isAuthor = comment.id === post.user.id;
+              const following = follows?.following?.find((follow) => {
+                if (follow.followed === comment.id) return true;
+              });
+              const isFollowing = following !== undefined ? true : false;
+              return (
+                <Comment
+                  isAuthor={isAuthor}
+                  isFollowing={isFollowing}
+                  comment={comment}
+                  index={index}
+                />
+              );
+            })}
+            <NewComment
+              user={user}
+              setComments={setComments}
+              comments={comments}
+              postId={post.id}
+            />
+          </Comments>
+        ) : undefined}
+    </PostContainer>
   );
 }
 
@@ -257,3 +265,15 @@ function Snippet({ link }) {
     </SnippetBox>
   );
 }
+
+const PostContainer = styled.div`
+  position: relative;
+  width: ${(props) => (props.hasTrending ? "64%" : "100%")};
+  display: ${(props) => (!props.load ? "flex" : "none")};
+  //margin-bottom: 16px;
+  margin-top: ${props => props.isRepost ? '62px' : '32px'};
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+`;
